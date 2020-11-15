@@ -1,0 +1,92 @@
+% -----------------------------------------------------------------------------
+% Beamer font theme: CodeCourse
+% Copyright (c) 2019 Jonas R. Glesaaen (jonas@glesaaen.com)
+% -----------------------------------------------------------------------------
+
+% Requirements
+\ProvidesPackage{theme/font/beamerfontthemeCodeCourse}
+\RequirePackage{etoolbox}
+\RequirePackage{ifxetex}
+\RequirePackage{ifluatex}
+
+% font logic from mtheme
+% https://github.com/matze/mtheme
+\ifboolexpr{bool {xetex} or bool {luatex}}{
+  \@ifpackageloaded{mathspec}{
+    \PassOptionsToPackage{quiet}{mathspec}
+  }{
+    \RequirePackage[quiet]{mathspec}
+  }
+  \newcounter{fontsnotfound}
+  \newcommand{\checkfont}[1]{%
+    \suppressfontnotfounderror=1%
+    \font\x = "#1" at 10pt
+    \selectfont
+    \ifx\x\nullfont%
+      \stepcounter{fontsnotfound}%
+    \fi%
+    \suppressfontnotfounderror=0%
+  }
+
+  \newcommand{\iffontsavailable}[3]{%
+    \setcounter{fontsnotfound}{0}%
+    \expandafter\forcsvlist\expandafter%
+    \checkfont\expandafter{#1}%
+    \ifnum\value{fontsnotfound}=0%
+      #2%
+    \else%
+      #3%
+    \fi%
+  }
+
+  % Set main font
+  \iffontsavailable{%
+    Asap%
+  }{%
+    \setsansfont[
+      ItalicFont={Asap},
+      Scale=1,
+      LetterSpace=2.0
+    ]{Asap}
+  }{%
+    \PackageWarning{beamerthememeCodeCourse}{%
+      Could not find Asap font%
+    }
+  }
+
+  % Set monospaced font
+  \iffontsavailable{%
+    Fira Code%
+  }{%
+    \setmonofont{Fira Code}
+  }{%
+    \PackageWarning{beamerthememeCodeCourse}{%
+      Could not find Fira Code font%
+    }
+  }
+
+  % Set math font
+  \iffontsavailable{%
+    Linux Libertine O%
+  }{%
+    \usefonttheme[onlymath]{serif}
+    \setmainfont{Linux Libertine O}
+    \setmathrm{Linux Libertine O}
+  }{%
+    \PackageWarning{beamerthememeCodeCourse}{%
+      Could not find Linux Libertine 0 font%
+    }
+  }
+}{%
+  \PackageWarning{beamerthememeCodeCourse}{%
+    You need to compile with XeLaTeX or LuaLaTeX to use the Yanone Kaffeesatz
+    and Fira Code fonts%
+  }
+}
+
+\setbeamerfont{title}{size=\LARGE}
+\setbeamerfont{frametitle}{size=\Large}
+\setbeamerfont{framesubtitle}{size=\large}
+\setbeamerfont{date}{size=\small}
+\setbeamerfont{institute}{size=\footnotesize}
+\setbeamerfont{section title}{size=\LARGE}

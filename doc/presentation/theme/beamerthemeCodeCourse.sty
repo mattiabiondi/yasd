@@ -1,0 +1,41 @@
+% -----------------------------------------------------------------------------
+% Beamer theme: CodeCourse
+% Copyright (c) 2019 Jonas R. Glesaaen (jonas@glesaaen.com)
+% -----------------------------------------------------------------------------
+
+% Requirement
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{theme/beamerthemeCodeCourse}
+\RequirePackage{etoolbox}
+\RequirePackage{tikz}
+\RequirePackage{pgfopts}
+
+\pgfkeys{/CodeCourse/.cd,
+  .search also={
+    /CodeCourse/outer,
+  }
+}
+
+\usetikzlibrary{positioning,calc}
+
+% Sub-styles
+\usepackage{theme/inner/beamerinnerthemeCodeCourse}
+\usepackage{theme/outer/beamerouterthemeCodeCourse}
+\usepackage{theme/color/beamercolorthemeCodeCourse}
+\usepackage{theme/font/beamerfontthemeCodeCourse}
+
+% Settings
+\setbeamertemplate{navigation symbols}{} %Remove beamer navigation symbols
+\setbeamertemplate{bibliography item}{\insertbiblabel}
+
+\pgfkeys{/CodeCourse/.cd,
+  noslidenumbers/.code=\pgfkeysalso{outer/numbering=none},
+}
+
+\AtEndPreamble{%
+  \@ifpackageloaded{pgfplots}{%
+    \RequirePackage{pgfplotsthemetol}
+  }{}
+}
+
+\ProcessPgfOptions{/CodeCourse}
