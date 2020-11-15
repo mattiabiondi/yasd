@@ -1,0 +1,70 @@
+\documentclass{beamer}
+
+\usepackage[numbering=fraction]{theme/beamerthemeCodeCourse}
+
+\beamertemplatenavigationsymbolsempty
+
+\title{yasd}
+\subtitle{(yet another) self-driving car simulator}
+\author{C. Caramaschi \and M. Biondi \and V. Armandi}
+\institute{Alma Mater Studiorum $\cdot$ Università di Bologna\\
+Corso di Laurea Magistrale in Informatica\\
+Fisica dei Sistemi Complessi}
+\date{November 2020}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+\begin{frame}
+	\frametitle{yasd}
+	\framesubtitle{(yet another) self-driving car simulator}
+
+	\begin{center}
+	\begin{block}{\textbf{What}}
+        An isolated simulation environment to study how \\ autonomous car could learn to properly drive and coexist without an initial well defined traffic law
+	\end{block}
+
+	\begin{exampleblock}{\textbf{With}}
+		\begin{itemize}
+			\item a convoluted looped road track
+			\item multiple autonomous cars
+		\end{itemize}
+	\end{exampleblock}
+
+	\begin{alertblock}{\textbf{Without}}
+	    \setbeamercolor{itemize item}{fg=Marty}
+        \begin{itemize}
+			\item road signs
+		\end{itemize}
+	\end{alertblock}
+	\end{center}
+\end{frame}
+
+\section{System operation}
+\begin{frame}
+	\frametitle{How}
+	\framesubtitle{the system will work}
+
+	The autonomous cars should learn to:
+	\begin{center}
+		\begin{exampleblock}{\textbf{Respect}}
+	    \begin{itemize}
+			\item safety distance
+			\item speed limits
+			\item precedence
+		\end{itemize}
+	    \end{exampleblock}
+
+	    \begin{alertblock}{\textbf{Avoid}}
+	    \setbeamercolor{itemize item}{fg=Marty}
+        \begin{itemize}
+			\item border collisions
+            \item road accidents
+			\item traffic congestion
+		\end{itemize}
+        \end{alertblock}
+	\end{center}
+\end{frame}
+\end{document}
