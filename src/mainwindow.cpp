@@ -164,6 +164,14 @@ void MainWindow::clearRecentFiles()
 	setRecentFilesVisible(!recentFiles.isEmpty());
 }
 
+void MainWindow::editSet()
+{
+}
+
+void MainWindow::editMap()
+{
+}
+
 void MainWindow::about()
 {
 	// TODO
@@ -252,6 +260,16 @@ void MainWindow::createActions()
 	exitAct = fileMenu->addAction(exitIcon, tr("E&xit"), this, &QWidget::close);
 	exitAct->setShortcuts(QKeySequence::Quit);
 	exitAct->setStatusTip(tr("Exit yasd"));
+
+	menuBar()->addSeparator();
+
+	QMenu *editMenu = menuBar()->addMenu(tr("&Edit"));
+
+	editSetAct = editMenu->addAction(tr("Cars set..."), this, &MainWindow::editSet);
+	editSetAct->setStatusTip(tr("Edit cars set"));
+
+	editMapAct = editMenu->addAction(tr("Map..."), this, &MainWindow::editMap);
+	editMapAct->setStatusTip(tr("Edit map"));
 
 	menuBar()->addSeparator();
 

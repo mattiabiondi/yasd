@@ -31,6 +31,8 @@ bool saveAs();
 void updateRecentFileActions();
 void openRecentFile();
 void clearRecentFiles();
+void editSet();
+void editMap();
 void about();
 void fileWasModified();
 #ifndef QT_NO_SESSIONMANAGER
@@ -68,6 +70,8 @@ QAction *recentFileSubMenuAct;
 QAction *recentFileSeparator;
 QAction *clearRecentFilesAct;
 QAction *exitAct;
+QAction *editSetAct;
+QAction *editMapAct;
 QAction *aboutAct;
 QAction *aboutQtAct;
 
