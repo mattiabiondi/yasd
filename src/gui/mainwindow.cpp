@@ -1,6 +1,7 @@
 #include <QtWidgets>
 
 #include "mainwindow.h"
+#include "dialogs/new_dialog.h"
 
 MainWindow::MainWindow()
 	: tabWidget(new QTabWidget)
@@ -38,8 +39,11 @@ void MainWindow::newFile()
 	if (maybeSave()) {
 		// TODO
 		// empty the working space
-		setCurrentFile(QString());
+//		setCurrentFile(QString());
 	}
+    NewDialog *newDialog = new NewDialog;
+    newDialog->show();
+
 }
 
 void MainWindow::open()

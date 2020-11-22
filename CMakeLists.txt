@@ -14,6 +14,4 @@ find_package(Qt5 COMPONENTS Widgets REQUIRED)
 # Minimum Versions
 set(QT_MINIMUM_VERSION "5.9.0")
 
-find_package(Qt5Widgets ${QT_MINIMUM_VERSION} REQUIRED)
-
 add_subdirectory(src)
