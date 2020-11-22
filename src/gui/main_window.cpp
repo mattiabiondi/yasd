@@ -1,7 +1,6 @@
 #include <QtWidgets>
 
 #include "main_window.h"
-#include "dialogs/new_dialog.h"
 
 MainWindow::MainWindow()
 	: tabWidget(new QTabWidget)
@@ -37,13 +36,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::newFile()
 {
 	if (maybeSave()) {
-		// TODO
-		// empty the working space
-		// setCurrentFile(QString());
+		newWizard = new NewWizard;
+		newWizard->exec();
 	}
-	NewDialog *newDialog = new NewDialog;
-
-	newDialog->show();
 }
 
 void MainWindow::open()
@@ -269,8 +264,8 @@ void MainWindow::createActions()
 
 	QMenu *editMenu = menuBar()->addMenu(tr("&Edit"));
 
-	editSetAct = editMenu->addAction(tr("Cars set..."), this, &MainWindow::editSet);
-	editSetAct->setStatusTip(tr("Edit cars set"));
+	editSetAct = editMenu->addAction(tr("Cars..."), this, &MainWindow::editSet);
+	editSetAct->setStatusTip(tr("Edit cars"));
 
 	editMapAct = editMenu->addAction(tr("Map..."), this, &MainWindow::editMap);
 	editMapAct->setStatusTip(tr("Edit map"));

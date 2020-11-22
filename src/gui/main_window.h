@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include "wizards/new_wizard.h"
+
 QT_BEGIN_NAMESPACE
 class QAction;
 class QMenu;
@@ -74,6 +76,8 @@ QAction *editSetAct;
 QAction *editMapAct;
 QAction *aboutAct;
 QAction *aboutQtAct;
+
+NewWizard *newWizard;
 
 QString curFile;
 bool isUntitled;
