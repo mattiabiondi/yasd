@@ -1,6 +1,6 @@
 #include <QtWidgets>
 
-#include "mainwindow.h"
+#include "main_window.h"
 #include "dialogs/new_dialog.h"
 
 MainWindow::MainWindow()
@@ -39,11 +39,11 @@ void MainWindow::newFile()
 	if (maybeSave()) {
 		// TODO
 		// empty the working space
-//		setCurrentFile(QString());
+		// setCurrentFile(QString());
 	}
-    NewDialog *newDialog = new NewDialog;
-    newDialog->show();
+	NewDialog *newDialog = new NewDialog;
 
+	newDialog->show();
 }
 
 void MainWindow::open()

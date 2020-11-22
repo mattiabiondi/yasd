@@ -3,8 +3,9 @@
 
 CarsSetPage::CarsSetPage(QWidget *parent) : QWidget(parent)
 {
-    QVBoxLayout *layout = new QVBoxLayout;
-    label = new QLabel(tr("provaaa"));
-    layout->addWidget(label);
-    setLayout(layout);
+	QVBoxLayout *layout = new QVBoxLayout;
+
+	label = new QLabel(tr("provaaa"));
+	layout->addWidget(label);
+	setLayout(layout);
 }

@@ -18,9 +18,8 @@ class NewDialog : public QWizard
 Q_OBJECT
 
 public:
-    enum { Path_Page, Cars_Set_Page, Map_Page };
-    NewDialog(QWidget *parent = nullptr);
-
+enum { Path_Page, Cars_Set_Page, Map_Page };
+NewDialog(QWidget *parent = nullptr);
 
 //    void accept() override;
 };
@@ -30,22 +29,21 @@ class PathWizardPage : public QWizardPage
 Q_OBJECT
 
 public:
-    PathWizardPage(QWidget *parent = nullptr);
-    int nextId() const override;
+PathWizardPage(QWidget *parent = nullptr);
+int nextId() const override;
 private:
-    QLabel *topLabel;
+QLabel *topLabel;
 };
 
 class CarsSetWizardPage : public QWizardPage
 {
- Q_OBJECT
+Q_OBJECT
 
 public:
-    CarsSetWizardPage(QWidget *parent = nullptr);
-    int nextId() const override;
+CarsSetWizardPage(QWidget *parent = nullptr);
+int nextId() const override;
 private:
-    CarsSetPage *carsSetPage;
-
+CarsSetPage *carsSetPage;
 };
 
 class MapWizardPage : public QWizardPage
@@ -53,12 +51,11 @@ class MapWizardPage : public QWizardPage
 Q_OBJECT
 
 public:
-    MapWizardPage(QWidget *parent = nullptr);
-    int nextId() const override;
+MapWizardPage(QWidget *parent = nullptr);
+int nextId() const override;
 
 private:
-    MapPage *mapPage;
+MapPage *mapPage;
 };
 
-
-#endif //YASD_NEW_DIALOG_H
+#endif // YASD_NEW_DIALOG_H

@@ -1,6 +1,6 @@
 set(yasd_SRCS
 	main.cpp
-		gui/mainwindow.cpp
+		gui/main_window.cpp
 		gui/dialogs/new_dialog.cpp
 		gui/dialogs/new_dialog.cpp
 		gui/pages/cars_set_page.cpp

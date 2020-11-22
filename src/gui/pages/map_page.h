@@ -9,11 +9,10 @@ class MapPage : public QWidget
 Q_OBJECT
 
 public:
-    MapPage(QWidget *parent = nullptr);
+MapPage(QWidget *parent = nullptr);
 
 private:
-    QLabel *label;
-
+QLabel *label;
 };
 
-#endif //YASD_MAP_PAGE_H
+#endif // YASD_MAP_PAGE_H

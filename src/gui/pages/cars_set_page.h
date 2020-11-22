@@ -6,14 +6,13 @@
 
 class CarsSetPage : public QWidget
 {
-    Q_OBJECT
+Q_OBJECT
 
 public:
-    CarsSetPage(QWidget *parent = nullptr);
+CarsSetPage(QWidget *parent = nullptr);
 
 private:
-    QLabel *label;
-
+QLabel *label;
 };
 
-#endif //YASD_CARS_SET_PAGE_H
+#endif // YASD_CARS_SET_PAGE_H

@@ -3,11 +3,12 @@
 
 MapPage::MapPage(QWidget *parent)
 {
-    QVBoxLayout *layout = new QVBoxLayout;
-    label = new QLabel(tr("prova2"));
-    layout->addWidget(label);
-    setLayout(layout);
+	QVBoxLayout *layout = new QVBoxLayout;
+
+	label = new QLabel(tr("prova2"));
+	layout->addWidget(label);
+	setLayout(layout);
 
 
-    setLayout(layout);
+	setLayout(layout);
 }
