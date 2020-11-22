@@ -9,9 +9,11 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Widgets Gui REQUIRED)
 
 # Minimum Versions
 set(QT_MINIMUM_VERSION "5.9.0")
+
+find_package(Qt5Widgets ${QT_MINIMUM_VERSION} REQUIRED)
 
 add_subdirectory(src)

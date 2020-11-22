@@ -15,4 +15,5 @@ target_compile_definitions(yasd
 
 target_link_libraries(yasd
 	Qt5::Widgets
+	Qt5::Gui
 )
