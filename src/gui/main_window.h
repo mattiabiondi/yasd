@@ -4,6 +4,8 @@
 #include <QMainWindow>
 
 #include "wizards/new_wizard.h"
+#include "dialogs/cars_dialog.h"
+#include "dialogs/map_dialog.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -33,7 +35,7 @@ bool saveAs();
 void updateRecentFileActions();
 void openRecentFile();
 void clearRecentFiles();
-void editSet();
+void editCars();
 void editMap();
 void about();
 void fileWasModified();
@@ -72,12 +74,14 @@ QAction *recentFileSubMenuAct;
 QAction *recentFileSeparator;
 QAction *clearRecentFilesAct;
 QAction *exitAct;
-QAction *editSetAct;
+QAction *editCarsAct;
 QAction *editMapAct;
 QAction *aboutAct;
 QAction *aboutQtAct;
 
 NewWizard *newWizard;
+CarsDialog *carsDialog;
+MapDialog *mapDialog;
 
 QString curFile;
 bool isUntitled;

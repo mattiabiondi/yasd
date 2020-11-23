@@ -4,6 +4,8 @@
 #include <QWizardPage>
 #include <QLabel>
 
+#include "../../widgets/map_widget.h"
+
 class MapWizardPage : public QWizardPage
 {
 Q_OBJECT
@@ -13,6 +15,7 @@ MapWizardPage(QWidget *parent = nullptr);
 int nextId() const override;
 
 private:
+MapWidget *mapWidget;
 };
 
 #endif // YASD_MAP_PAGE_H

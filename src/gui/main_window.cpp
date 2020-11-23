@@ -36,6 +36,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::newFile()
 {
 	if (maybeSave()) {
+		setCurrentFile(QString());
 		newWizard = new NewWizard;
 		newWizard->exec();
 	}
@@ -163,12 +164,16 @@ void MainWindow::clearRecentFiles()
 	setRecentFilesVisible(!recentFiles.isEmpty());
 }
 
-void MainWindow::editSet()
+void MainWindow::editCars()
 {
+	carsDialog = new CarsDialog;
+	carsDialog->exec();
 }
 
 void MainWindow::editMap()
 {
+	mapDialog = new MapDialog;
+	mapDialog->exec();
 }
 
 void MainWindow::about()
@@ -264,11 +269,11 @@ void MainWindow::createActions()
 
 	QMenu *editMenu = menuBar()->addMenu(tr("&Edit"));
 
-	editSetAct = editMenu->addAction(tr("Cars..."), this, &MainWindow::editSet);
-	editSetAct->setStatusTip(tr("Edit cars"));
+	editCarsAct = editMenu->addAction(tr("Cars..."), this, &MainWindow::editCars);
+	editCarsAct->setStatusTip(tr("Edit car preferences"));
 
 	editMapAct = editMenu->addAction(tr("Map..."), this, &MainWindow::editMap);
-	editMapAct->setStatusTip(tr("Edit map"));
+	editMapAct->setStatusTip(tr("Edit map preferences"));
 
 	menuBar()->addSeparator();
 

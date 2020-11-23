@@ -3,22 +3,11 @@
 NewWizard::NewWizard(QWidget *parent)
 	: QWizard(parent)
 {
-	setPage(Path_Page, new PathWizardPage);
-	setPage(Cars_Page, new CarsSetWizardPage);
+	setPage(Cars_Page, new CarsWizardPage);
 	setPage(Map_Page, new MapWizardPage);
 
-	setStartId(Path_Page);
+	setStartId(Cars_Page);
 	setWizardStyle(ModernStyle);
 
 	setWindowTitle(tr("Create a new configuration"));
-}
-
-PathWizardPage::PathWizardPage(QWidget *parent) : QWizardPage(parent)
-{
-	setTitle(tr("Path"));
-}
-
-int PathWizardPage::nextId() const
-{
-	return NewWizard::Cars_Page;
 }

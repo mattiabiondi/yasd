@@ -1,11 +1,19 @@
 #include "cars_page.h"
 
-CarsSetWizardPage::CarsSetWizardPage(QWidget *parent)
+CarsWizardPage::CarsWizardPage(QWidget *parent)
 {
-	setTitle(tr("Cars"));
+	setTitle(tr("Cars preferences"));
+	setSubTitle(tr("Specify preferences about the set of cars.<br>"
+		       "You can change them up until the first run."));
+
+	QVBoxLayout *layout = new QVBoxLayout;
+
+	carsWidget = new CarsWidget;
+	layout->addWidget(carsWidget);
+	setLayout(layout);
 }
 
-int CarsSetWizardPage::nextId() const
+int CarsWizardPage::nextId() const
 {
 	return NewWizard::Map_Page;
 }
