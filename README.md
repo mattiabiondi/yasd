@@ -10,7 +10,9 @@
 
 ## Introduction
 
-*insert*
+**yasd** is an isolated simulation environment designed to study how autonomous cars could learn to properly drive and coexist without an initial well defined traffic law.
+
+*complete*
 
 ## How to compile
 
