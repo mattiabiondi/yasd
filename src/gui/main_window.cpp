@@ -32,13 +32,16 @@ void MainWindow::closeEvent(QCloseEvent *event)
 	}
 }
 
-void MainWindow::newFile()
+void MainWindow::newFileWizard()
 {
 	if (maybeSave()) {
-		setCurrentFile(QString());
-		newWizard = new NewWizard;
 		newWizard->exec();
 	}
+}
+
+void MainWindow::newFile()
+{
+	setCurrentFile(QString());
 }
 
 void MainWindow::open()
@@ -206,7 +209,9 @@ void MainWindow::createActions()
 	newAct = new QAction(newIcon, tr("&New"), this);
 	newAct->setShortcuts(QKeySequence::New);
 	newAct->setStatusTip(tr("Create a new file"));
-	connect(newAct, &QAction::triggered, this, &MainWindow::newFile);
+	newWizard = new NewWizard;
+	connect(newAct, &QAction::triggered, this, &MainWindow::newFileWizard);
+	connect(newWizard, &QWizard::accepted, this, &MainWindow::newFile);
 	fileMenu->addAction(newAct);
 	fileToolBar->addAction(newAct);
 
@@ -226,6 +231,7 @@ void MainWindow::createActions()
 	saveAct = new QAction(saveIcon, tr("&Save"), this);
 	saveAct->setShortcuts(QKeySequence::Save);
 	saveAct->setStatusTip(tr("Save the file to disk"));
+	saveAct->setEnabled(false);
 	connect(saveAct, &QAction::triggered, this, &MainWindow::save);
 	fileMenu->addAction(saveAct);
 	fileToolBar->addAction(saveAct);
@@ -236,6 +242,7 @@ void MainWindow::createActions()
 	saveAsAct = fileMenu->addAction(saveAsIcon, tr("Save &As..."), this, &MainWindow::saveAs);
 	saveAsAct->setShortcuts(QKeySequence::SaveAs);
 	saveAsAct->setStatusTip(tr("Save the file under a new name"));
+	saveAsAct->setEnabled(false);
 
 	fileMenu->addSeparator();
 
@@ -270,9 +277,11 @@ void MainWindow::createActions()
 
 	editCarsAct = editMenu->addAction(tr("Cars..."), this, &MainWindow::editCars);
 	editCarsAct->setStatusTip(tr("Edit car preferences"));
+	editCarsAct->setEnabled(false);
 
 	editMapAct = editMenu->addAction(tr("Map..."), this, &MainWindow::editMap);
 	editMapAct->setStatusTip(tr("Edit map preferences"));
+	editMapAct->setEnabled(false);
 
 	menuBar()->addSeparator();
 
@@ -439,6 +448,11 @@ void MainWindow::setCurrentFile(const QString &fileName)
 	// TODO
 	// set file as not modified
 	setWindowModified(false);
+
+	saveAct->setEnabled(true);
+	saveAsAct->setEnabled(true);
+	editCarsAct->setEnabled(true);
+	editMapAct->setEnabled(true);
 
 	if (!isUntitled && windowFilePath() != curFile)
 		MainWindow::prependToRecentFiles(curFile);

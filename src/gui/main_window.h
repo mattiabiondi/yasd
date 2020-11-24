@@ -28,6 +28,7 @@ protected:
 void closeEvent(QCloseEvent *event) override;
 
 private slots:
+void newFileWizard();
 void newFile();
 void open();
 bool save();
