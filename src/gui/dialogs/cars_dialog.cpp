@@ -15,6 +15,7 @@ CarsDialog::CarsDialog(QWidget *parent)
 	typeCSpinBox->setRange(MINCARS, MAXCARS);
 
 	QFormLayout *formLayout = new QFormLayout;
+
 	formLayout->addRow(tr("Type &A - Regular driver:"), typeASpinBox);
 	formLayout->addRow(tr("Type &B - Fast driver:"), typeBSpinBox);
 	formLayout->addRow(tr("Type &C - Slow driver:"), typeCSpinBox);

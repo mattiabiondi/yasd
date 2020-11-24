@@ -40,6 +40,7 @@ void editCars();
 void editMap();
 void about();
 void fileWasModified();
+void updateConfig();
 #ifndef QT_NO_SESSIONMANAGER
 void commitData(QSessionManager &);
 #endif
@@ -63,6 +64,7 @@ QTabWidget *tabWidget;
 QPushButton *createButton(const QAction *action, const QString &text = QString());
 
 QWidget *welcomeTab();
+QWidget *configTab();
 
 QAction *newAct;
 QAction *openAct;
@@ -78,11 +80,20 @@ QAction *editMapAct;
 QAction *aboutAct;
 QAction *aboutQtAct;
 
+QLabel *typeALabel;
+QLabel *typeBLabel;
+QLabel *typeCLabel;
+QLabel *crossroadsLabel;
+QLabel *speedLimitLabel;
+QLabel *frictionLabel;
+
 NewWizard *newWizard;
 CarsDialog *carsDialog;
 MapDialog *mapDialog;
 
 QString curFile;
+int curConfig[CONFIGPARAMS];
+
 bool isUntitled;
 };
 

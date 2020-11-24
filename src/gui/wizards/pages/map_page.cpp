@@ -21,6 +21,7 @@ MapWizardPage::MapWizardPage(QWidget *parent)
 	registerField("friction", frictionComboBox);
 
 	QFormLayout *formLayout = new QFormLayout;
+
 	formLayout->addRow(tr("No. of crossroads:"), crossroadsNoSpinBox);
 	formLayout->addRow(tr("Speed limit:"), speedLimitSpinBox);
 	formLayout->addRow(tr("Coefficient of friction:"), frictionComboBox);

@@ -34,13 +34,22 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::newFileWizard()
 {
-	if (maybeSave()) {
+	if (maybeSave())
 		newWizard->exec();
-	}
 }
 
 void MainWindow::newFile()
 {
+	curConfig[TYPEA] = newWizard->field("typeANo").toInt();
+	curConfig[TYPEB] = newWizard->field("typeBNo").toInt();
+	curConfig[TYPEC] = newWizard->field("typeCNo").toInt();
+	curConfig[CROSSROADS] = newWizard->field("crossroadsNo").toInt();
+	curConfig[SPEEDLIMIT] = newWizard->field("speedLimit").toInt();
+	if (newWizard->field("friction").toInt())
+		curConfig[FRICTION] = 35;
+	else
+		curConfig[FRICTION] = 72;
+
 	setCurrentFile(QString());
 }
 
@@ -320,7 +329,7 @@ void MainWindow::createTabs()
 {
 	const QIcon detailsIcon = QIcon::fromTheme("todo");
 
-	tabWidget->addTab(welcomeTab(), detailsIcon, "Welcome");
+	tabWidget->addTab(welcomeTab(), detailsIcon, "&Welcome");
 }
 
 QPushButton *MainWindow::createButton(const QAction *action, const QString &text)
@@ -364,6 +373,66 @@ QWidget *MainWindow::welcomeTab()
 	layout->addStretch();
 
 	return scrollArea;
+}
+
+QWidget *MainWindow::configTab()
+{
+	QScrollArea *scrollArea = new QScrollArea;
+	QWidget *tab = new QWidget;
+
+	tab->setObjectName("ConfigTab");
+	scrollArea->setWidget(tab);
+	scrollArea->setWidgetResizable(true);
+	scrollArea->setFrameShape(QFrame::NoFrame);
+	scrollArea->setStyleSheet("QAbstractScrollArea, #ConfigTab {background: transparent}");
+
+	QFormLayout *carsFormLayout = new QFormLayout;
+
+	typeALabel = new QLabel;
+	carsFormLayout->addRow(tr("Type A - Regular driver:"), typeALabel);
+	typeBLabel = new QLabel;
+	carsFormLayout->addRow(tr("Type B - Fast driver:"), typeBLabel);
+	typeCLabel = new QLabel;
+	carsFormLayout->addRow(tr("Type C - Slow driver:"), typeCLabel);
+
+	QGroupBox *carsGroupBox = new QGroupBox(tr("Number of cars:"));
+
+	carsGroupBox->setLayout(carsFormLayout);
+
+	QFormLayout *mapFormLayout = new QFormLayout;
+
+	crossroadsLabel = new QLabel;
+	mapFormLayout->addRow(tr("No. of crossroads:"), crossroadsLabel);
+	speedLimitLabel = new QLabel;
+	mapFormLayout->addRow(tr("Speed limit:"), speedLimitLabel);
+	frictionLabel = new QLabel;
+	mapFormLayout->addRow(tr("Coefficient of friction:"), frictionLabel);
+
+	QGroupBox *mapGroupBox = new QGroupBox(tr("Map:"));
+
+	mapGroupBox->setLayout(mapFormLayout);
+
+	QVBoxLayout *layout = new QVBoxLayout;
+
+	layout->setAlignment(Qt::AlignCenter);
+	layout->addStretch();
+	layout->addWidget(carsGroupBox);
+	layout->addWidget(mapGroupBox);
+	layout->addStretch();
+
+	tab->setLayout(layout);
+
+	return scrollArea;
+}
+
+void MainWindow::updateConfig()
+{
+	typeALabel->setText(QString::number(curConfig[TYPEA]));
+	typeBLabel->setText(QString::number(curConfig[TYPEB]));
+	typeCLabel->setText(QString::number(curConfig[TYPEC]));
+	crossroadsLabel->setText(QString::number(curConfig[CROSSROADS]));
+	speedLimitLabel->setText(QString::number(curConfig[SPEEDLIMIT]));
+	frictionLabel->setText(QString::number(curConfig[FRICTION]));
 }
 
 void MainWindow::readSettings()
@@ -475,6 +544,10 @@ void MainWindow::setCurrentFile(const QString &fileName)
 		MainWindow::prependToRecentFiles(curFile);
 
 	setWindowFilePath(curFile);
+
+	delete tabWidget->widget(0);
+	tabWidget->insertTab(0, configTab(), "&Configuration");
+	updateConfig();
 }
 
 QString MainWindow::strippedName(const QString &fullFileName)

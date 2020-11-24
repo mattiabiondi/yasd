@@ -1,6 +1,7 @@
 #ifndef YASD_MAP_DIALOG_H
 #define YASD_MAP_DIALOG_H
 
+#include <QtWidgets>
 #include <QDialog>
 #include <QSpinBox>
 #include <QComboBox>
@@ -22,6 +23,7 @@ private:
 QDialogButtonBox *buttonBox;
 QSpinBox *crossroadsNoSpinBox;
 QSpinBox *speedLimitSpinBox;
-QComboBox *frictionComboBox;};
+QComboBox *frictionComboBox;
+};
 
 #endif // YASD_MAP_DIALOG_H

@@ -1,5 +1,3 @@
-#include <QtWidgets>
-
 #include "map_dialog.h"
 
 MapDialog::MapDialog(QWidget *parent)
@@ -19,6 +17,7 @@ MapDialog::MapDialog(QWidget *parent)
 	frictionComboBox->addItem(QString("Grass (clean and dry) - 0.%1").arg(FRICTIONGRASS));
 
 	QFormLayout *formLayout = new QFormLayout;
+
 	formLayout->addRow(tr("No. of crossroads:"), crossroadsNoSpinBox);
 	formLayout->addRow(tr("Speed limit:"), speedLimitSpinBox);
 	formLayout->addRow(tr("Coefficient of friction:"), frictionComboBox);

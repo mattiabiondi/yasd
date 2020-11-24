@@ -25,8 +25,6 @@ Q_OBJECT
 
 public:
 NewWizard(QWidget *parent = nullptr);
-
-void accept() override;
 };
 
 #endif // YASD_NEW_WIZARD_H
