@@ -2,10 +2,11 @@
 #define YASD_CARS_PAGE_H
 
 #include <QWizardPage>
-#include <QLabel>
+#include <QGroupBox>
+#include <QSpinBox>
 
 #include "../new_wizard.h"
-#include "../../widgets/cars_widget.h"
+#include "../../const.h"
 
 class CarsWizardPage : public QWizardPage
 {
@@ -13,10 +14,15 @@ Q_OBJECT
 
 public:
 CarsWizardPage(QWidget *parent = nullptr);
-int nextId() const override;
+
+protected:
+bool isComplete() const override;
 
 private:
-CarsWidget *carsWidget;
+QGroupBox *carsNoBox;
+QSpinBox *typeASpinBox;
+QSpinBox *typeBSpinBox;
+QSpinBox *typeCSpinBox;
 };
 
 #endif // YASD_CARS_PAGE_H

@@ -2,20 +2,26 @@
 #define YASD_MAP_PAGE_H
 
 #include <QWizardPage>
-#include <QLabel>
+#include <QFormLayout>
+#include <QSpinBox>
+#include <QComboBox>
 
-#include "../../widgets/map_widget.h"
+#include "../../const.h"
 
 class MapWizardPage : public QWizardPage
 {
 Q_OBJECT
 
+protected:
+void initializePage() override;
+
 public:
 MapWizardPage(QWidget *parent = nullptr);
-int nextId() const override;
 
 private:
-MapWidget *mapWidget;
+QSpinBox *crossroadsNoSpinBox;
+QSpinBox *speedLimitSpinBox;
+QComboBox *frictionComboBox;
 };
 
 #endif // YASD_MAP_PAGE_H

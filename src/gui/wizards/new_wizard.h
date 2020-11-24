@@ -24,10 +24,9 @@ class NewWizard : public QWizard
 Q_OBJECT
 
 public:
-enum { Cars_Page, Map_Page };
 NewWizard(QWidget *parent = nullptr);
 
-//todo void accept() override;
+void accept() override;
 };
 
 #endif // YASD_NEW_WIZARD_H

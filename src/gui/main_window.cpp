@@ -19,7 +19,6 @@ MainWindow::MainWindow()
 		this, &MainWindow::commitData);
 #endif
 
-	setCurrentFile(QString());
 	setUnifiedTitleAndToolBarOnMac(true);
 }
 
@@ -135,7 +134,7 @@ void MainWindow::updateRecentFileActions()
 	QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
 
 	const QStringList recentFiles = readRecentFiles(settings);
-	const int count = qMin(int(MaxRecentFiles), recentFiles.size());
+	const int count = qMin(int(MAXRECENTFILES), recentFiles.size());
 	int i = 0;
 
 	for ( ; i < count; ++i) {
@@ -144,7 +143,7 @@ void MainWindow::updateRecentFileActions()
 		recentFileActs[i]->setData(recentFiles.at(i));
 		recentFileActs[i]->setVisible(true);
 	}
-	for ( ; i < MaxRecentFiles; ++i)
+	for ( ; i < MAXRECENTFILES; ++i)
 		recentFileActs[i]->setVisible(false);
 }
 
@@ -245,7 +244,7 @@ void MainWindow::createActions()
 	connect(recentMenu, &QMenu::aboutToShow, this, &MainWindow::updateRecentFileActions);
 	recentFileSubMenuAct = recentMenu->menuAction();
 
-	for (int i = 0; i < MaxRecentFiles; ++i) {
+	for (int i = 0; i < MAXRECENTFILES; ++i) {
 		recentFileActs[i] = recentMenu->addAction(QString(), this, &MainWindow::openRecentFile);
 		recentFileActs[i]->setVisible(false);
 	}

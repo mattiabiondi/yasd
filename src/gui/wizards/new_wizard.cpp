@@ -3,11 +3,23 @@
 NewWizard::NewWizard(QWidget *parent)
 	: QWizard(parent)
 {
-	setPage(Cars_Page, new CarsWizardPage);
-	setPage(Map_Page, new MapWizardPage);
+	addPage(new CarsWizardPage);
+	addPage(new MapWizardPage);
 
-	setStartId(Cars_Page);
 	setWizardStyle(ModernStyle);
 
 	setWindowTitle(tr("Create a new configuration"));
+}
+
+void NewWizard::accept()
+{
+	int typeANo = field("typeANo").toInt();
+	int typeBNo = field("typeBNo").toInt();
+	int typeCNo = field("typeCNo").toInt();
+
+	int crossroadsNo = field("crossroadsNo").toInt();
+	int speedLimit = field("speedLimit").toInt();
+	int friction = field("friction").toInt();
+
+	QDialog::accept();
 }

@@ -44,8 +44,6 @@ void commitData(QSessionManager &);
 #endif
 
 private:
-enum { MaxRecentFiles = 5 };
-
 void createActions();
 void createStatusBar();
 void createTabs();
@@ -69,7 +67,7 @@ QAction *newAct;
 QAction *openAct;
 QAction *saveAct;
 QAction *saveAsAct;
-QAction *recentFileActs[MaxRecentFiles];
+QAction *recentFileActs[MAXRECENTFILES];
 QAction *recentFileSubMenuAct;
 QAction *recentFileSeparator;
 QAction *clearRecentFilesAct;

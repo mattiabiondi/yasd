@@ -2,8 +2,12 @@
 #define YASD_CARS_DIALOG_H
 
 #include <QDialog>
+#include <QVBoxLayout>
+#include <QFormLayout>
+#include <QGroupBox>
+#include <QSpinBox>
 
-#include "../widgets/cars_widget.h"
+#include "../const.h"
 
 QT_BEGIN_NAMESPACE
 class QDialogButtonBox;
@@ -18,7 +22,10 @@ CarsDialog(QWidget *parent = nullptr);
 
 private:
 QDialogButtonBox *buttonBox;
-CarsWidget *carsWidget;
+QGroupBox *carsNoBox;
+QSpinBox *typeASpinBox;
+QSpinBox *typeBSpinBox;
+QSpinBox *typeCSpinBox;
 };
 
 #endif // YASD_CARS_DIALOG_H

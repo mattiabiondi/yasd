@@ -2,8 +2,10 @@
 #define YASD_MAP_DIALOG_H
 
 #include <QDialog>
+#include <QSpinBox>
+#include <QComboBox>
 
-#include "../widgets/map_widget.h"
+#include "../const.h"
 
 QT_BEGIN_NAMESPACE
 class QDialogButtonBox;
@@ -18,7 +20,8 @@ MapDialog(QWidget *parent = nullptr);
 
 private:
 QDialogButtonBox *buttonBox;
-MapWidget *mapWidget;
-};
+QSpinBox *crossroadsNoSpinBox;
+QSpinBox *speedLimitSpinBox;
+QComboBox *frictionComboBox;};
 
 #endif // YASD_MAP_DIALOG_H

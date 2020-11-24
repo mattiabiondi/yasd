@@ -6,8 +6,6 @@ set(yasd_SRCS
 	gui/wizards/pages/map_page.cpp
 	gui/dialogs/cars_dialog.cpp
 	gui/dialogs/map_dialog.cpp
-	gui/widgets/cars_widget.cpp
-	gui/widgets/map_widget.cpp
 )
 
 add_executable(yasd

@@ -9,8 +9,21 @@ MapDialog::MapDialog(QWidget *parent)
 
 	QVBoxLayout *layout = new QVBoxLayout;
 
-	mapWidget = new MapWidget;
-	layout->addWidget(mapWidget);
+	crossroadsNoSpinBox = new QSpinBox;
+	crossroadsNoSpinBox->setRange(MINCROSSROADS, MAXCROSSROADS);
+	speedLimitSpinBox = new QSpinBox;
+	speedLimitSpinBox->setRange(MINSPEEDLIMIT, MAXSPEEDLIMIT);
+	speedLimitSpinBox->setSuffix(" km/h");
+	frictionComboBox = new QComboBox;
+	frictionComboBox->addItem(QString("Asphalt (clean and dry) - 0.%1").arg(FRICTIONASPHALT));
+	frictionComboBox->addItem(QString("Grass (clean and dry) - 0.%1").arg(FRICTIONGRASS));
+
+	QFormLayout *formLayout = new QFormLayout;
+	formLayout->addRow(tr("No. of crossroads:"), crossroadsNoSpinBox);
+	formLayout->addRow(tr("Speed limit:"), speedLimitSpinBox);
+	formLayout->addRow(tr("Coefficient of friction:"), frictionComboBox);
+
+	layout->addLayout(formLayout);
 
 	buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
 					 | QDialogButtonBox::Cancel);
