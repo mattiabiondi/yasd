@@ -180,16 +180,33 @@ void MainWindow::editMap()
 
 void MainWindow::about()
 {
-	// TODO
-	// complete
-	QMessageBox::about(this, tr("About yasd"), tr(
-				   "<h3>yasd *insert version*</h3>"
-				   "<p>(yet another) self-driving car simulator</p>"
-				   "<p>yasd is *insert description*</p>"
-				   "<p>Website</p>"
-				   "<p>Copyright</p>"
-				   "<p>Credits</p>"
-				   "<p>License</p>"));
+	QString name = QString("About yasd");
+	QString text = QString(
+		"<h2>yasd %1</h2>"
+		"<em>(yet another) self-driving car simulator</em>"
+		"<p><b>yasd</b> is an isolated simulation environment "
+		"designed to study how autonomous cars could learn to "
+		"properly drive and coexist without an initial "
+		"well defined traffic law.</p>"
+		"<h4><a href='https://github.com/mattiabiondi/yasd'>https://github.com/mattiabiondi/yasd</a></h4>"
+		"Copyright &copy; 2020 <b>yasd</b> authors"
+		"<hr />"
+		"<h3 style='margin-top: 0;'>Credits</h3>"
+		"<p style='margin: 0 0 0 10px;'>"
+		" <a href='https://github.com/litoss'>Carlos Caramaschi</a>, "
+		" <a href='https://github.com/mattiabiondi'>Mattia Biondi</a>, "
+		" <a href='https://github.com/Vincenzo1409'>Vincenzo Armandi</a>"
+		"</p>"
+		"<hr />"
+		"<h3 style='margin-top: 0;'>License</h3>"
+		"<p style='margin: 0 0 0 10px;'>"
+		" <b>yasd</b> is free software, licensed under"
+		" the <a href='https://www.gnu.org/licenses/gpl-3.0.html'>GNU"
+		" General Public License, version 3</a>."
+		"</p>")
+		       .arg(PROJECT_VERSION);
+
+	QMessageBox::about(this, name, text);
 }
 
 void MainWindow::fileWasModified()
