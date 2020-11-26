@@ -8,7 +8,6 @@ int main(int argc, char *argv[])
 	QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
-	QCoreApplication::setOrganizationName("yasd");
 	QCoreApplication::setApplicationName("yasd");
 	QCoreApplication::setApplicationVersion(PROJECT_VERSION);
 	QCommandLineParser parser;

@@ -4,6 +4,8 @@ Application::Application(int& argc, char **argv)
 	: QApplication(argc, argv),
 	config(NULL)
 {
+	QCoreApplication::setOrganizationName("yasd");
+
 	mainWin.reset(new MainWindow);
 
 	mainWin->show();
