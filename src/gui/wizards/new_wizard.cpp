@@ -10,3 +10,16 @@ NewWizard::NewWizard(QWidget *parent)
 
 	setWindowTitle(tr("Create a new configuration"));
 }
+
+Configuration *NewWizard::getConfig()
+{
+	Configuration *config = Configuration::create(QString());
+
+	config->setTypeA(field("typeANo").toInt());
+	config->setTypeB(field("typeBNo").toInt());
+	config->setTypeC(field("typeCNo").toInt());
+	config->setCrossroads(field("crossroadsNo").toInt());
+	config->setSpeedLimit(field("speedLimit").toInt());
+	config->setFriction(field("friction").toInt());
+	return config;
+}

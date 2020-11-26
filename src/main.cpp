@@ -1,15 +1,13 @@
-#include <QApplication>
-#include <QCommandLineParser>
-#include <QCommandLineOption>
-
-#include "gui/main_window.h"
+#include "src/application.h"
 
 int main(int argc, char *argv[])
 {
+	Application app(argc, argv);
+
 #ifdef Q_OS_ANDROID
 	QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
-	QApplication app(argc, argv);
+
 	QCoreApplication::setOrganizationName("yasd");
 	QCoreApplication::setApplicationName("yasd");
 	QCoreApplication::setApplicationVersion(PROJECT_VERSION);
@@ -20,9 +18,8 @@ int main(int argc, char *argv[])
 	parser.addPositionalArgument("file", "The .yasd file to load.");
 	parser.process(app);
 
-	MainWindow mainWin;
 	if (!parser.positionalArguments().isEmpty())
-		mainWin.loadFile(parser.positionalArguments().first());
-	mainWin.show();
+		Appl()->loadConfig(parser.positionalArguments().first());
+
 	return app.exec();
 }

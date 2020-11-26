@@ -3,10 +3,11 @@
 
 #include <QWizardPage>
 #include <QGroupBox>
+#include <QFormLayout>
+#include <QVBoxLayout>
 #include <QSpinBox>
 
-#include "../new_wizard.h"
-#include "../../const.h"
+#include "src/const.h"
 
 class CarsWizardPage : public QWizardPage
 {

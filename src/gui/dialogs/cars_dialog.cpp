@@ -1,18 +1,20 @@
-#include <QtWidgets>
-
 #include "cars_dialog.h"
 
-CarsDialog::CarsDialog(QWidget *parent)
-	: QDialog(parent)
+CarsDialog::CarsDialog(Configuration *config, QWidget *parent)
+	: QDialog(parent),
+	config(config)
 {
 	setWindowTitle(tr("Cars preferences"));
 
 	typeASpinBox = new QSpinBox;
 	typeASpinBox->setRange(MINCARS, MAXCARS);
+	typeASpinBox->setValue(config->getTypeA());
 	typeBSpinBox = new QSpinBox;
 	typeBSpinBox->setRange(MINCARS, MAXCARS);
+	typeBSpinBox->setValue(config->getTypeB());
 	typeCSpinBox = new QSpinBox;
 	typeCSpinBox->setRange(MINCARS, MAXCARS);
+	typeCSpinBox->setValue(config->getTypeC());
 
 	QFormLayout *formLayout = new QFormLayout;
 
@@ -28,10 +30,19 @@ CarsDialog::CarsDialog(QWidget *parent)
 
 	buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
 					 | QDialogButtonBox::Cancel);
+
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+	connect(buttonBox, &QDialogButtonBox::accepted, this, &CarsDialog::saveConfig);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
 	layout->addWidget(buttonBox);
 
 	setLayout(layout);
+}
+
+void CarsDialog::saveConfig()
+{
+	config->setTypeA(typeASpinBox->value());
+	config->setTypeB(typeBSpinBox->value());
+	config->setTypeC(typeCSpinBox->value());
 }

@@ -1,5 +1,3 @@
-#include <QtWidgets>
-
 #include "main_window.h"
 
 MainWindow::MainWindow()
@@ -19,7 +17,11 @@ MainWindow::MainWindow()
 		this, &MainWindow::commitData);
 #endif
 
+	connect(Appl(), &Application::configurationChanged, this, &MainWindow::configurationChanged);
+
 	setUnifiedTitleAndToolBarOnMac(true);
+
+	configTab = NULL;
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -32,49 +34,50 @@ void MainWindow::closeEvent(QCloseEvent *event)
 	}
 }
 
-void MainWindow::newFileWizard()
-{
-	if (maybeSave())
-		newWizard->exec();
-}
-
 void MainWindow::newFile()
 {
-	curConfig[TYPEA] = newWizard->field("typeANo").toInt();
-	curConfig[TYPEB] = newWizard->field("typeBNo").toInt();
-	curConfig[TYPEC] = newWizard->field("typeCNo").toInt();
-	curConfig[CROSSROADS] = newWizard->field("crossroadsNo").toInt();
-	curConfig[SPEEDLIMIT] = newWizard->field("speedLimit").toInt();
-	if (newWizard->field("friction").toInt())
-		curConfig[FRICTION] = 35;
-	else
-		curConfig[FRICTION] = 72;
-
-	setCurrentFile(QString());
+	if (maybeSave()) {
+		NewWizard wizard(this);
+		if (wizard.exec() == QWizard::Accepted)
+			Appl()->createConfig(wizard.getConfig());
+	}
 }
 
 void MainWindow::open()
 {
 	if (maybeSave()) {
-		QString fileName = QFileDialog::getOpenFileName(this);
-		if (!fileName.isEmpty())
-			loadFile(fileName);
+		QString fileName = QFileDialog::getOpenFileName(this,
+								tr("Open"),
+								Appl()->getCurrentDir(),
+								tr("yasd file (*.yasd)")
+								);
+		if (!fileName.isEmpty()) {
+			Appl()->loadConfig(fileName);
+			statusBar()->showMessage(tr("File loaded"), 2000);
+		}
 	}
 }
 
-bool MainWindow::save()
+void MainWindow::save()
 {
-	return isUntitled ? saveAs() : saveFile(curFile);
+	if (Appl()->isUntitled)
+		saveAs();
+	else
+	if (Appl()->getConfig()->save(Appl()->curFile))
+		statusBar()->showMessage(tr("File saved"), 2000);
 }
 
-bool MainWindow::saveAs()
+void MainWindow::saveAs()
 {
-	QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"), curFile);
+	QString fileName = QFileDialog::getSaveFileName(this,
+							tr("Save As"),
+							Appl()->curFile,
+							tr("yasd file (*.yasd)")
+							);
 
-	if (fileName.isEmpty())
-		return false;
-
-	return saveFile(fileName);
+	if (!fileName.isEmpty())
+		if (Appl()->getConfig()->save(fileName))
+			statusBar()->showMessage(tr("File saved"), 2000);
 }
 
 void MainWindow::setRecentFilesVisible(bool visible)
@@ -117,6 +120,7 @@ static void writeRecentFiles(const QStringList &files, QSettings &settings)
 	settings.endArray();
 }
 
+//todo fix this -> always return zero at start
 bool MainWindow::hasRecentFiles()
 {
 	QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
@@ -161,8 +165,10 @@ void MainWindow::updateRecentFileActions()
 
 void MainWindow::openRecentFile()
 {
-	if (const QAction *action = qobject_cast<const QAction *>(sender()))
-		loadFile(action->data().toString());
+	if (const QAction *action = qobject_cast<const QAction *>(sender())) {
+		Appl()->loadConfig(action->data().toString());
+		statusBar()->showMessage(tr("File loaded"), 2000);
+	}
 }
 
 void MainWindow::clearRecentFiles()
@@ -177,14 +183,18 @@ void MainWindow::clearRecentFiles()
 
 void MainWindow::editCars()
 {
-	carsDialog = new CarsDialog;
-	carsDialog->exec();
+	CarsDialog dialog(Appl()->getConfig(), this);
+
+	if (dialog.exec() == QDialog::Accepted)
+		configTab->update();
 }
 
 void MainWindow::editMap()
 {
-	mapDialog = new MapDialog;
-	mapDialog->exec();
+	MapDialog dialog(Appl()->getConfig(), this);
+
+	if (dialog.exec() == QDialog::Accepted)
+		configTab->update();
 }
 
 void MainWindow::about()
@@ -236,8 +246,7 @@ void MainWindow::createActions()
 	newAct->setShortcuts(QKeySequence::New);
 	newAct->setStatusTip(tr("Create a new file"));
 	newWizard = new NewWizard;
-	connect(newAct, &QAction::triggered, this, &MainWindow::newFileWizard);
-	connect(newWizard, &QWizard::accepted, this, &MainWindow::newFile);
+	connect(newAct, &QAction::triggered, this, &MainWindow::newFile);
 	fileMenu->addAction(newAct);
 	fileToolBar->addAction(newAct);
 
@@ -375,66 +384,6 @@ QWidget *MainWindow::welcomeTab()
 	return scrollArea;
 }
 
-QWidget *MainWindow::configTab()
-{
-	QScrollArea *scrollArea = new QScrollArea;
-	QWidget *tab = new QWidget;
-
-	tab->setObjectName("ConfigTab");
-	scrollArea->setWidget(tab);
-	scrollArea->setWidgetResizable(true);
-	scrollArea->setFrameShape(QFrame::NoFrame);
-	scrollArea->setStyleSheet("QAbstractScrollArea, #ConfigTab {background: transparent}");
-
-	QFormLayout *carsFormLayout = new QFormLayout;
-
-	typeALabel = new QLabel;
-	carsFormLayout->addRow(tr("Type A - Regular driver:"), typeALabel);
-	typeBLabel = new QLabel;
-	carsFormLayout->addRow(tr("Type B - Fast driver:"), typeBLabel);
-	typeCLabel = new QLabel;
-	carsFormLayout->addRow(tr("Type C - Slow driver:"), typeCLabel);
-
-	QGroupBox *carsGroupBox = new QGroupBox(tr("Number of cars:"));
-
-	carsGroupBox->setLayout(carsFormLayout);
-
-	QFormLayout *mapFormLayout = new QFormLayout;
-
-	crossroadsLabel = new QLabel;
-	mapFormLayout->addRow(tr("No. of crossroads:"), crossroadsLabel);
-	speedLimitLabel = new QLabel;
-	mapFormLayout->addRow(tr("Speed limit:"), speedLimitLabel);
-	frictionLabel = new QLabel;
-	mapFormLayout->addRow(tr("Coefficient of friction:"), frictionLabel);
-
-	QGroupBox *mapGroupBox = new QGroupBox(tr("Map:"));
-
-	mapGroupBox->setLayout(mapFormLayout);
-
-	QVBoxLayout *layout = new QVBoxLayout;
-
-	layout->setAlignment(Qt::AlignCenter);
-	layout->addStretch();
-	layout->addWidget(carsGroupBox);
-	layout->addWidget(mapGroupBox);
-	layout->addStretch();
-
-	tab->setLayout(layout);
-
-	return scrollArea;
-}
-
-void MainWindow::updateConfig()
-{
-	typeALabel->setText(QString::number(curConfig[TYPEA]));
-	typeBLabel->setText(QString::number(curConfig[TYPEB]));
-	typeCLabel->setText(QString::number(curConfig[TYPEC]));
-	crossroadsLabel->setText(QString::number(curConfig[CROSSROADS]));
-	speedLimitLabel->setText(QString::number(curConfig[SPEEDLIMIT]));
-	frictionLabel->setText(QString::number(curConfig[FRICTION]));
-}
-
 void MainWindow::readSettings()
 {
 	QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
@@ -466,88 +415,28 @@ bool MainWindow::maybeSave()
 	return true;
 }
 
-void MainWindow::loadFile(const QString &fileName)
+void MainWindow::configurationChanged()
 {
-	QFile file(fileName);
-
-	if (!file.open(QFile::ReadOnly | QFile::Text)) {
-		QMessageBox::warning(this, tr("yasd"),
-				     tr("Cannot read file %1:\n%2.")
-				     .arg(QDir::toNativeSeparators(fileName), file.errorString()));
-		return;
-	}
-
-	// TODO read file
-	QTextStream in(&file);
-
-#ifndef QT_NO_CURSOR
-	QGuiApplication::setOverrideCursor(Qt::WaitCursor);
-#endif
-	// TODO set the file read
-#ifndef QT_NO_CURSOR
-	QGuiApplication::restoreOverrideCursor();
-#endif
-
-	setCurrentFile(fileName);
-	statusBar()->showMessage(tr("File loaded"), 2000);
-}
-
-bool MainWindow::saveFile(const QString &fileName)
-{
-	QString errorMessage;
-
-	QGuiApplication::setOverrideCursor(Qt::WaitCursor);
-	QSaveFile file(fileName);
-
-	if (file.open(QFile::WriteOnly | QFile::Text)) {
-		// TODO write file
-		QTextStream out(&file);
-		if (!file.commit())
-			errorMessage = tr("Cannot write file %1:\n%2.")
-				       .arg(QDir::toNativeSeparators(fileName), file.errorString());
+	if (!configTab) {
+		delete tabWidget->widget(0);
+		configTab = new ConfigTab;
+		tabWidget->insertTab(0, configTab, "&Configuration");
+		saveAct->setEnabled(true);
+		saveAsAct->setEnabled(true);
+		editCarsAct->setEnabled(true);
+		editMapAct->setEnabled(true);
 	} else {
-		errorMessage = tr("Cannot open file %1 for writing:\n%2.")
-			       .arg(QDir::toNativeSeparators(fileName), file.errorString());
+		configTab->update();
 	}
-	QGuiApplication::restoreOverrideCursor();
-
-	if (!errorMessage.isEmpty()) {
-		QMessageBox::warning(this, tr("yasd"), errorMessage);
-		return false;
-	}
-
-	setCurrentFile(fileName);
-	statusBar()->showMessage(tr("File saved"), 2000);
-	return true;
-}
-
-void MainWindow::setCurrentFile(const QString &fileName)
-{
-	static int sequenceNumber = 1;
-
-	isUntitled = fileName.isEmpty();
-	if (isUntitled)
-		curFile = tr("untitled%1.yasd").arg(sequenceNumber++);
-	else
-		curFile = QFileInfo(fileName).canonicalFilePath();
 
 	// TODO
 	// set file as not modified
 	setWindowModified(false);
 
-	saveAct->setEnabled(true);
-	saveAsAct->setEnabled(true);
-	editCarsAct->setEnabled(true);
-	editMapAct->setEnabled(true);
+	if (!Appl()->isUntitled && windowFilePath() != Appl()->curFile)
+		MainWindow::prependToRecentFiles(Appl()->curFile);
 
-	if (!isUntitled && windowFilePath() != curFile)
-		MainWindow::prependToRecentFiles(curFile);
-
-	setWindowFilePath(curFile);
-
-	delete tabWidget->widget(0);
-	tabWidget->insertTab(0, configTab(), "&Configuration");
-	updateConfig();
+	setWindowFilePath(Appl()->curFile);
 }
 
 QString MainWindow::strippedName(const QString &fullFileName)

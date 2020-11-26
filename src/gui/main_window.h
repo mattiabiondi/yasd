@@ -3,9 +3,12 @@
 
 #include <QMainWindow>
 
-#include "wizards/new_wizard.h"
-#include "dialogs/cars_dialog.h"
-#include "dialogs/map_dialog.h"
+#include "src/configuration.h"
+#include "src/application.h"
+#include "src/gui/tabs/config_tab.h"
+#include "src/gui/wizards/new_wizard.h"
+#include "src/gui/dialogs/cars_dialog.h"
+#include "src/gui/dialogs/map_dialog.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -13,6 +16,7 @@ class QMenu;
 class QTabWidget;
 class QPushButton;
 class QSessionManager;
+class ConfigTab;
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -22,17 +26,14 @@ Q_OBJECT
 public:
 MainWindow();
 
-void loadFile(const QString &fileName);
-
 protected:
 void closeEvent(QCloseEvent *event) override;
 
 private slots:
-void newFileWizard();
 void newFile();
 void open();
-bool save();
-bool saveAs();
+void save();
+void saveAs();
 void updateRecentFileActions();
 void openRecentFile();
 void clearRecentFiles();
@@ -40,7 +41,7 @@ void editCars();
 void editMap();
 void about();
 void fileWasModified();
-void updateConfig();
+void configurationChanged();
 #ifndef QT_NO_SESSIONMANAGER
 void commitData(QSessionManager &);
 #endif
@@ -55,16 +56,13 @@ bool maybeSave();
 static bool hasRecentFiles();
 void prependToRecentFiles(const QString &fileName);
 void setRecentFilesVisible(bool visible);
-bool saveFile(const QString &fileName);
-void setCurrentFile(const QString &fileName);
 QString strippedName(const QString &fullFileName);
-
-QTabWidget *tabWidget;
 
 QPushButton *createButton(const QAction *action, const QString &text = QString());
 
+QTabWidget *tabWidget;
 QWidget *welcomeTab();
-QWidget *configTab();
+ConfigTab *configTab;
 
 QAction *newAct;
 QAction *openAct;
@@ -80,21 +78,8 @@ QAction *editMapAct;
 QAction *aboutAct;
 QAction *aboutQtAct;
 
-QLabel *typeALabel;
-QLabel *typeBLabel;
-QLabel *typeCLabel;
-QLabel *crossroadsLabel;
-QLabel *speedLimitLabel;
-QLabel *frictionLabel;
-
 NewWizard *newWizard;
-CarsDialog *carsDialog;
 MapDialog *mapDialog;
-
-QString curFile;
-int curConfig[CONFIGPARAMS];
-
-bool isUntitled;
 };
 
 #endif // MAINWINDOW_H

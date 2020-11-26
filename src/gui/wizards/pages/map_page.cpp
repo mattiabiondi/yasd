@@ -13,8 +13,8 @@ MapWizardPage::MapWizardPage(QWidget *parent)
 	speedLimitSpinBox->setRange(MINSPEEDLIMIT, MAXSPEEDLIMIT);
 	speedLimitSpinBox->setSuffix(" km/h");
 	frictionComboBox = new QComboBox;
-	frictionComboBox->addItem(QString("Asphalt (clean and dry) - 0.%1").arg(FRICTIONASPHALT));
-	frictionComboBox->addItem(QString("Grass (clean and dry) - 0.%1").arg(FRICTIONGRASS));
+	frictionComboBox->addItem(QString("Asphalt (clean and dry) - %1").arg(FRICTIONASPHALT));
+	frictionComboBox->addItem(QString("Grass (clean and dry) - %1").arg(FRICTIONGRASS));
 
 	registerField("crossroadsNo", crossroadsNoSpinBox);
 	registerField("speedLimit", speedLimitSpinBox);

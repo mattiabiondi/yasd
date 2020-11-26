@@ -6,7 +6,7 @@
 #include <QSpinBox>
 #include <QComboBox>
 
-#include "../../const.h"
+#include "src/const.h"
 
 class MapWizardPage : public QWizardPage
 {

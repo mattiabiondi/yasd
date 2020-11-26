@@ -8,9 +8,12 @@
 #include <QFileDialog>
 #include <QPushButton>
 #include <QMessageBox>
+#include <QScopedPointer>
+#include <QString>
 
 #include "pages/cars_page.h"
 #include "pages/map_page.h"
+#include "src/configuration.h"
 
 QT_BEGIN_NAMESPACE
 class QCheckBox;
@@ -25,6 +28,8 @@ Q_OBJECT
 
 public:
 NewWizard(QWidget *parent = nullptr);
+
+Configuration *getConfig();
 };
 
 #endif // YASD_NEW_WIZARD_H
