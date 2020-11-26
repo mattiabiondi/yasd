@@ -24,7 +24,7 @@ Configuration *Configuration::loadFromFile(const QString &fileName, QString &err
  *              return;
  *      }
  */
-	QScopedPointer<Configuration> config(new Configuration(fileName));
+	QScopedPointer<Configuration> config(new Configuration);
 
 /*
  *
@@ -42,9 +42,9 @@ Configuration *Configuration::loadFromFile(const QString &fileName, QString &err
 	return config.take();
 }
 
-Configuration *Configuration::create(const QString &fileName)
+Configuration *Configuration::create()
 {
-	QScopedPointer<Configuration> config(new Configuration(fileName));
+	QScopedPointer<Configuration> config(new Configuration);
 
 	return config.take();
 }
@@ -79,11 +79,6 @@ bool Configuration::save(const QString &fileName)
  *      //setCurrentFile(fileName);
  */
 	return true;
-}
-
-Configuration::Configuration(const QString &fn)
-	: fileName(fn)
-{
 }
 
 void Configuration::setTypeA(int value)

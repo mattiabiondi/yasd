@@ -18,7 +18,7 @@ Configuration *Application::getConfig()
 
 void Application::createConfig(Configuration *newConfig)
 {
-	setCurrentConfig(newConfig);
+	setCurrentConfig(QString(), newConfig);
 }
 
 void Application::loadConfig(const QString &fileName)
@@ -28,23 +28,23 @@ void Application::loadConfig(const QString &fileName)
 							       error);
 
 	if (newConfig)
-		setCurrentConfig(newConfig);
+		setCurrentConfig(fileName, newConfig);
 	else
 		QMessageBox::critical(mainWin.get(), QString("%1: Error").arg(applicationName()),
 				      QString("<b>Error loading configuration:</b> %1").arg(error));
 }
 
-void Application::setCurrentConfig(Configuration *newConfig)
+void Application::setCurrentConfig(const QString &fileName, Configuration *newConfig)
 {
 	config.reset(newConfig);
 
 	static int sequenceNumber = 1;
 
-	isUntitled = newConfig->getFileName().isEmpty();
+	isUntitled = fileName.isEmpty();
 	if (isUntitled) {
 		curFile = tr("untitled%1.yasd").arg(sequenceNumber++);
 	} else {
-		QFileInfo info(newConfig->getFileName());
+		QFileInfo info(fileName);
 		dir = info.absolutePath();
 		QDir::setCurrent(dir);
 		curFile = info.canonicalFilePath();

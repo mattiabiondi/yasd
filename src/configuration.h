@@ -10,12 +10,8 @@ class Configuration {
 public:
 
 static Configuration *loadFromFile(const QString &fileName, QString &error);
-static Configuration *create(const QString &fileName);
+static Configuration *create();
 bool save(const QString &fileName);
-const QString& getFileName() const
-{
-	return fileName;
-}
 
 void setTypeA(int value);
 int getTypeA() const
@@ -54,10 +50,6 @@ int getFriction() const
 }
 
 private:
-Configuration(const QString &fileName);
-
-QString fileName;
-
 int typeA;
 int typeB;
 int typeC;

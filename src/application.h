@@ -33,7 +33,7 @@ signals:
 void configurationChanged();
 
 private:
-void setCurrentConfig(Configuration *newConfig);
+void setCurrentConfig(const QString &fileName, Configuration *newConfig);
 QScopedPointer<Configuration> config;
 QScopedPointer<MainWindow> mainWin;
 QString dir;

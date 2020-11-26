@@ -13,7 +13,7 @@ NewWizard::NewWizard(QWidget *parent)
 
 Configuration *NewWizard::getConfig()
 {
-	Configuration *config = Configuration::create(QString());
+	Configuration *config = Configuration::create();
 
 	config->setTypeA(field("typeANo").toInt());
 	config->setTypeB(field("typeBNo").toInt());
