@@ -13,32 +13,50 @@ static T bumpProperty(T minValue, T value, T maxValue)
 
 Configuration *Configuration::loadFromFile(const QString &fileName, QString &error)
 {
-	// todo read json
-/*
- *      QFile file(fileName);
- *
- *      if (!file.open(QFile::ReadOnly | QFile::Text)) {
- *              QMessageBox::warning(this, tr("yasd"),
- *                                   tr("Cannot read file %1:\n%2.")
- *                                   .arg(QDir::toNativeSeparators(fileName), file.errorString()));
- *              return;
- *      }
- */
+	QFile file(fileName);
+
+	if (!file.open(QFile::ReadOnly | QFile::Text)) {
+		QMessageBox::warning(nullptr, QString("yasd"),
+				     QString("Cannot read file %1:\n%2.")
+				     .arg(QDir::toNativeSeparators(fileName), file.errorString()));
+		return nullptr;
+	}
+
+	QByteArray bytes = file.readAll();
+
+	file.close();
+
+	QJsonParseError jsonError;
+	QJsonDocument document = QJsonDocument::fromJson(bytes, &jsonError);
+
+	if (jsonError.error != QJsonParseError::NoError) {
+		QMessageBox::warning(nullptr, QString("yasd"),
+				     QString("Cannot parse from JSON:\n%1.")
+				     .arg(jsonError.errorString()));
+		return nullptr;
+	}
+	if (!document.isObject()) {
+		QMessageBox::warning(nullptr, QString("yasd"),
+				     QString("JSON object expected:\n%1."));
+		return nullptr;
+	}
+
+	QJsonObject root = document.object();
 	QScopedPointer<Configuration> config(new Configuration);
 
-/*
- *
- *      // TODO read file
- *      QTextStream in(&file);
- *
- #ifndef QT_NO_CURSOR
- *      QGuiApplication::setOverrideCursor(Qt::WaitCursor);
- #endif
- *      // TODO set the file read
- #ifndef QT_NO_CURSOR
- *      QGuiApplication::restoreOverrideCursor();
- #endif
- */
+	if (root.contains("cars")) {
+		QJsonObject cars = root.value("cars").toObject();
+		config->setTypeA(cars.take("typeA").toInt());
+		config->setTypeB(cars.take("typeB").toInt());
+		config->setTypeC(cars.take("typeC").toInt());
+	}
+
+	if (root.contains("map")) {
+		QJsonObject map = root.value("map").toObject();
+		config->setCrossroads(map.take("crossroads").toInt());
+		config->setSpeedLimit(map.take("speedLimit").toInt());
+		config->setFriction(map.take("friction").toInt());
+	}
 	return config.take();
 }
 
