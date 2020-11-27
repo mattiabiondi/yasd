@@ -58,16 +58,19 @@ void MainWindow::open()
 	}
 }
 
-void MainWindow::save()
+bool MainWindow::save()
 {
-	if (Appl()->isUntitled)
-		saveAs();
-	else
-	if (Appl()->getConfig()->save(Appl()->curFile))
+	if (Appl()->isUntitled) {
+		return saveAs();
+	} else if (Appl()->getConfig()->save(Appl()->curFile)) {
 		statusBar()->showMessage(tr("File saved"), 2000);
+		return true;
+	} else {
+		return false;
+	}
 }
 
-void MainWindow::saveAs()
+bool MainWindow::saveAs()
 {
 	QString fileName = QFileDialog::getSaveFileName(this,
 							tr("Save As"),
@@ -75,9 +78,13 @@ void MainWindow::saveAs()
 							tr("yasd file (*.yasd)")
 							);
 
-	if (!fileName.isEmpty())
-		if (Appl()->getConfig()->save(fileName))
-			statusBar()->showMessage(tr("File saved"), 2000);
+	if (!fileName.isEmpty() && Appl()->getConfig()->save(fileName)) {
+		statusBar()->showMessage(tr("File saved"), 2000);
+		Appl()->setCurrentConfig(fileName, Appl()->getConfig());
+		return true;
+	} else {
+		return false;
+	}
 }
 
 void MainWindow::setRecentFilesVisible(bool visible)
@@ -120,7 +127,6 @@ static void writeRecentFiles(const QStringList &files, QSettings &settings)
 	settings.endArray();
 }
 
-//todo fix this -> always return zero at start
 bool MainWindow::hasRecentFiles()
 {
 	QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());

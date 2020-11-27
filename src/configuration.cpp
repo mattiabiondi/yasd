@@ -51,33 +51,50 @@ Configuration *Configuration::create()
 
 bool Configuration::save(const QString &fileName)
 {
-	// todo write json
+	QJsonObject root;
 
-/*
- *      QString errorMessage;
- *
- *      QGuiApplication::setOverrideCursor(Qt::WaitCursor);
- *      QSaveFile file(fileName);
- *
- *      if (file.open(QFile::WriteOnly | QFile::Text)) {
- *              // TODO write file
- *              QTextStream out(&file);
- *              if (!file.commit())
- *                      errorMessage = tr("Cannot write file %1:\n%2.")
- *                                     .arg(QDir::toNativeSeparators(fileName), file.errorString());
- *      } else {
- *              errorMessage = tr("Cannot open file %1 for writing:\n%2.")
- *                             .arg(QDir::toNativeSeparators(fileName), file.errorString());
- *      }
- *      QGuiApplication::restoreOverrideCursor();
- *
- *      if (!errorMessage.isEmpty()) {
- *              QMessageBox::warning(this, tr("yasd"), errorMessage);
- *              return false;
- *      }
- *
- *      //setCurrentFile(fileName);
- */
+	QJsonObject cars;
+
+	cars.insert("typeA", getTypeA());
+	cars.insert("typeB", getTypeB());
+	cars.insert("typeC", getTypeC());
+
+	QJsonObject map;
+
+	map.insert("crossroads", getCrossroads());
+	map.insert("speedLimit", getSpeedLimit());
+	map.insert("friction", getFriction());
+
+	root.insert("cars", cars);
+	root.insert("map", map);
+
+	QJsonDocument document;
+
+	document.setObject(root);
+
+	QByteArray bytes = document.toJson(QJsonDocument::Indented);
+
+	QString errorMessage;
+
+	QSaveFile file(fileName);
+
+	if (file.open(QFile::WriteOnly | QFile::Text)) {
+		QTextStream out(&file);
+		out.setCodec("utf-8");
+		out << bytes;
+		if (!file.commit())
+			errorMessage = QString("Cannot write file %1:\n%2.")
+				       .arg(QDir::toNativeSeparators(fileName), file.errorString());
+	} else {
+		errorMessage = QString("Cannot open file %1 for writing:\n%2.")
+			       .arg(QDir::toNativeSeparators(fileName), file.errorString());
+	}
+
+	if (!errorMessage.isEmpty()) {
+		QMessageBox::warning(nullptr, QString("yasd"), errorMessage);
+		return false;
+	}
+
 	return true;
 }
 

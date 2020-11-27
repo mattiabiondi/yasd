@@ -3,8 +3,14 @@
 
 #include <QString>
 #include <QScopedPointer>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QJsonValue>
+#include <QSaveFile>
+#include <QDir>
+#include <QMessageBox>
 
-#include "const.h"
+#include "src/const.h"
 
 class Configuration {
 public:

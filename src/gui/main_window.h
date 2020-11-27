@@ -32,8 +32,8 @@ void closeEvent(QCloseEvent *event) override;
 private slots:
 void newFile();
 void open();
-void save();
-void saveAs();
+bool save();
+bool saveAs();
 void updateRecentFileActions();
 void openRecentFile();
 void clearRecentFiles();

@@ -20,6 +20,7 @@ Application(int& argc, char **argv);
 Configuration *getConfig();
 void createConfig(Configuration *newConfig);
 void loadConfig(const QString &fileName);
+void setCurrentConfig(const QString &fileName, Configuration *newConfig);
 
 const QString& getCurrentDir() const
 {
@@ -33,7 +34,6 @@ signals:
 void configurationChanged();
 
 private:
-void setCurrentConfig(const QString &fileName, Configuration *newConfig);
 QScopedPointer<Configuration> config;
 QScopedPointer<MainWindow> mainWin;
 QString dir;
