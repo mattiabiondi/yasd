@@ -4,6 +4,7 @@ set(yasd_SRCS
 	application.cpp
 	windows/main_window.cpp
 	tabs/config_tab.cpp
+	tabs/map_tab.cpp
 	wizards/new_wizard.cpp
 	wizards/pages/cars_page.cpp
 	wizards/pages/map_page.cpp

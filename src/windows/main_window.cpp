@@ -431,6 +431,8 @@ void MainWindow::configurationChanged()
 		saveAsAct->setEnabled(true);
 		editCarsAct->setEnabled(true);
 		editMapAct->setEnabled(true);
+		mapTab = new MapTab;
+		tabWidget->insertTab(1, mapTab, "&Map");
 	} else {
 		configTab->update();
 	}

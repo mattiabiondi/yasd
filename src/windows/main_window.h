@@ -6,6 +6,7 @@
 #include "src/configuration.h"
 #include "src/application.h"
 #include "src/tabs/config_tab.h"
+#include "src/tabs/map_tab.h"
 #include "src/wizards/new_wizard.h"
 #include "src/dialogs/cars_dialog.h"
 #include "src/dialogs/map_dialog.h"
@@ -17,6 +18,7 @@ class QTabWidget;
 class QPushButton;
 class QSessionManager;
 class ConfigTab;
+class MapTab;
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
