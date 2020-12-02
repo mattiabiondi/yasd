@@ -1,4 +1,4 @@
-#include "map_dialog.h"
+#include "src/dialogs/map_dialog.h"
 
 MapDialog::MapDialog(Configuration *config, QWidget *parent)
 	: QDialog(parent),

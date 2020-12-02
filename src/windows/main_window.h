@@ -1,14 +1,14 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef YASD_MAIN_WINDOW_H
+#define YASD_MAIN_WINDOW_H
 
 #include <QMainWindow>
 
 #include "src/configuration.h"
 #include "src/application.h"
-#include "src/gui/tabs/config_tab.h"
-#include "src/gui/wizards/new_wizard.h"
-#include "src/gui/dialogs/cars_dialog.h"
-#include "src/gui/dialogs/map_dialog.h"
+#include "src/tabs/config_tab.h"
+#include "src/wizards/new_wizard.h"
+#include "src/dialogs/cars_dialog.h"
+#include "src/dialogs/map_dialog.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -63,6 +63,7 @@ QPushButton *createButton(const QAction *action, const QString &text = QString()
 QTabWidget *tabWidget;
 QWidget *welcomeTab();
 ConfigTab *configTab;
+MapTab *mapTab;
 
 QAction *newAct;
 QAction *openAct;
@@ -82,4 +83,4 @@ NewWizard *newWizard;
 MapDialog *mapDialog;
 };
 
-#endif // MAINWINDOW_H
+#endif // YASD_MAIN_WINDOW_H

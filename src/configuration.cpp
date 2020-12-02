@@ -1,4 +1,4 @@
-#include "configuration.h"
+#include "src/configuration.h"
 
 template<typename T>
 static T bumpProperty(T minValue, T value, T maxValue)

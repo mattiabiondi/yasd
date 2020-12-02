@@ -1,4 +1,4 @@
-#include "cars_dialog.h"
+#include "src/dialogs/cars_dialog.h"
 
 CarsDialog::CarsDialog(Configuration *config, QWidget *parent)
 	: QDialog(parent),

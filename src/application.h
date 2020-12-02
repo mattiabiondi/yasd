@@ -7,7 +7,7 @@
 #include <QCommandLineOption>
 
 #include "src/configuration.h"
-#include "src/gui/main_window.h"
+#include "src/windows/main_window.h"
 
 class MainWindow;
 

@@ -2,13 +2,13 @@ set(yasd_SRCS
 	main.cpp
 	configuration.cpp
 	application.cpp
-	gui/main_window.cpp
-	gui/tabs/config_tab.cpp
-	gui/wizards/new_wizard.cpp
-	gui/wizards/pages/cars_page.cpp
-	gui/wizards/pages/map_page.cpp
-	gui/dialogs/cars_dialog.cpp
-	gui/dialogs/map_dialog.cpp
+	windows/main_window.cpp
+	tabs/config_tab.cpp
+	wizards/new_wizard.cpp
+	wizards/pages/cars_page.cpp
+	wizards/pages/map_page.cpp
+	dialogs/cars_dialog.cpp
+	dialogs/map_dialog.cpp
 )
 
 add_executable(yasd

@@ -1,4 +1,4 @@
-#include "main_window.h"
+#include "src/windows/main_window.h"
 
 MainWindow::MainWindow()
 	: tabWidget(new QTabWidget)

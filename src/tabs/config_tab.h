@@ -1,5 +1,5 @@
-#ifndef YASD__TAB_H
-#define YASD__TAB_H
+#ifndef YASD_CONFIG_TAB_H
+#define YASD_CONFIG_TAB_H
 
 #include <QWidget>
 #include <QScrollArea>
@@ -30,4 +30,4 @@ QLabel *speedLimitLabel;
 QLabel *frictionLabel;
 };
 
-#endif // YASD__TAB_H
+#endif // YASD_CONFIG_TAB_H

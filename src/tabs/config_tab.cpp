@@ -1,4 +1,4 @@
-#include "config_tab.h"
+#include "src/tabs/config_tab.h"
 
 ConfigTab::ConfigTab(QWidget *parent)
 	: QWidget(parent)
