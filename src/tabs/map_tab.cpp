@@ -113,13 +113,13 @@ void MapTab::addTrack(QGraphicsScene *scene, QColor *material, int crossroads)
 	//todo: close path
 
 	track->setPath(path);
-	track->setBrush(QBrush(material->rgb()));
+	track->setPen(QPen(QBrush(material->rgb()), 75, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 	scene->addItem(track);
 }
 
 void MapTab::lissajous(int a, int b)
 {
-	int w = 500;    // width
+	int w = 750;    // width
 	int h = w;      // height
 
 	float d = w - 0.2 * w;
