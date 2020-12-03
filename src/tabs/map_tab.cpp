@@ -5,28 +5,9 @@ MapTab::MapTab(QWidget *parent)
 {
 	grass = new QColor("#a3be8c");
 	asphalt = new QColor("#4c566a");
-	int crossroadsNum = Appl()->getConfig()->getCrossroads();
 
-	QGraphicsScene *scene = new QGraphicsScene(this);
-
-	addTrack(scene, asphalt, crossroadsNum);
-
-	//scene->setSceneRect(-300, -300, 600, 600);
-	scene->setItemIndexMethod(QGraphicsScene::NoIndex);
-
-	QGraphicsView *view = new QGraphicsView(scene);
-
-	view->setRenderHint(QPainter::Antialiasing);
-	view->setBackgroundBrush(QBrush(grass->rgb()));
-	view->setCacheMode(QGraphicsView::CacheBackground);
-	view->setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
-
-	//view->resize(400, 300);
-
-	QVBoxLayout *vBoxLayout = new QVBoxLayout;
-
+	vBoxLayout = new QVBoxLayout;
 	vBoxLayout->setAlignment(Qt::AlignCenter);
-	vBoxLayout->addWidget(view);
 
 	QWidget *tab = new QWidget;
 
@@ -43,48 +24,84 @@ MapTab::MapTab(QWidget *parent)
 	QVBoxLayout *layout = new QVBoxLayout;
 
 	layout->addWidget(scrollArea);
-
 	setLayout(layout);
+
+	scene = nullptr;
+	view = nullptr;
+	track = nullptr;
+
+	update();
+}
+
+void MapTab::update()
+{
+	if (scene) {
+		if (view) {
+			if (track) {
+				scene->removeItem(track);
+				delete track;
+			}
+			vBoxLayout->removeWidget(view);
+			delete view;
+		}
+		delete scene;
+	}
+
+	scene = new QGraphicsScene(this);
+	scene->setItemIndexMethod(QGraphicsScene::NoIndex);
+
+	view = new QGraphicsView(scene);
+
+	view->setRenderHint(QPainter::Antialiasing);
+	view->setBackgroundBrush(QBrush(grass->rgb()));
+	view->setCacheMode(QGraphicsView::CacheBackground);
+	view->setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
+
+	vBoxLayout->addWidget(view);
+
+	int crossroadsNum = Appl()->getConfig()->getCrossroads();
+
+	addTrack(scene, asphalt, crossroadsNum);
 }
 
 void MapTab::addTrack(QGraphicsScene *scene, QColor *material, int crossroads)
 {
-	QGraphicsPathItem *track = new QGraphicsPathItem;
+	track = new QGraphicsPathItem;
 
 	QPainterPath path;
 
-	switch(crossroads) {
-		case 0:
+	switch (crossroads) {
+	case 0:
 		lissajous(0, 0);
 		break;
-		case 1:
+	case 1:
 		lissajous(1, 0);
 		break;
-		case 2:
+	case 2:
 		lissajous(0, 2);
 		break;
-		case 3:
+	case 3:
 		lissajous(3, 0); // ?
 		break;
-		case 4:
+	case 4:
 		lissajous(0, 4); // ?
 		break;
-		case 5:
+	case 5:
 		lissajous(5, 0); // ?
 		break;
-		case 6:
+	case 6:
 		lissajous(0, 6); // ?
 		break;
-		case 7:
+	case 7:
 		lissajous(1, 2);
 		break;
-		case 8:
+	case 8:
 		lissajous(0, 8); // ?
 		break;
-		case 9:
+	case 9:
 		lissajous(0, 6); // ?
 		break;
-		case 10:
+	case 10:
 		lissajous(3, 2); // ?
 		break;
 	}
@@ -98,7 +115,6 @@ void MapTab::addTrack(QGraphicsScene *scene, QColor *material, int crossroads)
 	track->setPath(path);
 	track->setBrush(QBrush(material->rgb()));
 	scene->addItem(track);
-
 }
 
 void MapTab::lissajous(int a, int b)
@@ -113,6 +129,7 @@ void MapTab::lissajous(int a, int b)
 	float cy = h + b * h + h / 2;
 
 	float angle = 0;
+
 	for (int i = 0; i < points; i++) {
 		float x = r * cos(angle * (a + 1) - M_PI_2);
 		float y = r * sin(angle * (b + 1) - M_PI_2);

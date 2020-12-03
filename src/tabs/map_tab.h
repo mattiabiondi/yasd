@@ -19,9 +19,16 @@ Q_OBJECT
 public:
 MapTab(QWidget *parent = 0);
 
+public slots:
+void update();
+
 private:
 void addTrack(QGraphicsScene *scene, QColor *material, int crossroads);
 void lissajous(int a, int b);
+QVBoxLayout *vBoxLayout;
+QGraphicsScene *scene;
+QGraphicsView *view;
+QGraphicsPathItem *track;
 QColor *grass;
 QColor *asphalt;
 QPointF curve[points];

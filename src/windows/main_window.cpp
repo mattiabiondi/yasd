@@ -199,8 +199,10 @@ void MainWindow::editMap()
 {
 	MapDialog dialog(Appl()->getConfig(), this);
 
-	if (dialog.exec() == QDialog::Accepted)
+	if (dialog.exec() == QDialog::Accepted) {
 		configTab->update();
+		mapTab->update();
+	}
 }
 
 void MainWindow::about()
@@ -435,6 +437,7 @@ void MainWindow::configurationChanged()
 		tabWidget->insertTab(1, mapTab, "&Map");
 	} else {
 		configTab->update();
+		mapTab->update();
 	}
 
 	// TODO
