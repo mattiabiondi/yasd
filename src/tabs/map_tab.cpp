@@ -53,6 +53,7 @@ void MapTab::update()
 	view = new QGraphicsView(scene);
 
 	view->setRenderHint(QPainter::Antialiasing);
+	view->setDragMode(QGraphicsView::ScrollHandDrag);
 	view->setBackgroundBrush(QBrush(grass->rgb()));
 	view->setCacheMode(QGraphicsView::CacheBackground);
 	view->setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
@@ -138,4 +139,12 @@ void MapTab::lissajous(int a, int b)
 
 		angle += 0.01;
 	}
+}
+
+void MapTab::wheelEvent(QWheelEvent *event)
+{
+	if (event->angleDelta().y() > 0)
+		view->scale(1.25, 1.25);
+	else
+		view->scale(0.8, 0.8);
 }

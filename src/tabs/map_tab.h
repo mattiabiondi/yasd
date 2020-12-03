@@ -22,6 +22,9 @@ MapTab(QWidget *parent = 0);
 public slots:
 void update();
 
+protected slots:
+void wheelEvent(QWheelEvent *event);
+
 private:
 void addTrack(QGraphicsScene *scene, QColor *material, int crossroads);
 void lissajous(int a, int b);
