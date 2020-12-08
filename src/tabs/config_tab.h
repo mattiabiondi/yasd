@@ -22,9 +22,9 @@ public slots:
 void update();
 
 private:
-QLabel *typeALabel;
-QLabel *typeBLabel;
-QLabel *typeCLabel;
+QLabel *redLabel;
+QLabel *greenLabel;
+QLabel *blueLabel;
 QLabel *crossroadsLabel;
 QLabel *speedLimitLabel;
 QLabel *frictionLabel;

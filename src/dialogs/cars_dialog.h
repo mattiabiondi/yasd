@@ -27,9 +27,9 @@ Configuration *const config;
 
 QDialogButtonBox *buttonBox;
 QGroupBox *carsNoBox;
-QSpinBox *typeASpinBox;
-QSpinBox *typeBSpinBox;
-QSpinBox *typeCSpinBox;
+QSpinBox *redSpinBox;
+QSpinBox *greenSpinBox;
+QSpinBox *blueSpinBox;
 
 private slots:
 void saveConfig();

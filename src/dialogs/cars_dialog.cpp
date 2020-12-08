@@ -6,21 +6,21 @@ CarsDialog::CarsDialog(Configuration *config, QWidget *parent)
 {
 	setWindowTitle(tr("Cars preferences"));
 
-	typeASpinBox = new QSpinBox;
-	typeASpinBox->setRange(MINCARS, MAXCARS);
-	typeASpinBox->setValue(config->getTypeA());
-	typeBSpinBox = new QSpinBox;
-	typeBSpinBox->setRange(MINCARS, MAXCARS);
-	typeBSpinBox->setValue(config->getTypeB());
-	typeCSpinBox = new QSpinBox;
-	typeCSpinBox->setRange(MINCARS, MAXCARS);
-	typeCSpinBox->setValue(config->getTypeC());
+	redSpinBox = new QSpinBox;
+	redSpinBox->setRange(MINCARS, MAXCARS);
+	redSpinBox->setValue(config->getRed());
+	greenSpinBox = new QSpinBox;
+	greenSpinBox->setRange(MINCARS, MAXCARS);
+	greenSpinBox->setValue(config->getGreen());
+	blueSpinBox = new QSpinBox;
+	blueSpinBox->setRange(MINCARS, MAXCARS);
+	blueSpinBox->setValue(config->getBlue());
 
 	QFormLayout *formLayout = new QFormLayout;
 
-	formLayout->addRow(tr("Type &A - Regular driver:"), typeASpinBox);
-	formLayout->addRow(tr("Type &B - Fast driver:"), typeBSpinBox);
-	formLayout->addRow(tr("Type &C - Slow driver:"), typeCSpinBox);
+	formLayout->addRow(tr("Red - Fast driver:"), redSpinBox);
+	formLayout->addRow(tr("Green - Regular driver:"), greenSpinBox);
+	formLayout->addRow(tr("Blue - Slow driver:"), blueSpinBox);
 
 	QVBoxLayout *layout = new QVBoxLayout;
 
@@ -42,7 +42,7 @@ CarsDialog::CarsDialog(Configuration *config, QWidget *parent)
 
 void CarsDialog::saveConfig()
 {
-	config->setTypeA(typeASpinBox->value());
-	config->setTypeB(typeBSpinBox->value());
-	config->setTypeC(typeCSpinBox->value());
+	config->setRed(redSpinBox->value());
+	config->setGreen(greenSpinBox->value());
+	config->setBlue(blueSpinBox->value());
 }

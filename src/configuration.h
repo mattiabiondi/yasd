@@ -19,22 +19,22 @@ static Configuration *loadFromFile(const QString &fileName, QString &error);
 static Configuration *create();
 bool save(const QString &fileName);
 
-void setTypeA(int value);
-int getTypeA() const
+void setRed(int value);
+int getRed() const
 {
-	return typeA;
+	return red;
 }
 
-void setTypeB(int value);
-int getTypeB() const
+void setGreen(int value);
+int getGreen() const
 {
-	return typeB;
+	return green;
 }
 
-void setTypeC(int value);
-int getTypeC() const
+void setBlue(int value);
+int getBlue() const
 {
-	return typeC;
+	return blue;
 }
 
 void setCrossroads(int value);
@@ -56,9 +56,9 @@ int getFriction() const
 }
 
 private:
-int typeA;
-int typeB;
-int typeC;
+int red;
+int green;
+int blue;
 int crossroads;
 int speedLimit;
 int friction;

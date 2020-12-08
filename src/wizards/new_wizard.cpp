@@ -15,9 +15,9 @@ Configuration *NewWizard::getConfig()
 {
 	Configuration *config = Configuration::create();
 
-	config->setTypeA(field("typeANo").toInt());
-	config->setTypeB(field("typeBNo").toInt());
-	config->setTypeC(field("typeCNo").toInt());
+	config->setRed(field("redNo").toInt());
+	config->setGreen(field("greenNo").toInt());
+	config->setBlue(field("blueNo").toInt());
 	config->setCrossroads(field("crossroadsNo").toInt());
 	config->setSpeedLimit(field("speedLimit").toInt());
 	config->setFriction(field("friction").toInt());

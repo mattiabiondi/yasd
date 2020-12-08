@@ -21,9 +21,9 @@ bool isComplete() const override;
 
 private:
 QGroupBox *carsNoBox;
-QSpinBox *typeASpinBox;
-QSpinBox *typeBSpinBox;
-QSpinBox *typeCSpinBox;
+QSpinBox *redSpinBox;
+QSpinBox *greenSpinBox;
+QSpinBox *blueSpinBox;
 };
 
 #endif // YASD_CARS_PAGE_H

@@ -46,9 +46,9 @@ Configuration *Configuration::loadFromFile(const QString &fileName, QString &err
 
 	if (root.contains("cars")) {
 		QJsonObject cars = root.value("cars").toObject();
-		config->setTypeA(cars.take("typeA").toInt());
-		config->setTypeB(cars.take("typeB").toInt());
-		config->setTypeC(cars.take("typeC").toInt());
+		config->setRed(cars.take("red").toInt());
+		config->setGreen(cars.take("green").toInt());
+		config->setBlue(cars.take("blue").toInt());
 	}
 
 	if (root.contains("map")) {
@@ -73,9 +73,9 @@ bool Configuration::save(const QString &fileName)
 
 	QJsonObject cars;
 
-	cars.insert("typeA", getTypeA());
-	cars.insert("typeB", getTypeB());
-	cars.insert("typeC", getTypeC());
+	cars.insert("red", getRed());
+	cars.insert("green", getGreen());
+	cars.insert("blue", getBlue());
 
 	QJsonObject map;
 
@@ -116,19 +116,19 @@ bool Configuration::save(const QString &fileName)
 	return true;
 }
 
-void Configuration::setTypeA(int value)
+void Configuration::setRed(int value)
 {
-	typeA = bumpProperty(MINCARS, value, MAXCARS);
+	red = bumpProperty(MINCARS, value, MAXCARS);
 }
 
-void Configuration::setTypeB(int value)
+void Configuration::setGreen(int value)
 {
-	typeB = bumpProperty(MINCARS, value, MAXCARS);
+	green = bumpProperty(MINCARS, value, MAXCARS);
 }
 
-void Configuration::setTypeC(int value)
+void Configuration::setBlue(int value)
 {
-	typeC = bumpProperty(MINCARS, value, MAXCARS);
+	blue = bumpProperty(MINCARS, value, MAXCARS);
 }
 
 void Configuration::setCrossroads(int value)
