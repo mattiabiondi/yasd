@@ -4,12 +4,12 @@ set(yasd_SRCS
 	application.cpp
 	windows/main_window.cpp
 	tabs/config_tab.cpp
-	tabs/map_tab.cpp
+	tabs/track_tab.cpp
 	wizards/new_wizard.cpp
 	wizards/pages/cars_page.cpp
-	wizards/pages/map_page.cpp
+	wizards/pages/track_page.cpp
 	dialogs/cars_dialog.cpp
-	dialogs/map_dialog.cpp
+	dialogs/track_dialog.cpp
 )
 
 add_executable(yasd

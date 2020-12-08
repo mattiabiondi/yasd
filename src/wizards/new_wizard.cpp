@@ -4,7 +4,7 @@ NewWizard::NewWizard(QWidget *parent)
 	: QWizard(parent)
 {
 	addPage(new CarsWizardPage);
-	addPage(new MapWizardPage);
+	addPage(new TrackWizardPage);
 
 	setWizardStyle(ModernStyle);
 
@@ -15,11 +15,11 @@ Configuration *NewWizard::getConfig()
 {
 	Configuration *config = Configuration::create();
 
-	config->setRed(field("redNo").toInt());
-	config->setGreen(field("greenNo").toInt());
-	config->setBlue(field("blueNo").toInt());
-	config->setCrossroads(field("crossroadsNo").toInt());
-	config->setSpeedLimit(field("speedLimit").toInt());
+	config->setRed(field("red").toInt());
+	config->setGreen(field("green").toInt());
+	config->setBlue(field("blue").toInt());
+	config->setCrossroads(field("crossroads").toInt());
+	config->setLimit(field("limit").toInt());
 	config->setFriction(field("friction").toInt());
 	return config;
 }

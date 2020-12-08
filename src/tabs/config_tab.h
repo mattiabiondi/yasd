@@ -26,7 +26,7 @@ QLabel *redLabel;
 QLabel *greenLabel;
 QLabel *blueLabel;
 QLabel *crossroadsLabel;
-QLabel *speedLimitLabel;
+QLabel *limitLabel;
 QLabel *frictionLabel;
 };
 

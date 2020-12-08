@@ -51,11 +51,10 @@ Configuration *Configuration::loadFromFile(const QString &fileName, QString &err
 		config->setBlue(cars.take("blue").toInt());
 	}
 
-	if (root.contains("map")) {
-		QJsonObject map = root.value("map").toObject();
-		config->setCrossroads(map.take("crossroads").toInt());
-		config->setSpeedLimit(map.take("speedLimit").toInt());
-		config->setFriction(map.take("friction").toInt());
+	if (root.contains("track")) {
+		QJsonObject track = root.value("track").toObject();
+		config->setCrossroads(track.take("crossroads").toInt());
+		config->setLimit(track.take("limit").toInt());
 	}
 	return config.take();
 }
@@ -77,14 +76,14 @@ bool Configuration::save(const QString &fileName)
 	cars.insert("green", getGreen());
 	cars.insert("blue", getBlue());
 
-	QJsonObject map;
+	QJsonObject track;
 
-	map.insert("crossroads", getCrossroads());
-	map.insert("speedLimit", getSpeedLimit());
-	map.insert("friction", getFriction());
+	track.insert("crossroads", getCrossroads());
+	track.insert("limit", getLimit());
+	track.insert("friction", getFriction());
 
 	root.insert("cars", cars);
-	root.insert("map", map);
+	root.insert("track", track);
 
 	QJsonDocument document;
 
@@ -136,9 +135,9 @@ void Configuration::setCrossroads(int value)
 	crossroads = bumpProperty(MINCROSSROADS, value, MAXCROSSROADS);
 }
 
-void Configuration::setSpeedLimit(int value)
+void Configuration::setLimit(int value)
 {
-	speedLimit = bumpProperty(MINSPEEDLIMIT, value, MAXSPEEDLIMIT);
+	limit = bumpProperty(MINSPEEDLIMIT, value, MAXSPEEDLIMIT);
 }
 
 void Configuration::setFriction(int value)

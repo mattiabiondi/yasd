@@ -20,7 +20,7 @@ protected:
 bool isComplete() const override;
 
 private:
-QGroupBox *carsNoBox;
+QGroupBox *carsBox;
 QSpinBox *redSpinBox;
 QSpinBox *greenSpinBox;
 QSpinBox *blueSpinBox;

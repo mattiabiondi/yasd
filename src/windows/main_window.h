@@ -6,10 +6,10 @@
 #include "src/configuration.h"
 #include "src/application.h"
 #include "src/tabs/config_tab.h"
-#include "src/tabs/map_tab.h"
+#include "src/tabs/track_tab.h"
 #include "src/wizards/new_wizard.h"
 #include "src/dialogs/cars_dialog.h"
-#include "src/dialogs/map_dialog.h"
+#include "src/dialogs/track_dialog.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -18,7 +18,7 @@ class QTabWidget;
 class QPushButton;
 class QSessionManager;
 class ConfigTab;
-class MapTab;
+class TrackTab;
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -40,7 +40,7 @@ void updateRecentFileActions();
 void openRecentFile();
 void clearRecentFiles();
 void editCars();
-void editMap();
+void editTrack();
 void about();
 void fileWasModified();
 void configurationChanged();
@@ -65,7 +65,7 @@ QPushButton *createButton(const QAction *action, const QString &text = QString()
 QTabWidget *tabWidget;
 QWidget *welcomeTab();
 ConfigTab *configTab;
-MapTab *mapTab;
+TrackTab *trackTab;
 
 QAction *newAct;
 QAction *openAct;
@@ -77,12 +77,12 @@ QAction *recentFileSeparator;
 QAction *clearRecentFilesAct;
 QAction *exitAct;
 QAction *editCarsAct;
-QAction *editMapAct;
+QAction *editTrackAct;
 QAction *aboutAct;
 QAction *aboutQtAct;
 
 NewWizard *newWizard;
-MapDialog *mapDialog;
+TrackDialog *trackDialog;
 };
 
 #endif // YASD_MAIN_WINDOW_H

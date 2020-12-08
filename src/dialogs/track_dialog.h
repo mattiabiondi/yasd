@@ -14,19 +14,19 @@ QT_BEGIN_NAMESPACE
 class QDialogButtonBox;
 QT_END_NAMESPACE
 
-class MapDialog : public QDialog
+class TrackDialog : public QDialog
 {
 Q_OBJECT
 
 public:
-MapDialog(Configuration *config, QWidget *parent = nullptr);
+TrackDialog(Configuration *config, QWidget *parent = nullptr);
 
 private:
 Configuration *const config;
 
 QDialogButtonBox *buttonBox;
-QSpinBox *crossroadsNoSpinBox;
-QSpinBox *speedLimitSpinBox;
+QSpinBox *crossroadsSpinBox;
+QSpinBox *limitSpinBox;
 QComboBox *frictionComboBox;
 
 private slots:

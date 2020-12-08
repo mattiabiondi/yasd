@@ -16,25 +16,25 @@ ConfigTab::ConfigTab(QWidget *parent)
 
 	carsGroupBox->setLayout(carsFormLayout);
 
-	QFormLayout *mapFormLayout = new QFormLayout;
+	QFormLayout *trackFormLayout = new QFormLayout;
 
 	crossroadsLabel = new QLabel;
-	mapFormLayout->addRow(tr("No. of crossroads:"), crossroadsLabel);
-	speedLimitLabel = new QLabel;
-	mapFormLayout->addRow(tr("Speed limit:"), speedLimitLabel);
+	trackFormLayout->addRow(tr("No. of crossroads:"), crossroadsLabel);
+	limitLabel = new QLabel;
+	trackFormLayout->addRow(tr("Speed limit:"), limitLabel);
 	frictionLabel = new QLabel;
-	mapFormLayout->addRow(tr("Coefficient of friction:"), frictionLabel);
+	trackFormLayout->addRow(tr("Coefficient of friction:"), frictionLabel);
 
-	QGroupBox *mapGroupBox = new QGroupBox(tr("Map:"));
+	QGroupBox *trackGroupBox = new QGroupBox(tr("Track:"));
 
-	mapGroupBox->setLayout(mapFormLayout);
+	trackGroupBox->setLayout(trackFormLayout);
 
 	QVBoxLayout *vBoxLayout = new QVBoxLayout;
 
 	vBoxLayout->setAlignment(Qt::AlignCenter);
 	vBoxLayout->addStretch();
 	vBoxLayout->addWidget(carsGroupBox);
-	vBoxLayout->addWidget(mapGroupBox);
+	vBoxLayout->addWidget(trackGroupBox);
 	vBoxLayout->addStretch();
 
 	QWidget *tab = new QWidget;
@@ -65,7 +65,7 @@ void ConfigTab::update()
 	greenLabel->setText(QString::number(config->getGreen()));
 	blueLabel->setText(QString::number(config->getBlue()));
 	crossroadsLabel->setText(QString::number(config->getCrossroads()));
-	speedLimitLabel->setText(QString("%1 km/h").arg(config->getSpeedLimit()));
+	limitLabel->setText(QString("%1 km/h").arg(config->getLimit()));
 	if (config->getFriction() == FRICTIONASPHALTINDEX)
 		frictionLabel->setText(QString::number(FRICTIONASPHALT));
 	else if (config->getFriction() == FRICTIONGRASSINDEX)

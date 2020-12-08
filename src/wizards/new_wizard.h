@@ -12,7 +12,7 @@
 #include <QString>
 
 #include "pages/cars_page.h"
-#include "pages/map_page.h"
+#include "pages/track_page.h"
 #include "src/configuration.h"
 
 QT_BEGIN_NAMESPACE

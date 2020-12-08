@@ -8,7 +8,7 @@
 #define MINCARS 0
 #define MAXCARS 10
 
-// map min/max values
+// track min/max values
 #define MINCROSSROADS 0
 #define MAXCROSSROADS 10
 #define DEFAULTSPEEDLIMIT 70

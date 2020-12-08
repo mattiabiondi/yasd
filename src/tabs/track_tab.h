@@ -13,11 +13,11 @@
 
 const int points = 2 * M_PI * 100; // 2 * 3.14 = 6.28 * 100 = 628
 
-class MapTab : public QWidget {
+class TrackTab : public QWidget {
 Q_OBJECT
 
 public:
-MapTab(QWidget *parent = 0);
+TrackTab(QWidget *parent = 0);
 
 public slots:
 void update();

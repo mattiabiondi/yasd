@@ -26,7 +26,7 @@ private:
 Configuration *const config;
 
 QDialogButtonBox *buttonBox;
-QGroupBox *carsNoBox;
+QGroupBox *carsBox;
 QSpinBox *redSpinBox;
 QSpinBox *greenSpinBox;
 QSpinBox *blueSpinBox;

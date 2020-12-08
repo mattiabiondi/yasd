@@ -43,10 +43,10 @@ int getCrossroads() const
 	return crossroads;
 }
 
-void setSpeedLimit(int value);
-int getSpeedLimit() const
+void setLimit(int value);
+int getLimit() const
 {
-	return speedLimit;
+	return limit;
 }
 
 void setFriction(int value);
@@ -60,7 +60,7 @@ int red;
 int green;
 int blue;
 int crossroads;
-int speedLimit;
+int limit;
 int friction;
 };
 

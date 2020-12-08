@@ -8,7 +8,7 @@
 
 #include "src/const.h"
 
-class MapWizardPage : public QWizardPage
+class TrackWizardPage : public QWizardPage
 {
 Q_OBJECT
 
@@ -16,11 +16,11 @@ protected:
 void initializePage() override;
 
 public:
-MapWizardPage(QWidget *parent = nullptr);
+TrackWizardPage(QWidget *parent = nullptr);
 
 private:
-QSpinBox *crossroadsNoSpinBox;
-QSpinBox *speedLimitSpinBox;
+QSpinBox *crossroadsSpinBox;
+QSpinBox *limitSpinBox;
 QComboBox *frictionComboBox;
 };
 

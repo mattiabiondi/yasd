@@ -24,9 +24,9 @@ CarsDialog::CarsDialog(Configuration *config, QWidget *parent)
 
 	QVBoxLayout *layout = new QVBoxLayout;
 
-	carsNoBox = new QGroupBox(tr("Number of cars:"));
-	carsNoBox->setLayout(formLayout);
-	layout->addWidget(carsNoBox);
+	carsBox = new QGroupBox(tr("Number of cars:"));
+	carsBox->setLayout(formLayout);
+	layout->addWidget(carsBox);
 
 	buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
 					 | QDialogButtonBox::Cancel);

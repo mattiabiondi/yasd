@@ -19,16 +19,16 @@ CarsWizardPage::CarsWizardPage(QWidget *parent)
 	formLayout->addRow(tr("Green - Regular driver:"), greenSpinBox);
 	formLayout->addRow(tr("Blue - Slow driver:"), blueSpinBox);
 
-	carsNoBox = new QGroupBox(tr("Number of cars:"));
-	carsNoBox->setLayout(formLayout);
+	carsBox = new QGroupBox(tr("Number of cars:"));
+	carsBox->setLayout(formLayout);
 
-	registerField("redNo", redSpinBox);
-	registerField("greenNo", greenSpinBox);
-	registerField("blueNo", blueSpinBox);
+	registerField("red", redSpinBox);
+	registerField("green", greenSpinBox);
+	registerField("blue", blueSpinBox);
 
 	QVBoxLayout *layout = new QVBoxLayout;
 
-	layout->addWidget(carsNoBox);
+	layout->addWidget(carsBox);
 	setLayout(layout);
 
 	connect(redSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
@@ -41,7 +41,7 @@ CarsWizardPage::CarsWizardPage(QWidget *parent)
 
 bool CarsWizardPage::isComplete() const
 {
-	return field("redNo").toInt() +
-	       field("greenNo").toInt() +
-	       field("blueNo").toInt();
+	return field("red").toInt() +
+	       field("green").toInt() +
+	       field("blue").toInt();
 }

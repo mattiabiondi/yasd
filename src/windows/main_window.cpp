@@ -195,13 +195,13 @@ void MainWindow::editCars()
 		configTab->update();
 }
 
-void MainWindow::editMap()
+void MainWindow::editTrack()
 {
-	MapDialog dialog(Appl()->getConfig(), this);
+	TrackDialog dialog(Appl()->getConfig(), this);
 
 	if (dialog.exec() == QDialog::Accepted) {
 		configTab->update();
-		mapTab->update();
+		trackTab->update();
 	}
 }
 
@@ -322,9 +322,9 @@ void MainWindow::createActions()
 	editCarsAct->setStatusTip(tr("Edit car preferences"));
 	editCarsAct->setEnabled(false);
 
-	editMapAct = editMenu->addAction(tr("Map..."), this, &MainWindow::editMap);
-	editMapAct->setStatusTip(tr("Edit map preferences"));
-	editMapAct->setEnabled(false);
+	editTrackAct = editMenu->addAction(tr("Track..."), this, &MainWindow::editTrack);
+	editTrackAct->setStatusTip(tr("Edit track preferences"));
+	editTrackAct->setEnabled(false);
 
 	menuBar()->addSeparator();
 
@@ -432,12 +432,12 @@ void MainWindow::configurationChanged()
 		saveAct->setEnabled(true);
 		saveAsAct->setEnabled(true);
 		editCarsAct->setEnabled(true);
-		editMapAct->setEnabled(true);
-		mapTab = new MapTab;
-		tabWidget->insertTab(1, mapTab, "&Map");
+		editTrackAct->setEnabled(true);
+		trackTab = new TrackTab;
+		tabWidget->insertTab(1, trackTab, "&Track");
 	} else {
 		configTab->update();
-		mapTab->update();
+		trackTab->update();
 	}
 
 	// TODO

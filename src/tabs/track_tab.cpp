@@ -1,6 +1,6 @@
-#include "src/tabs/map_tab.h"
+#include "src/tabs/track_tab.h"
 
-MapTab::MapTab(QWidget *parent)
+TrackTab::TrackTab(QWidget *parent)
 	: QWidget(parent)
 {
 	grass = new QColor("#a3be8c");
@@ -11,7 +11,7 @@ MapTab::MapTab(QWidget *parent)
 
 	QWidget *tab = new QWidget;
 
-	tab->setObjectName("MapTab");
+	tab->setObjectName("TrackTab");
 	tab->setLayout(vBoxLayout);
 
 	QScrollArea *scrollArea = new QScrollArea;
@@ -19,7 +19,7 @@ MapTab::MapTab(QWidget *parent)
 	scrollArea->setWidget(tab);
 	scrollArea->setWidgetResizable(true);
 	scrollArea->setFrameShape(QFrame::NoFrame);
-	scrollArea->setStyleSheet("QAbstractScrollArea, #MapTab {background: transparent}");
+	scrollArea->setStyleSheet("QAbstractScrollArea, #TrackTab {background: transparent}");
 
 	QVBoxLayout *layout = new QVBoxLayout;
 
@@ -33,7 +33,7 @@ MapTab::MapTab(QWidget *parent)
 	update();
 }
 
-void MapTab::update()
+void TrackTab::update()
 {
 	if (scene) {
 		if (view) {
@@ -65,7 +65,7 @@ void MapTab::update()
 	addTrack(scene, asphalt, crossroadsNum);
 }
 
-void MapTab::addTrack(QGraphicsScene *scene, QColor *material, int crossroads)
+void TrackTab::addTrack(QGraphicsScene *scene, QColor *material, int crossroads)
 {
 	track = new QGraphicsPathItem;
 
@@ -118,7 +118,7 @@ void MapTab::addTrack(QGraphicsScene *scene, QColor *material, int crossroads)
 	scene->addItem(track);
 }
 
-void MapTab::lissajous(int a, int b)
+void TrackTab::lissajous(int a, int b)
 {
 	int w = 750;    // width
 	int h = w;      // height
@@ -141,7 +141,7 @@ void MapTab::lissajous(int a, int b)
 	}
 }
 
-void MapTab::wheelEvent(QWheelEvent *event)
+void TrackTab::wheelEvent(QWheelEvent *event)
 {
 	if (event->angleDelta().y() > 0)
 		view->scale(1.25, 1.25);
