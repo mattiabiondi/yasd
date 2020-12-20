@@ -236,6 +236,23 @@ void MainWindow::about()
 	QMessageBox::about(this, name, text);
 }
 
+void MainWindow::openTrack()
+{
+	// Set OpenGL Version information
+	// Note: This format must be set before show() is called.
+	QSurfaceFormat format;
+
+	format.setRenderableType(QSurfaceFormat::OpenGL);
+	format.setProfile(QSurfaceFormat::CoreProfile);
+	format.setVersion(4, 6);
+
+	// Set the window up
+	trackWin.reset(new TrackWindow);
+	trackWin->setFormat(format);
+	trackWin->resize(QSize(800, 600));
+	trackWin->show();
+}
+
 void MainWindow::fileWasModified()
 {
 	// TODO
@@ -245,7 +262,7 @@ void MainWindow::fileWasModified()
 void MainWindow::createActions()
 {
 	QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
-	QToolBar *fileToolBar = addToolBar(tr("File"));
+	QToolBar *toolbar = addToolBar(tr("Toolbar"));
 
 	// TODO
 	const QIcon newIcon = QIcon::fromTheme("document-new");
@@ -256,7 +273,7 @@ void MainWindow::createActions()
 	newWizard = new NewWizard;
 	connect(newAct, &QAction::triggered, this, &MainWindow::newFile);
 	fileMenu->addAction(newAct);
-	fileToolBar->addAction(newAct);
+	toolbar->addAction(newAct);
 
 	// TODO icon
 	const QIcon openIcon = QIcon::fromTheme("document-open");
@@ -266,7 +283,7 @@ void MainWindow::createActions()
 	openAct->setStatusTip(tr("Open an existing file"));
 	connect(openAct, &QAction::triggered, this, &MainWindow::open);
 	fileMenu->addAction(openAct);
-	fileToolBar->addAction(openAct);
+	toolbar->addAction(openAct);
 
 	// TODO icon
 	const QIcon saveIcon = QIcon::fromTheme("document-save");
@@ -277,7 +294,7 @@ void MainWindow::createActions()
 	saveAct->setEnabled(false);
 	connect(saveAct, &QAction::triggered, this, &MainWindow::save);
 	fileMenu->addAction(saveAct);
-	fileToolBar->addAction(saveAct);
+	toolbar->addAction(saveAct);
 
 	// TODO icon
 	const QIcon saveAsIcon = QIcon::fromTheme("document-save-as");
@@ -325,6 +342,16 @@ void MainWindow::createActions()
 	editTrackAct = editMenu->addAction(tr("Track..."), this, &MainWindow::editTrack);
 	editTrackAct->setStatusTip(tr("Edit track preferences"));
 	editTrackAct->setEnabled(false);
+
+	menuBar()->addSeparator();
+	toolbar->addSeparator();
+
+	QMenu *windowsMenu = menuBar()->addMenu(tr("&Windows"));
+
+	openTrackAct = windowsMenu->addAction(tr("Track"), this, &MainWindow::openTrack);
+	openTrackAct->setStatusTip(tr("Open track windows"));
+	openTrackAct->setEnabled(false);
+	toolbar->addAction(openTrackAct);
 
 	menuBar()->addSeparator();
 
@@ -433,6 +460,7 @@ void MainWindow::configurationChanged()
 		saveAsAct->setEnabled(true);
 		editCarsAct->setEnabled(true);
 		editTrackAct->setEnabled(true);
+		openTrackAct->setEnabled(true);
 		trackTab = new TrackTab;
 		tabWidget->insertTab(1, trackTab, "&Track");
 	} else {

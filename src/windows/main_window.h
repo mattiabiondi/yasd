@@ -7,6 +7,7 @@
 #include "src/application.h"
 #include "src/tabs/config_tab.h"
 #include "src/tabs/track_tab.h"
+#include "src/windows/track_window.h"
 #include "src/wizards/new_wizard.h"
 #include "src/dialogs/cars_dialog.h"
 #include "src/dialogs/track_dialog.h"
@@ -42,6 +43,7 @@ void clearRecentFiles();
 void editCars();
 void editTrack();
 void about();
+void openTrack();
 void fileWasModified();
 void configurationChanged();
 #ifndef QT_NO_SESSIONMANAGER
@@ -80,9 +82,12 @@ QAction *editCarsAct;
 QAction *editTrackAct;
 QAction *aboutAct;
 QAction *aboutQtAct;
+QAction *openTrackAct;
 
 NewWizard *newWizard;
 TrackDialog *trackDialog;
+
+QScopedPointer<TrackWindow> trackWin;
 };
 
 #endif // YASD_MAIN_WINDOW_H

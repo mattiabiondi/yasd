@@ -3,6 +3,11 @@ set(yasd_SRCS
 	configuration.cpp
 	application.cpp
 	windows/main_window.cpp
+	windows/track_window.cpp
+	windows/transform3d.cpp
+	windows/input.cpp
+	windows/camera3d.cpp
+	windows/resources.qrc
 	tabs/config_tab.cpp
 	tabs/track_tab.cpp
 	wizards/new_wizard.cpp
