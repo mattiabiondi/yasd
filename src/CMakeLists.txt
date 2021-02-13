@@ -2,9 +2,9 @@ set(yasd_SRCS
 	main.cpp
 	configuration.cpp
 	application.cpp
+	input.cpp
 	windows/main_window.cpp
 	windows/track_window.cpp
-	windows/input.cpp
 	tabs/config_tab.cpp
 	tabs/track_tab.cpp
 	wizards/new_wizard.cpp
