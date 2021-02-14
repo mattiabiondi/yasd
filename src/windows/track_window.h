@@ -1,15 +1,17 @@
 #ifndef YASD_TRACK_WINDOW_H
 #define YASD_TRACK_WINDOW_H
 
+#include "src/input.h"
+#include "src/const.h"
+#include "src/windows/cars/car.h"
+#include "src/windows/track/track.h"
+
 #include <QOpenGLWindow>
 #include <QOpenGLFunctions>
-#include <QOpenGLBuffer>
-#include <QOpenGLVertexArrayObject>
-#include <QMatrix4x4>
-#include "transform3d.h"
-#include "camera3d.h"
 
-class QOpenGLShaderProgram;
+#include <QPainter>
+#include <QPen>
+#include <QFont>
 
 class TrackWindow : public QOpenGLWindow,
 	protected QOpenGLFunctions
@@ -22,31 +24,19 @@ TrackWindow();
 ~TrackWindow();
 
 void initializeGL();
-void resizeGL(int width, int height);
 void paintGL();
 protected slots:
-  void teardownGL();
-  void update();
+void teardownGL();
+void update();
 
 protected:
-  void keyPressEvent(QKeyEvent *event);
-  void keyReleaseEvent(QKeyEvent *event);
-  void mousePressEvent(QMouseEvent *event);
-  void mouseReleaseEvent(QMouseEvent *event);
+void keyPressEvent(QKeyEvent *event);
+void keyReleaseEvent(QKeyEvent *event);
 
 private:
-// OpenGL State Information
-QOpenGLBuffer m_vertex;
-QOpenGLVertexArrayObject m_object;
-QOpenGLShaderProgram *m_program;
-
-// Shader Information
-int u_modelToWorld;
-int u_worldToCamera;
-  int u_cameraToView;
-  QMatrix4x4 m_projection;
-  Camera3D m_camera;
-Transform3D m_transform;
+//Car *car;
+Car **cars;
+Track ***tracks;
 
 // Private Helpers
 void printContextInformation();

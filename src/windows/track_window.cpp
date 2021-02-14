@@ -1,58 +1,34 @@
 #include "src/windows/track_window.h"
+
+#include <QApplication>
+#include <QMainWindow>
 #include <QDebug>
 #include <QString>
-#include <QOpenGLShaderProgram>
 #include <QKeyEvent>
-#include "vertex.h"
-#include "input.h"
 
-// Front Verticies
-#define VERTEX_FTR Vertex(QVector3D(0.5f, 0.5f, 0.5f), QVector3D(1.0f, 0.0f, 0.0f))
-#define VERTEX_FTL Vertex(QVector3D(-0.5f, 0.5f, 0.5f), QVector3D(0.0f, 1.0f, 0.0f))
-#define VERTEX_FBL Vertex(QVector3D(-0.5f, -0.5f, 0.5f), QVector3D(0.0f, 0.0f, 1.0f))
-#define VERTEX_FBR Vertex(QVector3D(0.5f, -0.5f, 0.5f), QVector3D(0.0f, 0.0f, 0.0f))
-
-// Back Verticies
-#define VERTEX_BTR Vertex(QVector3D(0.5f, 0.5f, -0.5f), QVector3D(1.0f, 1.0f, 0.0f))
-#define VERTEX_BTL Vertex(QVector3D(-0.5f, 0.5f, -0.5f), QVector3D(0.0f, 1.0f, 1.0f))
-#define VERTEX_BBL Vertex(QVector3D(-0.5f, -0.5f, -0.5f), QVector3D(1.0f, 0.0f, 1.0f))
-#define VERTEX_BBR Vertex(QVector3D(0.5f, -0.5f, -0.5f), QVector3D(1.0f, 1.0f, 1.0f))
-
-// Create a colored cube
-static const Vertex sg_vertexes[] = {
-	// Face 1 (Front)
-	VERTEX_FTR, VERTEX_FTL, VERTEX_FBL,
-	VERTEX_FBL, VERTEX_FBR, VERTEX_FTR,
-	// Face 2 (Back)
-	VERTEX_BBR, VERTEX_BTL, VERTEX_BTR,
-	VERTEX_BTL, VERTEX_BBR, VERTEX_BBL,
-	// Face 3 (Top)
-	VERTEX_FTR, VERTEX_BTR, VERTEX_BTL,
-	VERTEX_BTL, VERTEX_FTL, VERTEX_FTR,
-	// Face 4 (Bottom)
-	VERTEX_FBR, VERTEX_FBL, VERTEX_BBL,
-	VERTEX_BBL, VERTEX_BBR, VERTEX_FBR,
-	// Face 5 (Left)
-	VERTEX_FBL, VERTEX_FTL, VERTEX_BTL,
-	VERTEX_FBL, VERTEX_BTL, VERTEX_BBL,
-	// Face 6 (Right)
-	VERTEX_FTR, VERTEX_FBR, VERTEX_BBR,
-	VERTEX_BBR, VERTEX_BTR, VERTEX_FTR
-};
-
-#undef VERTEX_BBR
-#undef VERTEX_BBL
-#undef VERTEX_BTL
-#undef VERTEX_BTR
-
-#undef VERTEX_FBR
-#undef VERTEX_FBL
-#undef VERTEX_FTL
-#undef VERTEX_FTR
+// These variables set the dimensions of the rectanglar region we wish to view.
+const double Xmin = 0.0, Xmax = 3.0;
+const double Ymin = 0.0, Ymax = 3.0;
 
 TrackWindow::TrackWindow()
 {
-	m_transform.translate(0.0f, 0.0f, -5.0f);
+	int matrix[3][3] = { { 12, 14, 6 }, { 13, 15, 7 }, { 9, 11, 3 } };
+	QPointF *start = new QPointF(CHUNKSIZE / 2, CHUNKSIZE / 2);
+
+	cars = new Car *[3];
+	for (int i = 0; i < 3; i++) {
+		QPointF *point = new QPointF(CHUNKSIZE / 2 + i * 100, CHUNKSIZE / 2 + i * 100);
+		cars[i] = new Car(i, point, 0);
+	}
+
+	//car = new Car(start, 0);
+	tracks = new Track * *[3];
+
+	for (int i = 0; i < 3; i++) {
+		tracks[i] = new Track *[3];
+		for (int j = 0; j < 3; j++)
+			tracks[i][j] = new Track(matrix[i][j], 1);
+	}
 }
 
 TrackWindow::~TrackWindow()
@@ -70,124 +46,104 @@ void TrackWindow::initializeGL()
 	initializeOpenGLFunctions();
 	connect(this, &QOpenGLWindow::frameSwapped, this, &TrackWindow::update);
 	printContextInformation();
-
-	// Set global information
-	glEnable(GL_CULL_FACE);
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
-	// Application-specific initialization
-	{
-		// Create Shader (Do not release until VAO is created)
-		m_program = new QOpenGLShaderProgram();
-		m_program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/simple.vert");
-		m_program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/simple.frag");
-		m_program->link();
-		m_program->bind();
-
-		// Cache Uniform Locations
-		u_modelToWorld = m_program->uniformLocation("modelToWorld");
-		u_worldToCamera = m_program->uniformLocation("worldToCamera");
-    u_cameraToView = m_program->uniformLocation("cameraToView");
-
-		// Create Buffer (Do not release until VAO is created)
-		m_vertex.create();
-		m_vertex.bind();
-		m_vertex.setUsagePattern(QOpenGLBuffer::StaticDraw);
-		m_vertex.allocate(sg_vertexes, sizeof(sg_vertexes));
-
-		// Create Vertex Array Object
-		m_object.create();
-		m_object.bind();
-		m_program->enableAttributeArray(0);
-		m_program->enableAttributeArray(1);
-		m_program->setAttributeBuffer(0, GL_FLOAT, Vertex::positionOffset(), Vertex::PositionTupleSize, Vertex::stride());
-		m_program->setAttributeBuffer(1, GL_FLOAT, Vertex::colorOffset(), Vertex::ColorTupleSize, Vertex::stride());
-
-		// Release (unbind) all
-		m_object.release();
-		m_vertex.release();
-		m_program->release();
-	}
-}
-
-void TrackWindow::resizeGL(int width, int height)
-{
-	m_projection.setToIdentity();
-	m_projection.perspective(45.0f, width / float(height), 0.0f, 1000.0f);
 }
 
 void TrackWindow::paintGL()
 {
-	// Clear
-	glClear(GL_COLOR_BUFFER_BIT);
+	// Clear the rendering window
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// Render using our shader
-	m_program->bind();
-	m_program->setUniformValue(u_worldToCamera, m_camera.toMatrix());
-  m_program->setUniformValue(u_cameraToView, m_projection);
-	{
-		m_object.bind();
-		m_program->setUniformValue(u_modelToWorld, m_transform.toMatrix());
-		glDrawArrays(GL_TRIANGLES, 0, sizeof(sg_vertexes) / sizeof(sg_vertexes[0]));
-		m_object.release();
+	// painter.setPen(QPen(Qt::white, 5, Qt::SolidLine, Qt::RoundCap));
+	//
+	// //Stampa della posizione della macchina
+	// painter.drawPoint(*car->getPosition());
+	//
+	// //Stampa dei sensori
+	// painter.setPen(QPen(Qt::red, 5, Qt::SolidLine, Qt::RoundCap));
+	// QLineF **sensors = car->getSensors();
+	//
+	// for (int i = 0; i < 5; i++)
+	// 	painter.drawLine(*sensors[i]);
+
+	for (int i = 0; i < 3; i++)
+		cars[i]->print(this);
+
+	QPainter painter;
+
+	painter.begin(this);
+	painter.setRenderHint(QPainter::Antialiasing);
+
+	painter.setPen(QPen(Qt::yellow, 5, Qt::SolidLine, Qt::RoundCap));
+	//Stampa della strada
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			for (int k = 0; k < tracks[i][j]->numLines; k++)
+				painter.drawLine(tracks[i][j]->lines[k]->translated(QPointF(i * CHUNKSIZE, j * CHUNKSIZE)));
+
+			//painter.drawLines(*tracks[i][j]->lines, tracks[i][j]->numLines);
+			//painter.save();
+		}
 	}
-	m_program->release();
+
+	painter.end();
+
+	// Flush the pipeline.  (Not usually necessary.)
+	//glFlush();
 }
 
 void TrackWindow::teardownGL()
 {
 	// Actually destroy our OpenGL information
-	m_object.destroy();
-	m_vertex.destroy();
-	delete m_program;
+
+	//foo.destroy();
+	//delete bar;
 }
 
 void TrackWindow::update()
 {
 	// Update input
-  Input::update();
+	Input::update();
 
-  // Camera Transformation
-  if (Input::buttonPressed(Qt::RightButton))
-  {
-    static const float transSpeed = 0.5f;
-    static const float rotSpeed   = 0.5f;
+	// if (Input::keyPressed(Qt::Key_Up))
+	// 	car->move(5, 0);
+	// else if (Input::keyPressed(Qt::Key_Down))
+	// 	car->move(-5, 0);
+	// else if (Input::keyPressed(Qt::Key_Left))
+	// 	car->move(0, 1);
+	// else if (Input::keyPressed(Qt::Key_Right))
+	// 	car->move(0, -1);
+	// //Ricacolare intersezioni e distanze
+	// QLineF **sensors = car->getSensors();
 
-    // Handle rotations
-    m_camera.rotate(-rotSpeed * Input::mouseDelta().x(), Camera3D::LocalUp);
-    m_camera.rotate(-rotSpeed * Input::mouseDelta().y(), m_camera.right());
+	for (int i = 0; i < 3; i++) {
+		if (Input::keyPressed(Qt::Key_Up))
+			cars[i]->move(5, 0);
+		else if (Input::keyPressed(Qt::Key_Down))
+			cars[i]->move(-5, 0);
+		else if (Input::keyPressed(Qt::Key_Left))
+			cars[i]->move(0, 1);
+		else if (Input::keyPressed(Qt::Key_Right))
+			cars[i]->move(0, -1);
+	}
 
-    // Handle translations
-    QVector3D translation;
-    if (Input::keyPressed(Qt::Key_W))
-    {
-      translation += m_camera.forward();
-    }
-    if (Input::keyPressed(Qt::Key_S))
-    {
-      translation -= m_camera.forward();
-    }
-    if (Input::keyPressed(Qt::Key_A))
-    {
-      translation -= m_camera.right();
-    }
-    if (Input::keyPressed(Qt::Key_D))
-    {
-      translation += m_camera.right();
-    }
-    if (Input::keyPressed(Qt::Key_Q))
-    {
-      translation -= m_camera.up();
-    }
-    if (Input::keyPressed(Qt::Key_E))
-    {
-      translation += m_camera.up();
-    }
-    m_camera.translate(transSpeed * translation);
-  }
+	for (int a = 0; a < 3; a++) {
+		QLineF **sensors = cars[a]->getSensors();
+		int x = cars[a]->getPosition()->x() / CHUNKSIZE;
+		int y = cars[a]->getPosition()->y() / CHUNKSIZE;
 
-	// Update instance information
-	m_transform.rotate(1.0f, QVector3D(0.4f, 0.3f, 0.3f));
+		for (int i = x - 1; i <= x + 1; i++)
+			if (i >= 0 && i < 3) {
+				for (int j = y - 1; j <= y + 1; j++)
+					if (j >= 0 && j < 3) {
+						for (int k = 0; k < tracks[i][j]->numLines; k++)
+							for (int l = 0; l < 5; l++) {
+								QPointF *intersection = new QPointF();
+								if (sensors[l]->intersects(tracks[i][j]->lines[k]->translated(QPointF(i * CHUNKSIZE, j * CHUNKSIZE)), intersection) == QLineF::BoundedIntersection)
+									sensors[l]->setP2(*intersection);
+							}
+					}
+			}
+	}
 
 	// Schedule a redraw
 	QOpenGLWindow::update();
@@ -195,36 +151,18 @@ void TrackWindow::update()
 
 void TrackWindow::keyPressEvent(QKeyEvent *event)
 {
-  if (event->isAutoRepeat())
-  {
-    event->ignore();
-  }
-  else
-  {
-    Input::registerKeyPress(event->key());
-  }
+	if (event->isAutoRepeat())
+		event->ignore();
+	else
+		Input::registerKeyPress(event->key());
 }
 
 void TrackWindow::keyReleaseEvent(QKeyEvent *event)
 {
-  if (event->isAutoRepeat())
-  {
-    event->ignore();
-  }
-  else
-  {
-    Input::registerKeyRelease(event->key());
-  }
-}
-
-void TrackWindow::mousePressEvent(QMouseEvent *event)
-{
-  Input::registerMousePress(event->button());
-}
-
-void TrackWindow::mouseReleaseEvent(QMouseEvent *event)
-{
-  Input::registerMouseRelease(event->button());
+	if (event->isAutoRepeat())
+		event->ignore();
+	else
+		Input::registerKeyRelease(event->key());
 }
 
 /*******************************************************************************

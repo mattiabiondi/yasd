@@ -7,6 +7,7 @@
 #include <QJsonDocument>
 #include <QJsonValue>
 #include <QSaveFile>
+#include <QTextStream>
 #include <QDir>
 #include <QMessageBox>
 
