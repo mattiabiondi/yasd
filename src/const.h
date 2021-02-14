@@ -8,6 +8,11 @@
 #define MINCARS 0
 #define MAXCARS 10
 
+// cars type
+#define REDTYPE 0
+#define GREENTYPE 1
+#define BLUETYPE 2
+
 // track min/max values
 #define MINCROSSROADS 0
 #define MAXCROSSROADS 10
@@ -19,3 +24,11 @@
 
 #define FRICTIONASPHALTINDEX 0
 #define FRICTIONGRASSINDEX 1
+
+#define TRACKSIZE 250
+#define CHUNKSIZE 500
+
+// cars sensors proximity
+#define NUMSENSORS 5
+#define SENSORSOFFSET 50
+#define MINSENSORS CHUNKSIZE / 5
