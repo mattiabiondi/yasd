@@ -5,6 +5,7 @@ set(yasd_SRCS
 	input.cpp
 	windows/main_window.cpp
 	windows/track_window.cpp
+	windows/cars/car.cpp
 	tabs/config_tab.cpp
 	tabs/track_tab.cpp
 	wizards/new_wizard.cpp
