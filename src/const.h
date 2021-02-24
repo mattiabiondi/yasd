@@ -25,10 +25,15 @@
 #define FRICTIONASPHALTINDEX 0
 #define FRICTIONGRASSINDEX 1
 
-#define TRACKSIZE 250
-#define CHUNKSIZE 500
+#define TRACKSIZE 150
+#define CHUNKSIZE 300
 
 // cars sensors proximity
 #define NUMSENSORS 5
 #define SENSORSOFFSET 50
 #define MINSENSORS CHUNKSIZE / 5
+
+#define SPEEDOFFSET 100
+#define ANGLEOFFSET 10
+
+#define N_GENES 58

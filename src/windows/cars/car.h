@@ -1,30 +1,61 @@
 #ifndef YASD_CAR_H
 #define YASD_CAR_H
 
-#include "src/const.h"
-
 #include <QPointF>
 #include <QLineF>
 #include <QtMath>
 #include <QPainter>
 
+#include <chrono>
+#include <ctime>
+#include <iostream>
+#include <ratio>
+#include <stdio.h>
+#include <math.h>
+
+#include "src/const.h"
+#include "src/utils.h"
+
+#include "src/genetic_algorithm/dna.h"
+#include "src/neural_network/neural_network.h"	
+
+using namespace std::chrono;
 class Car
 {
 public:
-Car(int type, QPointF *position, int angle);
-void move(double accelerationPercentage, double rotationPercentage);
+Car(int type, int id,  QPointF position, int angle, int firstTime = 0, DNA dna = 0);
+// void move(double accelerationPercentage, double rotationPercentage);
+void move();
 void print(QPaintDevice *device);
-QPointF *getPosition();
+QPointF getPosition();
 QLineF **getSensors();
+void setPosition(QPointF position);
+void die();
+bool isAlive();
+
+DNA getDNA();
+double getMovement();
+double getAliveTime();
 
 private:
 void setSensors();
-QPointF *position;
+// float *arrayPortion(float *array, int start, int end);
+NeuralNetwork initNeuralNetwork();
+
+QPointF position;
 QLineF **sensors;
 double acceleration;
 double speed;
-int angle;
+double angle;
 int type;
+int id;
+bool alive;
+double movement;
+high_resolution_clock::time_point current, start;
+duration<double, std::milli> aliveTime;
+
+DNA dna;
+NeuralNetwork nn;
 };
 
 #endif // YASD_CAR_H

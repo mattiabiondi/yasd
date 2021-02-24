@@ -38,8 +38,12 @@ private:
 Car **cars;
 Track ***tracks;
 
+time_t startTime;
+
 // Private Helpers
 void printContextInformation();
 };
+
+
 
 #endif // YASD_TRACK_WINDOW_H
