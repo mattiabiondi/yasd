@@ -38,7 +38,7 @@ private:
 Car **cars;
 Track ***tracks;
 time_t startTime;
-
+int num_gen = 0;
 // Private Helpers
 void printContextInformation();
 };

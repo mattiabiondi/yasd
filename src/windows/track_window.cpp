@@ -177,6 +177,8 @@ void TrackWindow::update()
 
 		for (int i = 0; i < 12; i++)
 			cars[i] = new Car(i % 3, i, QPointF(CHUNKSIZE / 3 + (i * 5), CHUNKSIZE / 3 + (i * 5)), 0, 1, newGenerationDNAs[i]);
+		num_gen++;
+		cout << "\n\nGeneration: " << num_gen << "\n\n";
 	}
 
 	for (int a = 0; a < 12; a++) {
