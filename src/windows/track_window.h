@@ -37,7 +37,6 @@ private:
 //Car *car;
 Car **cars;
 Track ***tracks;
-
 time_t startTime;
 
 // Private Helpers

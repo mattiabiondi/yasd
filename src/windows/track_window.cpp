@@ -16,15 +16,16 @@ const double Ymin = 0.0, Ymax = 3.0;
 TrackWindow::TrackWindow()
 {
 	srand((unsigned int)time(NULL));
-	this->startTime = time(0); 
+	this->startTime = time(0);
 	int matrix[3][3] = { { 12, 14, 6 }, { 13, 15, 7 }, { 9, 11, 3 } };
+
 	// QPointF *start = new QPointF(CHUNKSIZE / 2, CHUNKSIZE / 2);
 
 	cars = new Car *[12];
-	for (int i = 0; i < 12 ; i++) {
+	for (int i = 0; i < 12; i++) {
 		// QPointF point = QPointF(CHUNKSIZE / 2 + i * 100, CHUNKSIZE / 2 + i * 100);
-		QPointF point = QPointF(CHUNKSIZE / 3 , CHUNKSIZE / 3 );
-		cars[i] = new Car(i%3, i, point, 0);
+		QPointF point = QPointF(CHUNKSIZE / 3, CHUNKSIZE / 3);
+		cars[i] = new Car(i % 3, i, point, 0);
 	}
 
 	//car = new Car(start, 0);
@@ -52,7 +53,6 @@ void TrackWindow::initializeGL()
 	initializeOpenGLFunctions();
 	connect(this, &QOpenGLWindow::frameSwapped, this, &TrackWindow::update);
 	printContextInformation();
-
 }
 
 void TrackWindow::paintGL()
@@ -131,12 +131,12 @@ void TrackWindow::update()
 	// 		cars[i]->move(0, 1);
 	// 	else if (Input::keyPressed(Qt::Key_Right))
 	// 		cars[i]->move(0, -1);
-	// } 
+	// }
 	//TODO: while cars.isEmpty
 
 
 	// for (int a = 0; a < 3; a++) {
-	
+
 	// 	cars[a]->move(0, 0);
 
 	// 	QLineF **sensors = cars[a]->getSensors();
@@ -155,35 +155,31 @@ void TrackWindow::update()
 	// 						}
 	// 				}
 	// 		}
-	
+
 	// }
 
 	// if(time(0) - this->startTime > 10) {
-	if(Input::keyPressed(Qt::Key_Up)) {
+	if (Input::keyPressed(Qt::Key_Up)) {
 		vector<DNA> DNAs;
-		for(int a = 0; a < 12; a++) {
-			if(cars[a]->isAlive()) {
+		for (int a = 0; a < 12; a++) {
+			if (cars[a]->isAlive())
 				cars[a]->die();
-				// cars[a]->movement = 0;
-			};
-			cars[a]->getDNA().setFitnessScore(fitnessFunction(cars[a]->getAliveTime(),cars[a]->getMovement()));
+			// cars[a]->movement = 0;
+			cars[a]->getDNA().setFitnessScore(fitnessFunction(cars[a]->getAliveTime(), cars[a]->getMovement()));
 			DNAs.push_back(cars[a]->getDNA());
 		}
 
 		vector<DNA> bestOfThisGen = pickBestDNAs(DNAs);
 		DNA newGenBaseDNA = crossover(bestOfThisGen);
-		vector<DNA> newGenerationDNAs = mutation(newGenBaseDNA,12);
+		vector<DNA> newGenerationDNAs = mutation(newGenBaseDNA, 12);
 
-		QPointF point = QPointF(CHUNKSIZE / 3 , CHUNKSIZE / 3 );
+		QPointF point = QPointF(CHUNKSIZE / 3, CHUNKSIZE / 3);
 
-		for(int i = 0; i < 12; i++){
-				cars[i] = new Car(i%3, i,  QPointF(CHUNKSIZE / 3 + (i*5), CHUNKSIZE / 3 + (i*5) ), 0, 1, newGenerationDNAs[i]);
-		}
-		
-		//call new generation
+		for (int i = 0; i < 12; i++)
+			cars[i] = new Car(i % 3, i, QPointF(CHUNKSIZE / 3 + (i * 5), CHUNKSIZE / 3 + (i * 5)), 0, 1, newGenerationDNAs[i]);
 	}
 
-		for (int a = 0; a < 12; a++) {
+	for (int a = 0; a < 12; a++) {
 		QPointF oldp = QPointF(cars[a]->getPosition());
 		cars[a]->move();
 
@@ -191,15 +187,15 @@ void TrackWindow::update()
 		int x = newp.x() / CHUNKSIZE;
 		int y = newp.y() / CHUNKSIZE;
 
-		if(newp != oldp){
-			QLineF movement = QLineF(oldp,newp);
-			for (int i = x - 1; i <= x + 1; i++){
+		if (newp != oldp) {
+			QLineF movement = QLineF(oldp, newp);
+			for (int i = x - 1; i <= x + 1; i++) {
 				if (i >= 0 && i < 3) {
-					for (int j = y - 1; j <= y + 1; j++){
+					for (int j = y - 1; j <= y + 1; j++) {
 						if (j >= 0 && j < 3) {
-							for (int k = 0; k < tracks[i][j]->numLines; k++){
+							for (int k = 0; k < tracks[i][j]->numLines; k++) {
 								QPointF *intersection = new QPointF();
-								if(movement.intersects(tracks[i][j]->lines[k]->translated(QPointF(i*CHUNKSIZE,j*CHUNKSIZE)),intersection) == QLineF::BoundedIntersection){
+								if (movement.intersects(tracks[i][j]->lines[k]->translated(QPointF(i * CHUNKSIZE, j * CHUNKSIZE)), intersection) == QLineF::BoundedIntersection) {
 									cars[a]->die();
 									cars[a]->setPosition(*intersection);
 								}
@@ -209,55 +205,44 @@ void TrackWindow::update()
 				}
 			}
 		}
-			QLineF **sensors = cars[a]->getSensors();
-					for (int i = x - 1; i <= x + 1; i++){
-						for (int i = x - 1; i <= x + 1; i++){
-							if (i >= 0 && i < 3) {
-								for (int j = y - 1; j <= y + 1; j++){
-									if (j >= 0 && j < 3) {
-										for (int k = 0; k < tracks[i][j]->numLines; k++){
-											for (int l = 0; l < 5; l++){
-												QPointF *intersection = new QPointF();
-												if (sensors[l]->intersects(tracks[i][j]->lines[k]->translated(QPointF(i * CHUNKSIZE, j * CHUNKSIZE)), intersection) == QLineF::BoundedIntersection){
-													sensors[l]->setP2(*intersection);
-
-												}
-
-											}
-
-										}
-
-									}
-
+		QLineF **sensors = cars[a]->getSensors();
+		for (int i = x - 1; i <= x + 1; i++) {
+			for (int i = x - 1; i <= x + 1; i++) {
+				if (i >= 0 && i < 3) {
+					for (int j = y - 1; j <= y + 1; j++) {
+						if (j >= 0 && j < 3) {
+							for (int k = 0; k < tracks[i][j]->numLines; k++) {
+								for (int l = 0; l < 5; l++) {
+									QPointF *intersection = new QPointF();
+									if (sensors[l]->intersects(tracks[i][j]->lines[k]->translated(QPointF(i * CHUNKSIZE, j * CHUNKSIZE)), intersection) == QLineF::BoundedIntersection)
+										sensors[l]->setP2(*intersection);
 								}
-
 							}
-
 						}
-
 					}
-	
-
+				}
+			}
+		}
 	}
-		
+
 
 	// for (int a = 0; a < 3; a++) {
-		// QLineF **sensors = cars[a]->getSensors();
-		// int x = cars[a]->getPosition()->x() / CHUNKSIZE;
-		// int y = cars[a]->getPosition()->y() / CHUNKSIZE;
+	// QLineF **sensors = cars[a]->getSensors();
+	// int x = cars[a]->getPosition()->x() / CHUNKSIZE;
+	// int y = cars[a]->getPosition()->y() / CHUNKSIZE;
 
-		// for (int i = x - 1; i <= x + 1; i++)
-		// 	if (i >= 0 && i < 3) {
-		// 		for (int j = y - 1; j <= y + 1; j++)
-		// 			if (j >= 0 && j < 3) {
-		// 				for (int k = 0; k < tracks[i][j]->numLines; k++)
-		// 					for (int l = 0; l < 5; l++) {
-		// 						QPointF *intersection = new QPointF();
-		// 						if (sensors[l]->intersects(tracks[i][j]->lines[k]->translated(QPointF(i * CHUNKSIZE, j * CHUNKSIZE)), intersection) == QLineF::BoundedIntersection)
-		// 							sensors[l]->setP2(*intersection);
-		// 		}
-		// 	}
-		// }
+	// for (int i = x - 1; i <= x + 1; i++)
+	// 	if (i >= 0 && i < 3) {
+	// 		for (int j = y - 1; j <= y + 1; j++)
+	// 			if (j >= 0 && j < 3) {
+	// 				for (int k = 0; k < tracks[i][j]->numLines; k++)
+	// 					for (int l = 0; l < 5; l++) {
+	// 						QPointF *intersection = new QPointF();
+	// 						if (sensors[l]->intersects(tracks[i][j]->lines[k]->translated(QPointF(i * CHUNKSIZE, j * CHUNKSIZE)), intersection) == QLineF::BoundedIntersection)
+	// 							sensors[l]->setP2(*intersection);
+	// 		}
+	// 	}
+	// }
 	// }
 
 	// Schedule a redraw
@@ -305,5 +290,3 @@ void TrackWindow::printContextInformation()
 	// qPrintable() will print our QString w/o quotes around it.
 	qDebug() << qPrintable(glType) << qPrintable(glVersion) << "(" << qPrintable(glProfile) << ")";
 }
-
-

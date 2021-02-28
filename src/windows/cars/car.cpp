@@ -2,7 +2,7 @@
 
 Car::Car(int type, int id, QPointF position, int angle, int firstTime, DNA dna)
 {
-	printf("%d type: ",type);
+	printf("%d type: ", type);
 	this->alive = true;
 	this->start = this->current = high_resolution_clock::now();
 	this->movement = 0;
@@ -15,16 +15,14 @@ Car::Car(int type, int id, QPointF position, int angle, int firstTime, DNA dna)
 	for (int i = 0; i < NUMSENSORS; i++)
 		this->sensors[i] = new QLineF();
 	this->setSensors();
-	
+
 	this->id = id;
-	
-	if(firstTime == 0) {
+
+	if (firstTime == 0)
 		this->dna = DNA(id);
-	}
-	
-	else {
+
+	else
 		this->dna = dna;
-	}
 
 
 
@@ -32,13 +30,12 @@ Car::Car(int type, int id, QPointF position, int angle, int firstTime, DNA dna)
 
 	// float a[5] = {11,7,23,2,22};
 	// float* outputs = nn.feedForward(a, dna.genes);
-	
+
 	// printf("\n");
 	// printf("%f",outputs[0]);
 	// printf("\n");
 	// printf("%f",outputs[1]);
 	// printf("\n");
-
 }
 
 void Car::move()
@@ -46,19 +43,20 @@ void Car::move()
 	//this->acceleration = 0.1 + accelerationPercentage * this->speed;
 	//this->speed = this->speed + this->acceleration;
 	//this->angle = this->angle + 360 * rotationPercentage;
-	if(!alive) return;
+	if (!alive) return;
 
-	QLineF ** sensors = this->getSensors();
+	QLineF **sensors = this->getSensors();
 	float *distances = new float();
-	for(int i = 0; i<NUMSENSORS; i++){
+
+	for (int i = 0; i < NUMSENSORS; i++) {
 		distances[i] = sensors[i]->length();
 		// printf("%f", sensors[i]->length());
 		// printf("\n");
 	}
 
 
-	float* outputs = nn.feedForward(distances, dna.genes);
-	
+	float *outputs = nn.feedForward(distances, dna.genes);
+
 	double accelerationPercentage = outputs[0];
 	double rotationPercentage = outputs[1];
 
@@ -67,12 +65,12 @@ void Car::move()
 	// printf("\n");
 	// printf("Output[1]: %f",outputs[1]);
 	// printf("\n");
- 
+
 	// TODO se una macchina rimane ferma per un tempo preso in input(per i test 1 min) distruggerla e darle una penalità
-	
+
 	// this->speed += (this->speed < 0.001) ? outputs[0] * 10 : this->speed * outputs[0];
 	// this->angle += (this->angle < 0.001) ? outputs[1] * 10 : this->angle *outputs[1];
-	
+
 	this->speed += outputs[0] * SPEEDOFFSET;
 	this->angle += outputs[1] * ANGLEOFFSET;
 
@@ -83,12 +81,12 @@ void Car::move()
 	// printf("\n");
 
 	//upper bound
-	if(this->speed > 100.0) this->speed = 100.0; 
+	if (this->speed > 100.0) this->speed = 100.0;
 	this->angle = fmod(this->angle, 360.0);
-	
+
 	//lower bound
-	if(this->speed < 0.0) this->speed = abs(this->speed); 
-	// if(this->angle < 0.0) this->angle = 0.0; 
+	if (this->speed < 0.0) this->speed = abs(this->speed);
+	// if(this->angle < 0.0) this->angle = 0.0;
 
 
 	// printf("new speed: %f", this->speed);
@@ -98,6 +96,7 @@ void Car::move()
 	// printf("\n");
 
 	high_resolution_clock::time_point prev = this->current;
+
 	this->current = high_resolution_clock::now();
 	duration<double, std::milli> time_span = this->current - prev;
 
@@ -105,7 +104,7 @@ void Car::move()
 	QPointF x = QPointF(this->speed * t * cos(this->angle * M_PI / 100), -this->speed * t * sin(this->angle * M_PI / 100));
 
 	this->position += x;
-	this->movement += QLineF(QPointF(0,0),x).length();
+	this->movement += QLineF(QPointF(0, 0), x).length();
 	// this->speed += (this->speed * outputs[0]);
 	// this->angle += (this->angle *outputs[1]);
 
@@ -118,7 +117,8 @@ void Car::move()
 	this->setSensors();
 }
 
-void Car::die(){
+void Car::die()
+{
 	this->alive = false;
 	// duration<double, std::milli> time_span = this->current - this->start;
 	this->aliveTime = this->current - this->start;
@@ -176,24 +176,29 @@ QLineF **Car::getSensors()
 	return this->sensors;
 }
 
-void Car::setPosition(QPointF position){
+void Car::setPosition(QPointF position)
+{
 	this->position = position;
 	this->setSensors();
 }
 
-bool Car::isAlive(){
+bool Car::isAlive()
+{
 	return this->alive;
 }
 
-DNA Car::getDNA(){
+DNA Car::getDNA()
+{
 	return this->dna;
 }
 
-double Car::getMovement(){
+double Car::getMovement()
+{
 	return this->movement;
 }
 
-double Car::getAliveTime(){
+double Car::getAliveTime()
+{
 	return (double)this->aliveTime.count();
 }
 
@@ -207,15 +212,16 @@ double Car::getAliveTime(){
 //     return portion;
 // }
 
-NeuralNetwork Car::initNeuralNetwork(){
-	NeuralNetwork nn = NeuralNetwork(5,7,2);
+NeuralNetwork Car::initNeuralNetwork()
+{
+	NeuralNetwork nn = NeuralNetwork(5, 7, 2);
 
-	float  **inputs_to_hidden_weights = nn.getMatrixWithWeights(7,5, getArrayPortion(this->dna.genes,0 ,35));
-    float **hidden_to_output_weights = nn.getMatrixWithWeights(2,7, getArrayPortion(this->dna.genes,35 ,49));
-    float *inputs_to_hidden_bias = getArrayPortion(this->dna.genes,49,56);
-    float *hidden_to_output_bias = getArrayPortion(this->dna.genes,56,58);
-	
-    nn.initNNParams(inputs_to_hidden_weights, hidden_to_output_weights, inputs_to_hidden_bias, hidden_to_output_bias);
-	
+	float **inputs_to_hidden_weights = nn.getMatrixWithWeights(7, 5, getArrayPortion(this->dna.genes, 0, 35));
+	float **hidden_to_output_weights = nn.getMatrixWithWeights(2, 7, getArrayPortion(this->dna.genes, 35, 49));
+	float *inputs_to_hidden_bias = getArrayPortion(this->dna.genes, 49, 56);
+	float *hidden_to_output_bias = getArrayPortion(this->dna.genes, 56, 58);
+
+	nn.initNNParams(inputs_to_hidden_weights, hidden_to_output_weights, inputs_to_hidden_bias, hidden_to_output_bias);
+
 	return nn;
 }

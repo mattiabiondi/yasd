@@ -17,13 +17,13 @@
 #include "src/utils.h"
 
 #include "src/genetic_algorithm/dna.h"
-#include "src/neural_network/neural_network.h"	
+#include "src/neural_network/neural_network.h"
 
 using namespace std::chrono;
 class Car
 {
 public:
-Car(int type, int id,  QPointF position, int angle, int firstTime = 0, DNA dna = 0);
+Car(int type, int id, QPointF position, int angle, int firstTime = 0, DNA dna = 0);
 // void move(double accelerationPercentage, double rotationPercentage);
 void move();
 void print(QPaintDevice *device);

@@ -1,36 +1,38 @@
 #include "dna.h"
 // #include "src/utils.cpp"
 
-DNA::DNA(){
-
+DNA::DNA()
+{
 }
 
-DNA::DNA(int id) {
-    this->carID = id;
-    this->genes = new float[N_GENES];
-    cout << "dna is: " << endl;
-    for (int i = 0; i < N_GENES; i++) {
+DNA::DNA(int id)
+{
+	this->carID = id;
+	this->genes = new float[N_GENES];
+	cout << "dna is: " << endl;
+	for (int i = 0; i < N_GENES; i++) {
 //        float gene = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-        float gene = getRandomFloat(1.0f, 0.1f);
-        gene = getNumberWithOneDecimalDigit(gene);
-        if(choose() == 1) gene *= -1;
+		float gene = getRandomFloat(1.0f, 0.1f);
+		gene = getNumberWithOneDecimalDigit(gene);
+		if (choose() == 1) gene *= -1;
 
-        this->genes[i] = gene;
-        cout << gene << "  ";
-    }
-    
-    cout << endl;
+		this->genes[i] = gene;
+		cout << gene << "  ";
+	}
+
+	cout << endl;
 }
 
-DNA::DNA(float *genes) {
-    this->genes = new float[N_GENES];
-    for (int i = 0; i < N_GENES; i++) {
-        this->genes[i] = genes[i];
-    }
+DNA::DNA(float *genes)
+{
+	this->genes = new float[N_GENES];
+	for (int i = 0; i < N_GENES; i++)
+		this->genes[i] = genes[i];
 }
 
-void DNA::setFitnessScore(float fitnessScore){
-    this->fitnessScore = fitnessScore;
+void DNA::setFitnessScore(float fitnessScore)
+{
+	this->fitnessScore = fitnessScore;
 }
 
 
@@ -88,8 +90,3 @@ void DNA::setFitnessScore(float fitnessScore){
 //     }
 //     return newGenerationDNAs;
 // }
-
-
-    
-
-
