@@ -104,6 +104,9 @@ void TrackWindow::teardownGL()
 
 	//foo.destroy();
 	//delete bar;
+
+	delete cars;
+	delete tracks;
 }
 
 void TrackWindow::update()
@@ -175,8 +178,10 @@ void TrackWindow::update()
 
 		QPointF point = QPointF(CHUNKSIZE / 3, CHUNKSIZE / 3);
 
-		for (int i = 0; i < 12; i++)
+		for (int i = 0; i < 12; i++) {
+			delete cars[i];
 			cars[i] = new Car(i % 3, i, QPointF(CHUNKSIZE / 3 + (i * 5), CHUNKSIZE / 3 + (i * 5)), 0, 1, newGenerationDNAs[i]);
+		}
 		num_gen++;
 		cout << "\n\nGeneration: " << num_gen << "\n\n";
 	}
@@ -201,6 +206,7 @@ void TrackWindow::update()
 									cars[a]->die();
 									cars[a]->setPosition(*intersection);
 								}
+								delete intersection;
 							}
 						}
 					}
@@ -218,6 +224,7 @@ void TrackWindow::update()
 									QPointF *intersection = new QPointF();
 									if (sensors[l]->intersects(tracks[i][j]->lines[k]->translated(QPointF(i * CHUNKSIZE, j * CHUNKSIZE)), intersection) == QLineF::BoundedIntersection)
 										sensors[l]->setP2(*intersection);
+									delete intersection;
 								}
 							}
 						}

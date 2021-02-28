@@ -57,6 +57,8 @@ void Car::move()
 
 	float *outputs = nn.feedForward(distances, dna.genes);
 
+	delete distances;
+
 	double accelerationPercentage = outputs[0];
 	double rotationPercentage = outputs[1];
 
