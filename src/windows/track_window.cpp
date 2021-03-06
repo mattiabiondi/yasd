@@ -19,17 +19,13 @@ TrackWindow::TrackWindow()
 	this->startTime = time(0);
 	int matrix[3][3] = { { 12, 14, 6 }, { 13, 15, 7 }, { 9, 11, 3 } };
 
-	// QPointF *start = new QPointF(CHUNKSIZE / 2, CHUNKSIZE / 2);
-
 	cars = new Car *[12];
 	for (int i = 0; i < 12; i++) {
-		// QPointF point = QPointF(CHUNKSIZE / 2 + i * 100, CHUNKSIZE / 2 + i * 100);
 		QPointF point = QPointF(CHUNKSIZE / 3, CHUNKSIZE / 3);
 		cars[i] = new Car(i % 3, i, point, 0);
 	}
 
-	//car = new Car(start, 0);
-	tracks = new Track * *[3];
+	tracks = new Track **[3];
 
 	for (int i = 0; i < 3; i++) {
 		tracks[i] = new Track *[3];
@@ -60,39 +56,13 @@ void TrackWindow::paintGL()
 	// Clear the rendering window
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// painter.setPen(QPen(Qt::white, 5, Qt::SolidLine, Qt::RoundCap));
-	//
-	// //Stampa della posizione della macchina
-	// painter.drawPoint(*car->getPosition());
-	//
-	// //Stampa dei sensori
-	// painter.setPen(QPen(Qt::red, 5, Qt::SolidLine, Qt::RoundCap));
-	// QLineF **sensors = car->getSensors();
-	//
-	// for (int i = 0; i < 5; i++)
-	// 	painter.drawLine(*sensors[i]);
-
 	for (int i = 0; i < 12; i++)
 		cars[i]->print(this);
 
-	QPainter painter;
-
-	painter.begin(this);
-	painter.setRenderHint(QPainter::Antialiasing);
-
-	painter.setPen(QPen(Qt::yellow, 5, Qt::SolidLine, Qt::RoundCap));
 	//Stampa della strada
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
-			for (int k = 0; k < tracks[i][j]->numLines; k++)
-				painter.drawLine(tracks[i][j]->lines[k]->translated(QPointF(i * CHUNKSIZE, j * CHUNKSIZE)));
-
-			//painter.drawLines(*tracks[i][j]->lines, tracks[i][j]->numLines);
-			//painter.save();
-		}
-	}
-
-	painter.end();
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < 3; j++)
+			tracks[i][j]->print(this, i, j);
 
 	// Flush the pipeline.  (Not usually necessary.)
 	//glFlush();
@@ -113,53 +83,6 @@ void TrackWindow::update()
 {
 	// Update input
 	Input::update();
-
-	// if (Input::keyPressed(Qt::Key_Up))
-	// 	car->move(5, 0);
-	// else if (Input::keyPressed(Qt::Key_Down))
-	// 	car->move(-5, 0);
-	// else if (Input::keyPressed(Qt::Key_Left))
-	// 	car->move(0, 1);
-	// else if (Input::keyPressed(Qt::Key_Right))
-	// 	car->move(0, -1);
-	// //Ricacolare intersezioni e distanze
-	// QLineF **sensors = car->getSensors();
-
-	// for (int i = 0; i < 1; i++) {
-	// 	if (Input::keyPressed(Qt::Key_Up))
-	// 		cars[i]->move(5, 0);
-	// 	else if (Input::keyPressed(Qt::Key_Down))
-	// 		cars[i]->move(-5, 0);
-	// 	else if (Input::keyPressed(Qt::Key_Left))
-	// 		cars[i]->move(0, 1);
-	// 	else if (Input::keyPressed(Qt::Key_Right))
-	// 		cars[i]->move(0, -1);
-	// }
-	//TODO: while cars.isEmpty
-
-
-	// for (int a = 0; a < 3; a++) {
-
-	// 	cars[a]->move(0, 0);
-
-	// 	QLineF **sensors = cars[a]->getSensors();
-	// 	int x = cars[a]->getPosition()->x() / CHUNKSIZE;
-	// 	int y = cars[a]->getPosition()->y() / CHUNKSIZE;
-
-	// 	for (int i = x - 1; i <= x + 1; i++)
-	// 		if (i >= 0 && i < 3) {
-	// 			for (int j = y - 1; j <= y + 1; j++)
-	// 				if (j >= 0 && j < 3) {
-	// 					for (int k = 0; k < tracks[i][j]->numLines; k++)
-	// 						for (int l = 0; l < 5; l++) {
-	// 							QPointF *intersection = new QPointF();
-	// 							if (sensors[l]->intersects(tracks[i][j]->lines[k]->translated(QPointF(i * CHUNKSIZE, j * CHUNKSIZE)), intersection) == QLineF::BoundedIntersection)
-	// 								sensors[l]->setP2(*intersection);
-	// 						}
-	// 				}
-	// 		}
-
-	// }
 
 	// if(time(0) - this->startTime > 10) {
 	if (Input::keyPressed(Qt::Key_Up)) {
@@ -193,6 +116,9 @@ void TrackWindow::update()
 		QPointF newp = QPointF(cars[a]->getPosition());
 		int x = newp.x() / CHUNKSIZE;
 		int y = newp.y() / CHUNKSIZE;
+
+
+
 
 		if (newp != oldp) {
 			QLineF movement = QLineF(oldp, newp);

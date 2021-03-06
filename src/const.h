@@ -33,6 +33,9 @@
 #define SENSORSOFFSET 50
 #define MINSENSORS CHUNKSIZE / 5
 
+#define CAR_LENGTH 20
+#define CAR_WIDTH 10
+
 #define SPEEDOFFSET 100
 #define ANGLEOFFSET 10
 

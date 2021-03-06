@@ -52,3 +52,18 @@ Track::Track(int type, double friction)
 		}
 	}
 }
+
+void Track::print(QPaintDevice *device, int x, int y)
+{
+	QPainter painter;
+
+	painter.begin(device);
+	painter.setRenderHint(QPainter::Antialiasing);
+
+	painter.setPen(QPen(Qt::yellow, 5, Qt::SolidLine, Qt::RoundCap));
+
+	for (int k = 0; k < this->numLines; k++)
+		painter.drawLine(this->lines[k]->translated(QPointF(x * CHUNKSIZE, y * CHUNKSIZE)));
+
+	painter.end();
+}

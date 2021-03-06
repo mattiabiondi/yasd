@@ -19,6 +19,8 @@
 #include "src/genetic_algorithm/dna.h"
 #include "src/neural_network/neural_network.h"
 
+#define sign(x) (signbit(x) ? -1 : 1)
+
 using namespace std::chrono;
 class Car
 {
@@ -39,11 +41,13 @@ double getAliveTime();
 
 private:
 void setSensors();
+void setHitbox();
 // float *arrayPortion(float *array, int start, int end);
 NeuralNetwork initNeuralNetwork();
 
 QPointF position;
 QLineF **sensors;
+QLineF hitbox[4];
 double acceleration;
 double speed;
 double angle;
@@ -51,6 +55,7 @@ int type;
 int id;
 bool alive;
 double movement;
+bool *chunkTraveled;
 high_resolution_clock::time_point current, start;
 duration<double, std::milli> aliveTime;
 

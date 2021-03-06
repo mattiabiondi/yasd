@@ -12,9 +12,12 @@ Car::Car(int type, int id, QPointF position, int angle, int firstTime, DNA dna)
 	this->angle = angle;
 	this->speed = this->acceleration = 0;
 	this->sensors = new QLineF *[NUMSENSORS];
+
 	for (int i = 0; i < NUMSENSORS; i++)
 		this->sensors[i] = new QLineF();
+
 	this->setSensors();
+	this->setHitbox();
 
 	this->id = id;
 
@@ -117,6 +120,7 @@ void Car::move()
 	// *this->position += QPointF(speed * cos(this->angle * M_PI / 180), -speed * sin(this->angle * M_PI / 180));
 
 	this->setSensors();
+	this->setHitbox();
 }
 
 void Car::die()
@@ -151,10 +155,15 @@ void Car::print(QPaintDevice *device)
 
 	QBrush brush = QBrush(color, Qt::SolidPattern);
 
-	painter.setPen(QPen(brush, 35, Qt::SolidLine, Qt::RoundCap));
+	//painter.setPen(QPen(brush, 35, Qt::SolidLine, Qt::RoundCap));
+	painter.setPen(QPen(color, 5, Qt::SolidLine, Qt::RoundCap));
 
 	//Stampa della posizione della macchina
-	painter.drawPoint(this->getPosition());
+	//painter.drawPoint(this->getPosition());
+
+	for(int i=0;i<4;i++){
+		painter.drawLine(this->hitbox[i]);
+	}
 
 	painter.end();
 }
@@ -165,6 +174,20 @@ void Car::setSensors()
 		this->sensors[i]->setP1(this->position);
 		this->sensors[i]->setAngle(this->angle - 90 + i * 45);
 		this->sensors[i]->setLength(MINSENSORS + (SENSORSOFFSET * this->type));
+	}
+}
+
+void Car::setHitbox()
+{
+	QPointF vector = QPointF(CAR_LENGTH/2, CAR_WIDTH/2);
+	int x = 1, y = 1;
+	for(int i = 0; i < 4; i++){
+		QPointF start = QPointF(this->position + QPointF(x* vector.x(), y* vector.y()));
+		int temp = x;
+		x = y;
+		y = -temp;
+		QPointF end = QPointF(this->position + QPointF(x* vector.x(), y* vector.y()));
+		this->hitbox[i] = QLineF(start, end);
 	}
 }
 
