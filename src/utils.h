@@ -1,4 +1,4 @@
-float getNumberWithOneDecimalDigit(float number);
-float getRandomFloat(float max, float min);
+double getNumberWithOneDecimalDigit(double number);
+double getRandomDouble(double max, double min);
 int choose();
-float *getArrayPortion(float *array, int start, int end);
+double *getArrayPortion(double *array, int start, int end);

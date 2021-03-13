@@ -9,7 +9,7 @@
 
 using namespace std;
 
-float fitnessFunction(float timeBeforeCrash, float distanceTraveledBeforeCrash)
+double fitnessFunction(double timeBeforeCrash, double distanceTraveledBeforeCrash)
 {
 	return timeBeforeCrash * 2 + distanceTraveledBeforeCrash; //da decidere insieme... al momento il tempo influisce per 2/3 e la distanza per 1/3
 }
@@ -29,7 +29,7 @@ DNA crossover(vector<DNA> bestDNAs)
 {
 	DNA firstParent = bestDNAs[0];
 	DNA secondParent = bestDNAs[1];
-	float *genes = new float[N_GENES];
+	double *genes = new double[N_GENES];
 
 	for (int i = 0; i < N_GENES; ++i) {
 		int coin = rand() % 100;
@@ -58,7 +58,7 @@ vector<DNA> mutation(DNA dna, int N_CARS)
 		DNA nthDNA = dna;
 		for (int j = 0; j < N_GENES; j++) {
 			if (probability > minProb) {
-				float newGene = getNumberWithOneDecimalDigit(getRandomFloat(1.0f, 0.1f));
+				double newGene = getNumberWithOneDecimalDigit(getRandomDouble(1.0f, 0.1f));
 				if (choose() == 1) newGene *= -1;
 				nthDNA.genes[j] = newGene;
 				maxProb -= 2;

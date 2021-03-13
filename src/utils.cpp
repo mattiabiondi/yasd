@@ -3,17 +3,17 @@
 
 using namespace std;
 
-float getNumberWithOneDecimalDigit(float number)
+double getNumberWithOneDecimalDigit(double number)
 {
 	int tmpInt = int((number * 10 - (floor(number)) * 10));
-	float tmpFloat = 0.0 + (float)tmpInt / 10;
+	double tmpFloat = 0.0 + (double)tmpInt / 10;
 
 	return tmpFloat;
 }
 
-float getRandomFloat(float max, float min)
+double getRandomDouble(double max, double min)
 {
-	return ((float)rand() / RAND_MAX) * (max - min) + min;
+	return ((double)rand() / RAND_MAX) * (max - min) + min;
 }
 
 int choose()
@@ -23,9 +23,9 @@ int choose()
 	return coin % 2;
 }
 
-float *getArrayPortion(float *array, int start, int end)
+double *getArrayPortion(double *array, int start, int end)
 {
-	float *portion = new float[(end - start)];
+	double *portion = new double[(end - start)];
 
 	for (int i = start; i < end; i++)
 		portion[i - start] = array[i];

@@ -13,13 +13,13 @@ class DNA {
 public:
 DNA();
 DNA(int id);            //first time (initializing DNA with random genes
-DNA(float *genes);      // get from parameters dna after crossover and here we have to call mutation
-void setFitnessScore(float fitnessScore);
-// float fitnessFunction(float timeBeforeCrash, float distanceTraveledBeforeCrash);
+DNA(double *genes);     // get from parameters dna after crossover and here we have to call mutation
+void setFitnessScore(double fitnessScore);
+// double fitnessFunction(double timeBeforeCrash, double distanceTraveledBeforeCrash);
 // vector<DNA> pickBestDNAs(vector<DNA> DNAs);
 // DNA crossover(vector<DNA> bestDNAs);
 // vector<DNA> mutation(DNA dna, int N_CARS);
-float *genes;
+double *genes;
 int carID;
-float fitnessScore;
+double fitnessScore;
 };

@@ -8,35 +8,42 @@ DNA::DNA()
 DNA::DNA(int id)
 {
 	this->carID = id;
-	this->genes = new float[N_GENES];
-	cout << "dna is: " << endl;
+	this->genes = new double[N_GENES];
+
+	// [DEBUG] Print DNA sequence
+	//cout << "------------------DNA-------------------" << endl;
+
 	for (int i = 0; i < N_GENES; i++) {
-//        float gene = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-		float gene = getRandomFloat(1.0f, 0.1f);
+//        double gene = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
+		double gene = getRandomDouble(1.0f, 0.1f);
 		gene = getNumberWithOneDecimalDigit(gene);
 		if (choose() == 1) gene *= -1;
 
 		this->genes[i] = gene;
-		cout << gene << "  ";
+
+		// [DEBUG] Print DNA sequence
+		//cout << gene << "  ";
 	}
 
-	cout << endl;
+	// [DEBUG] End DNA sequence printing
+	//cout << endl
+	//cout << "----------------------------------------" << endl;
 }
 
-DNA::DNA(float *genes)
+DNA::DNA(double *genes)
 {
-	this->genes = new float[N_GENES];
+	this->genes = new double[N_GENES];
 	for (int i = 0; i < N_GENES; i++)
 		this->genes[i] = genes[i];
 }
 
-void DNA::setFitnessScore(float fitnessScore)
+void DNA::setFitnessScore(double fitnessScore)
 {
 	this->fitnessScore = fitnessScore;
 }
 
 
-// float fitnessFunction(float timeBeforeCrash, float distanceTraveledBeforeCrash){
+// double fitnessFunction(double timeBeforeCrash, double distanceTraveledBeforeCrash){
 //     return timeBeforeCrash * 2 + distanceTraveledBeforeCrash; //da decidere insieme... al momento il tempo influisce per 2/3 e la distanza per 1/3
 // }
 
@@ -53,7 +60,7 @@ void DNA::setFitnessScore(float fitnessScore)
 // DNA crossover(vector<DNA> bestDNAs){
 //     DNA firstParent = bestDNAs[0];
 //     DNA secondParent = bestDNAs[1];
-//     float *genes = new float[N_GENES];
+//     double *genes = new double[N_GENES];
 
 //     for (int i = 0; i < N_GENES; ++i) {
 //         int coin = rand() % 100;
@@ -81,7 +88,7 @@ void DNA::setFitnessScore(float fitnessScore)
 //         DNA nthDNA = dna;
 //         for (int j = 0; j < N_GENES; j++) {
 //             if (probability > minProb) {
-//                 nthDNA.genes[j] = getNumberWithOneDecimalDigit(getRandomFloat(1.0f, 0.1f));
+//                 nthDNA.genes[j] = getNumberWithOneDecimalDigit(getRandomDouble(1.0f, 0.1f));
 //                 maxProb -= 2;
 //                 minProb += rand() % 3;
 //             }

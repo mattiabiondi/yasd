@@ -6,19 +6,19 @@ int n_inputs;
 int n_outputs;
 int n_hidden;     //we assume we have only one hidden layer
 
-float **inputs_to_hidden_weights;
-float **hidden_to_output_weights;
+double **inputs_to_hidden_weights;
+double **hidden_to_output_weights;
 
-float *inputs_to_hidden_bias;
-float *hidden_to_output_bias;
+double *inputs_to_hidden_bias;
+double *hidden_to_output_bias;
 
 public:
 NeuralNetwork();
 NeuralNetwork(int n_inputs, int n_hidden, int n_outputs);
-void initNNParams(float **inputs_to_hidden_weights, float **hidden_to_output_weights, float *inputs_to_hidden_bias, float *hidden_to_output_bias);
-float *feedForward(float *inputs, float *genes);
-float **getMatrixWithWeights(int n_rows, int n_colums, float *weights);     // weights will be DNA later
-float *weightsTimesPreviousInputs(float **weights, float *previousInputs, int n_rows, int n_columns, float *bias);
-float *activationFunction(float *matrixWithBias, int n_rows);
-//    float *addBias(float *multipliedMatrix, float *bias);
+void initNNParams(double **inputs_to_hidden_weights, double **hidden_to_output_weights, double *inputs_to_hidden_bias, double *hidden_to_output_bias);
+double *feedForward(double *inputs);
+double **getMatrixWithWeights(int n_rows, int n_colums, double *weights);     // weights will be DNA later
+double *weightsTimesPreviousInputs(double **weights, double *previousInputs, int n_rows, int n_columns, double *bias);
+double *activationFunction(double *matrixWithBias, int n_rows);
+//    double *addBias(double *multipliedMatrix, double *bias);
 };
