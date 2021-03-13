@@ -34,7 +34,6 @@ void keyPressEvent(QKeyEvent *event);
 void keyReleaseEvent(QKeyEvent *event);
 
 private:
-//Car *car;
 Car **cars;
 Track ***tracks;
 time_t startTime;
