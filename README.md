@@ -44,7 +44,7 @@ $ make
 #### Launch
 
 ```sh
-$ ./src/yasd
+$ ./yasd
 ```
 
 ## License

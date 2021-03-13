@@ -1,4 +1,4 @@
-set(yasd_SRCS
+add_executable(${PROJECT_NAME}
 	main.cpp
 	configuration.cpp
 	application.cpp
@@ -18,20 +18,20 @@ set(yasd_SRCS
 	genetic_algorithm/dna.cpp
 	genetic_algorithm/genetic_algorithm_methods.cpp
 	neural_network/neural_network.cpp
-
 )
 
-add_executable(yasd
-	${yasd_SRCS}
-)
-
-target_compile_definitions(yasd
+target_compile_definitions(${PROJECT_NAME}
 	PRIVATE -DPROJECT_VERSION="${PROJECT_VERSION}")
 
-target_include_directories(yasd
+target_include_directories(${PROJECT_NAME}
 	PRIVATE ${PROJECT_SOURCE_DIR})
 
-target_link_libraries(yasd
+target_link_libraries(${PROJECT_NAME}
 	Qt5::Widgets
 	Qt5::Gui
+)
+
+set_target_properties(${PROJECT_NAME}
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 )
