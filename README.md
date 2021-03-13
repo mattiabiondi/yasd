@@ -23,7 +23,7 @@ Please [report any problems](https://github.com/mattiabiondi/yasd/issues/new) yo
 A compiler with C++11 support ([clang-3.3+](https://llvm.org/releases/download.html), [gcc-4.8+](https://gcc.gnu.org/releases.html))
 - `git`
 - `cmake 3.5+`
-- `Qt 5.5+`
+- `Qt 5.14+`
 
 #### Get the source code
 
