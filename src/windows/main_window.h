@@ -86,8 +86,6 @@ QAction *openTrackAct;
 
 NewWizard *newWizard;
 TrackDialog *trackDialog;
-
-QScopedPointer<TrackWindow> trackWin;
 };
 
 #endif // YASD_MAIN_WINDOW_H

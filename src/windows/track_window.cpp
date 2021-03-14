@@ -8,7 +8,6 @@
 #include <ctime>
 #include <vector>
 
-
 // These variables set the dimensions of the rectanglar region we wish to view.
 const double Xmin = 0.0, Xmax = 3.0;
 const double Ymin = 0.0, Ymax = 3.0;
@@ -19,11 +18,24 @@ TrackWindow::TrackWindow()
 	this->startTime = time(0);
 	int matrix[3][3] = { { 12, 14, 6 }, { 13, 15, 7 }, { 9, 11, 3 } };
 
-	cars = new Car *[12];
-	for (int i = 0; i < 12; i++) {
-		QPointF point = QPointF(CHUNKSIZE / 3, CHUNKSIZE / 3);
-		cars[i] = new Car(i % 3, i, point, 0);
-	}
+	QPointF spawn_point = QPointF(CHUNKSIZE / 3, CHUNKSIZE / 3);
+
+	config = Appl()->getConfig();
+	n_red = config->getRed();
+	n_green = config->getGreen();
+	n_blue = config->getBlue();
+	n_cars = n_red + n_green + n_blue;
+
+	cars = new Car *[n_cars];
+
+	for (int i = 0; i < n_red; i++)
+		cars[i] = new Car(REDTYPE, i, spawn_point, 0);
+
+	for (int i = n_red; i < n_red + n_green; i++)
+		cars[i] = new Car(GREENTYPE, i, spawn_point, 0);
+
+	for (int i = n_red + n_green; i < n_cars; i++)
+		cars[i] = new Car(BLUETYPE, i, spawn_point, 0);
 
 	tracks = new Track * *[3];
 
@@ -38,6 +50,7 @@ TrackWindow::~TrackWindow()
 {
 	makeCurrent();
 	teardownGL();
+	delete this;
 }
 
 /*******************************************************************************
@@ -56,7 +69,7 @@ void TrackWindow::paintGL()
 	// Clear the rendering window
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	for (int i = 0; i < 12; i++)
+	for (int i = 0; i < n_cars; i++)
 		cars[i]->print(this);
 
 	//Stampa della strada
@@ -86,7 +99,7 @@ void TrackWindow::update()
 
 	if (Input::keyPressed(Qt::Key_Up)) {
 		vector<DNA> DNAs;
-		for (int a = 0; a < 12; a++) {
+		for (int a = 0; a < n_cars; a++) {
 			if (cars[a]->isAlive())
 				cars[a]->die();
 			cars[a]->getDNA().setFitnessScore(fitnessFunction(cars[a]->getAliveTime(), cars[a]->getDistance()));
@@ -95,17 +108,26 @@ void TrackWindow::update()
 
 		vector<DNA> bestOfThisGen = pickBestDNAs(DNAs);
 		DNA newGenBaseDNA = crossover(bestOfThisGen);
-		vector<DNA> newGenerationDNAs = mutation(newGenBaseDNA, 12);
+		vector<DNA> newGenerationDNAs = mutation(newGenBaseDNA, n_cars);
 
-		for (int i = 0; i < 12; i++) {
+		for (int i = 0; i < n_cars; i++) {
 			delete cars[i];
-			cars[i] = new Car(i % 3, i, QPointF(CHUNKSIZE / 3 + (i * 5), CHUNKSIZE / 3 + (i * 5)), 0, 1, newGenerationDNAs[i]);
 		}
+
+		for (int i = 0; i < n_red; i++)
+			cars[i] = new Car(REDTYPE, i, QPointF(CHUNKSIZE / 3 + (i * 5), CHUNKSIZE / 3 + (i * 5)), 0, 1, newGenerationDNAs[i]);
+
+		for (int i = n_red; i < n_red + n_green; i++)
+			cars[i] = new Car(GREENTYPE, i, QPointF(CHUNKSIZE / 3 + (i * 5), CHUNKSIZE / 3 + (i * 5)), 0, 1, newGenerationDNAs[i]);
+
+		for (int i = n_red + n_green; i < n_cars; i++)
+			cars[i] = new Car(BLUETYPE, i, QPointF(CHUNKSIZE / 3 + (i * 5), CHUNKSIZE / 3 + (i * 5)), 0, 1, newGenerationDNAs[i]);
+
 		num_gen++;
 		cout << "\n\nGeneration: " << num_gen << "\n\n";
 	}
 
-	for (int a = 0; a < 12; a++) {
+	for (int a = 0; a < n_cars; a++) {
 		QPointF oldp = QPointF(cars[a]->getPosition());
 
 		if (cars[a]->isAlive())

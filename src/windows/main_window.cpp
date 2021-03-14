@@ -247,7 +247,7 @@ void MainWindow::openTrack()
 	format.setVersion(4, 6);
 
 	// Set the window up
-	trackWin.reset(new TrackWindow);
+	TrackWindow *trackWin = new TrackWindow();
 	trackWin->setFormat(format);
 	trackWin->resize(QSize(800, 600));
 	trackWin->show();
