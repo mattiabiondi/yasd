@@ -41,7 +41,7 @@ CarsWizardPage::CarsWizardPage(QWidget *parent)
 
 bool CarsWizardPage::isComplete() const
 {
-	return field("red").toInt() +
-	       field("green").toInt() +
-	       field("blue").toInt();
+	// Note: at least two cars are needed for genetic algorithm
+	// TODO: future works --> RL if only one car
+	return (field("red").toInt() + field("green").toInt() + field("blue").toInt()) > 1;
 }
