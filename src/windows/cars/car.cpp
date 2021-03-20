@@ -157,6 +157,11 @@ QLineF **Car::getSensors()
 	return this->sensors;
 }
 
+QLineF *Car::getHitbox()
+{
+	return this->hitbox;
+}
+
 void Car::setPosition(QPointF position)
 {
 	this->position = position;

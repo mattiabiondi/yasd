@@ -30,6 +30,7 @@ void move();
 void print(QPaintDevice *device);
 QPointF getPosition();
 QLineF **getSensors();
+QLineF *getHitbox();
 void setPosition(QPointF position);
 void die();
 bool isAlive();

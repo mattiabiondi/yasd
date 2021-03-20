@@ -28,9 +28,10 @@ TrackWindow::TrackWindow()
 
 	cars = new Car *[n_cars];
 
-	for (int i = 0; i < n_red; i++)
+	for (int i = 0; i < n_red; i++){
+		QPointF spawn_point = QPointF(CHUNKSIZE*(i/3) + CHUNKSIZE / 2, CHUNKSIZE*(i%3) + CHUNKSIZE / 2);
 		cars[i] = new Car(REDTYPE, i, spawn_point, 0);
-
+}
 	for (int i = n_red; i < n_red + n_green; i++)
 		cars[i] = new Car(GREENTYPE, i, spawn_point, 0);
 
@@ -115,30 +116,31 @@ void TrackWindow::update()
 		}
 
 		for (int i = 0; i < n_red; i++)
-			cars[i] = new Car(REDTYPE, i, QPointF(CHUNKSIZE / 3 + (i * 5), CHUNKSIZE / 3 + (i * 5)), 0, 1, newGenerationDNAs[i]);
+			cars[i] = new Car(REDTYPE, i, QPointF(CHUNKSIZE / 3 + (i * 20), CHUNKSIZE / 3 + (i * 20)), 0, 1, newGenerationDNAs[i]);
 
 		for (int i = n_red; i < n_red + n_green; i++)
-			cars[i] = new Car(GREENTYPE, i, QPointF(CHUNKSIZE / 3 + (i * 5), CHUNKSIZE / 3 + (i * 5)), 0, 1, newGenerationDNAs[i]);
+			cars[i] = new Car(GREENTYPE, i, QPointF(CHUNKSIZE / 3 + (i * 20), CHUNKSIZE / 3 + (i * 20)), 0, 1, newGenerationDNAs[i]);
 
 		for (int i = n_red + n_green; i < n_cars; i++)
-			cars[i] = new Car(BLUETYPE, i, QPointF(CHUNKSIZE / 3 + (i * 5), CHUNKSIZE / 3 + (i * 5)), 0, 1, newGenerationDNAs[i]);
+			cars[i] = new Car(BLUETYPE, i, QPointF(CHUNKSIZE / 3 + (i * 20), CHUNKSIZE / 3 + (i * 20)), 0, 1, newGenerationDNAs[i]);
 
 		num_gen++;
 		cout << "\n\nGeneration: " << num_gen << "\n\n";
 	}
 
 	for (int a = 0; a < n_cars; a++) {
-		QPointF oldp = QPointF(cars[a]->getPosition());
+		if (cars[a]->isAlive()){
 
-		if (cars[a]->isAlive())
+			QPointF oldp = QPointF(cars[a]->getPosition());
 			cars[a]->move();
+			QPointF newp = QPointF(cars[a]->getPosition());
 
-		QPointF newp = QPointF(cars[a]->getPosition());
-		int x = newp.x() / CHUNKSIZE;
-		int y = newp.y() / CHUNKSIZE;
+			int x = newp.x() / CHUNKSIZE;
+			int y = newp.y() / CHUNKSIZE;
 
-		if (newp != oldp) {
 			QLineF distance = QLineF(oldp, newp);
+			QLineF **sensors = cars[a]->getSensors();
+
 			for (int i = x - 1; i <= x + 1; i++) {
 				if (i >= 0 && i < 3) {
 					for (int j = y - 1; j <= y + 1; j++) {
@@ -150,19 +152,7 @@ void TrackWindow::update()
 									cars[a]->setPosition(*intersection);
 								}
 								delete intersection;
-							}
-						}
-					}
-				}
-			}
-		}
-		QLineF **sensors = cars[a]->getSensors();
-		for (int i = x - 1; i <= x + 1; i++) {
-			for (int i = x - 1; i <= x + 1; i++) {
-				if (i >= 0 && i < 3) {
-					for (int j = y - 1; j <= y + 1; j++) {
-						if (j >= 0 && j < 3) {
-							for (int k = 0; k < tracks[i][j]->numLines; k++) {
+
 								for (int l = 0; l < 5; l++) {
 									QPointF *intersection = new QPointF();
 									if (sensors[l]->intersects(tracks[i][j]->lines[k]->translated(QPointF(i * CHUNKSIZE, j * CHUNKSIZE)), intersection) == QLineF::BoundedIntersection)
@@ -170,6 +160,25 @@ void TrackWindow::update()
 									delete intersection;
 								}
 							}
+						}
+					}
+				}
+			}
+
+			for (int l = 0; l < 5; l++) {
+				for(int i = 0; i < n_cars; i++){
+					if(i!=a){
+						for (int h = 0; h < 4; h++) {
+							QPointF *intersection = new QPointF();
+							if (sensors[l]->intersects(cars[i]->getHitbox()[h], intersection) == QLineF::BoundedIntersection){
+								sensors[l]->setP2(*intersection);
+								for(int j = 0; j<4;j++)
+										if (cars[a]->getHitbox()[j].intersects(cars[i]->getHitbox()[h], intersection) == QLineF::BoundedIntersection){
+											cars[a]->die();
+											cars[i]->die();
+										}
+							}
+							delete intersection;
 						}
 					}
 				}
