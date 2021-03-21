@@ -248,6 +248,7 @@ void MainWindow::openTrack()
 
 	// Set the window up
 	TrackWindow *trackWin = new TrackWindow();
+
 	trackWin->setFormat(format);
 	trackWin->resize(QSize(800, 600));
 	trackWin->show();
