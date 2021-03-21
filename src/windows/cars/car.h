@@ -5,6 +5,7 @@
 #include <QLineF>
 #include <QtMath>
 #include <QPainter>
+#include <QPainterPath>
 
 #include <chrono>
 #include <ctime>

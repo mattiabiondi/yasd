@@ -86,33 +86,43 @@ void Car::print(QPaintDevice *device)
 	for (int i = 0; i < NUMSENSORS; i++)
 		painter.drawLine(*this->sensors[i]);
 
-	QColor color;
+	QColor outline_color;
+	QColor infill_color;
 
 	switch (this->type) {
 	case REDTYPE:
-		color = QColor(Qt::red);
+		infill_color = QColor(Qt::red);
+		outline_color = QColor(Qt::darkRed);
 		break;
 	case GREENTYPE:
-		color = QColor(Qt::green);
+		infill_color = QColor(Qt::green);
+		outline_color = QColor(Qt::darkGreen);
 		break;
 	case BLUETYPE:
 	default:
-		color = QColor(Qt::blue);
+		infill_color = QColor(Qt::blue);
+		outline_color = QColor(Qt::darkBlue);
 		break;
 	}
+	QBrush infill = QBrush(infill_color, Qt::SolidPattern);
+	QBrush outline = QBrush(outline_color, Qt::SolidPattern);
 
-	QBrush brush = QBrush(color, Qt::SolidPattern);
+	// Draw car outline
+	QPainterPath path;
 
-	//painter.setPen(QPen(brush, 35, Qt::SolidLine, Qt::RoundCap));
+	path.moveTo(this->hitbox[0].p1());
+	for (int i = 0; i < 3; i++) {
+		path.lineTo(this->hitbox[i].p2());
+		path.lineTo(this->hitbox[i + 1].p1());
+	}
+	path.lineTo(this->hitbox[3].p2());
+	path.closeSubpath();
 
-	painter.setPen(QPen(Qt::white, 5, Qt::SolidLine, Qt::RoundCap));
-	painter.drawLine(this->hitbox[0]);
-	painter.drawPoint(this->sensors[2]->p2());
+	painter.setPen(QPen(outline, 5, Qt::SolidLine, Qt::RoundCap));
+	painter.drawPath(path);
 
-	painter.setPen(QPen(color, 5, Qt::SolidLine, Qt::RoundCap));
-
-	for (int i = 1; i < 4; i++)
-		painter.drawLine(this->hitbox[i]);
+	// Fill car outline with color
+	painter.fillPath(path, infill);
 
 	painter.end();
 }
