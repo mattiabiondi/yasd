@@ -88,12 +88,18 @@ void Car::print(QPaintDevice *device)
 
 	QColor color;
 
-	if (this->type == 0)
+	switch (this->type) {
+	case REDTYPE:
 		color = QColor(Qt::red);
-	else if (this->type == 1)
+		break;
+	case GREENTYPE:
 		color = QColor(Qt::green);
-	else
+		break;
+	case BLUETYPE:
+	default:
 		color = QColor(Qt::blue);
+		break;
+	}
 
 	QBrush brush = QBrush(color, Qt::SolidPattern);
 
