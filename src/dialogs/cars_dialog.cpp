@@ -31,7 +31,6 @@ CarsDialog::CarsDialog(Configuration *config, QWidget *parent)
 	buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
 					 | QDialogButtonBox::Cancel);
 
-	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &CarsDialog::saveConfig);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
@@ -42,7 +41,17 @@ CarsDialog::CarsDialog(Configuration *config, QWidget *parent)
 
 void CarsDialog::saveConfig()
 {
-	config->setRed(redSpinBox->value());
-	config->setGreen(greenSpinBox->value());
-	config->setBlue(blueSpinBox->value());
+	// Note: at least two cars are needed for genetic algorithm
+	if(redSpinBox->value() + greenSpinBox->value() + blueSpinBox->value() > 1) {
+		config->setRed(redSpinBox->value());
+		config->setGreen(greenSpinBox->value());
+		config->setBlue(blueSpinBox->value());
+		accept();
+	} else {
+		QMessageBox warning;
+		warning.setIcon(QMessageBox::Warning);
+		warning.setWindowTitle("Warning");
+		warning.setText("At least two cars are needed for the genetic algorithm!");
+		warning.exec();
+	}
 }
