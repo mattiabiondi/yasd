@@ -7,6 +7,7 @@
 #include "src/application.h"
 #include "src/tabs/config_tab.h"
 #include "src/tabs/track_tab.h"
+#include "src/tabs/track_tab0.h"
 #include "src/windows/track_window.h"
 #include "src/wizards/new_wizard.h"
 #include "src/dialogs/cars_dialog.h"
@@ -20,6 +21,7 @@ class QPushButton;
 class QSessionManager;
 class ConfigTab;
 class TrackTab;
+class TrackTab0;
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -68,6 +70,7 @@ QTabWidget *tabWidget;
 QWidget *welcomeTab();
 ConfigTab *configTab;
 TrackTab *trackTab;
+TrackTab0 *trackTab0;
 
 QAction *newAct;
 QAction *openAct;

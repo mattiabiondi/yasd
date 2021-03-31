@@ -10,6 +10,7 @@ add_executable(${PROJECT_NAME}
 	windows/cars/car.cpp
 	tabs/config_tab.cpp
 	tabs/track_tab.cpp
+	tabs/track_tab0.cpp
 	wizards/new_wizard.cpp
 	wizards/pages/cars_page.cpp
 	wizards/pages/track_page.cpp

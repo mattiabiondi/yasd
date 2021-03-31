@@ -202,6 +202,7 @@ void MainWindow::editTrack()
 	if (dialog.exec() == QDialog::Accepted) {
 		configTab->update();
 		trackTab->update();
+		//trackTab0->update();
 	}
 }
 
@@ -464,9 +465,24 @@ void MainWindow::configurationChanged()
 		openTrackAct->setEnabled(true);
 		trackTab = new TrackTab;
 		tabWidget->insertTab(1, trackTab, "&Track");
+
+
+		// Set OpenGL Version information
+		// Note: This format must be set before show() is called.
+		QSurfaceFormat format;
+
+		format.setRenderableType(QSurfaceFormat::OpenGL);
+		format.setProfile(QSurfaceFormat::CoreProfile);
+		format.setVersion(4, 6);
+
+		trackTab0 = new TrackTab0;
+		trackTab0->setFormat(format);
+
+		tabWidget->insertTab(2, trackTab0, "Track0");
 	} else {
 		configTab->update();
 		trackTab->update();
+		//trackTab0->update();
 	}
 
 	// TODO
