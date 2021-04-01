@@ -6,8 +6,8 @@ add_executable(${PROJECT_NAME}
 	utils.cpp
 	windows/main_window.cpp
 	windows/track_window.cpp
-	windows/track/track.cpp
-	windows/cars/car.cpp
+	tabs/track/track.cpp
+	tabs/cars/car.cpp
 	tabs/config_tab.cpp
 	tabs/track_tab.cpp
 	tabs/track_tab0.cpp

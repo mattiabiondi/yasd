@@ -1,4 +1,4 @@
-#include "src/windows/track/track.h"
+#include "src/tabs/track/track.h"
 
 #include <QPointF>
 #include <iostream>

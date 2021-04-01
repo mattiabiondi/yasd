@@ -1,4 +1,4 @@
-#include "src/windows/cars/car.h"
+#include "src/tabs/cars/car.h"
 
 Car::Car(int type, int id, QPointF position, double angle, int firstTime, DNA dna)
 {

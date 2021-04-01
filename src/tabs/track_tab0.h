@@ -5,8 +5,8 @@
 #include "src/configuration.h"
 #include "src/const.h"
 #include "src/input.h"
-#include "src/windows/cars/car.h"
-#include "src/windows/track/track.h"
+#include "src/tabs/cars/car.h"
+#include "src/tabs/track/track.h"
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
