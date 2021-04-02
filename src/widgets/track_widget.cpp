@@ -79,7 +79,7 @@ void TrackWidget::paintGL()
 		asphalt->greenF(),
 		asphalt->blueF(),
 		asphalt->alphaF()
-	);
+		);
 
 	for (int i = 0; i < n_cars; i++)
 		cars[i]->print(this);

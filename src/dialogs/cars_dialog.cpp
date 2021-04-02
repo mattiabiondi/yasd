@@ -42,7 +42,7 @@ CarsDialog::CarsDialog(Configuration *config, QWidget *parent)
 void CarsDialog::saveConfig()
 {
 	// Note: at least two cars are needed for genetic algorithm
-	if(redSpinBox->value() + greenSpinBox->value() + blueSpinBox->value() > 1) {
+	if (redSpinBox->value() + greenSpinBox->value() + blueSpinBox->value() > 1) {
 		config->setRed(redSpinBox->value());
 		config->setGreen(greenSpinBox->value());
 		config->setBlue(blueSpinBox->value());

@@ -1,5 +1,5 @@
-#ifndef YASD_TRACK_TAB0_H
-#define YASD_TRACK_TAB0_H
+#ifndef YASD_TRACK_WIDGET_H
+#define YASD_TRACK_WIDGET_H
 
 #include "src/application.h"
 #include "src/configuration.h"
@@ -55,4 +55,4 @@ QColor *asphalt;
 void printContextInformation();
 };
 
-#endif // YASD_TRACK_TAB0_H
+#endif // YASD_TRACK_WIDGET_H
