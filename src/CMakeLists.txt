@@ -5,17 +5,16 @@ add_executable(${PROJECT_NAME}
 	input.cpp
 	utils.cpp
 	windows/main_window.cpp
-	windows/track_window.cpp
-	tabs/track/track.cpp
-	tabs/cars/car.cpp
-	tabs/config_tab.cpp
-	tabs/track_tab.cpp
-	tabs/track_tab0.cpp
+	widgets/track_widget.cpp
+	widgets/track/track.cpp
+	widgets/cars/car.cpp
+	dialogs/config_dialog.cpp
 	wizards/new_wizard.cpp
 	wizards/pages/cars_page.cpp
 	wizards/pages/track_page.cpp
 	dialogs/cars_dialog.cpp
 	dialogs/track_dialog.cpp
+	dialogs/config_dialog.cpp
 	genetic_algorithm/dna.cpp
 	genetic_algorithm/genetic_algorithm_methods.cpp
 	neural_network/neural_network.cpp
