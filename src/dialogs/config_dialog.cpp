@@ -1,7 +1,7 @@
-#include "src/tabs/config_tab.h"
+#include "src/dialogs/config_dialog.h"
 
-ConfigTab::ConfigTab(QWidget *parent)
-	: QWidget(parent)
+ConfigDialog::ConfigDialog(QWidget *parent)
+	: QDialog(parent)
 {
 	QFormLayout *carsFormLayout = new QFormLayout;
 
@@ -37,27 +37,32 @@ ConfigTab::ConfigTab(QWidget *parent)
 	vBoxLayout->addWidget(trackGroupBox);
 	vBoxLayout->addStretch();
 
-	QWidget *tab = new QWidget;
+	QWidget *configWidget = new QWidget;
 
-	tab->setObjectName("ConfigTab");
-	tab->setLayout(vBoxLayout);
+	configWidget->setObjectName("ConfigDialog");
+	configWidget->setLayout(vBoxLayout);
 
 	QScrollArea *scrollArea = new QScrollArea;
 
-	scrollArea->setWidget(tab);
+	scrollArea->setWidget(configWidget);
 	scrollArea->setWidgetResizable(true);
 	scrollArea->setFrameShape(QFrame::NoFrame);
-	scrollArea->setStyleSheet("QAbstractScrollArea, #ConfigTab {background: transparent}");
+	scrollArea->setStyleSheet("QAbstractScrollArea, #ConfigDialog {background: transparent}");
 
 	QVBoxLayout *layout = new QVBoxLayout;
 
 	layout->addWidget(scrollArea);
+
+	buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
+	connect(buttonBox, &QDialogButtonBox::rejected, this, &ConfigDialog::reject);
+	layout->addWidget(buttonBox);
+
 	setLayout(layout);
 
 	update();
 }
 
-void ConfigTab::update()
+void ConfigDialog::update()
 {
 	const Configuration *config = Appl()->getConfig();
 

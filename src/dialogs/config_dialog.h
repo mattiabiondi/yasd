@@ -1,7 +1,7 @@
-#ifndef YASD_CONFIG_TAB_H
-#define YASD_CONFIG_TAB_H
+#ifndef YASD_CONFIG_DIALOG_H
+#define YASD_CONFIG_DIALOG_H
 
-#include <QWidget>
+#include <QDialog>
 #include <QScrollArea>
 #include <QFormLayout>
 #include <QGroupBox>
@@ -12,16 +12,22 @@
 #include "src/application.h"
 #include "src/configuration.h"
 
-class ConfigTab : public QWidget {
+QT_BEGIN_NAMESPACE
+class QDialogButtonBox;
+QT_END_NAMESPACE
+
+class ConfigDialog : public QDialog
+{
 Q_OBJECT
 
 public:
-ConfigTab(QWidget *parent = 0);
+ConfigDialog(QWidget *parent = nullptr);
 
 public slots:
 void update();
 
 private:
+QDialogButtonBox *buttonBox;
 QLabel *redLabel;
 QLabel *greenLabel;
 QLabel *blueLabel;
@@ -30,4 +36,4 @@ QLabel *limitLabel;
 QLabel *frictionLabel;
 };
 
-#endif // YASD_CONFIG_TAB_H
+#endif // YASD_CONFIG_DIALOG_H
