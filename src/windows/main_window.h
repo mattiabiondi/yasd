@@ -5,23 +5,21 @@
 
 #include "src/configuration.h"
 #include "src/application.h"
-#include "src/tabs/config_tab.h"
-#include "src/tabs/track_tab.h"
-#include "src/tabs/track_tab0.h"
-#include "src/windows/track_window.h"
+#include "src/widgets/track_widget.h"
 #include "src/wizards/new_wizard.h"
 #include "src/dialogs/cars_dialog.h"
 #include "src/dialogs/track_dialog.h"
+#include "src/dialogs/config_dialog.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
 class QMenu;
-class QTabWidget;
 class QPushButton;
 class QSessionManager;
-class ConfigTab;
+class ConfigWidget;
 class TrackTab;
-class TrackTab0;
+class TrackWidget;
+class ConfigDialog;
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -44,8 +42,8 @@ void openRecentFile();
 void clearRecentFiles();
 void editCars();
 void editTrack();
+void viewConfig();
 void about();
-void openTrack();
 void fileWasModified();
 void configurationChanged();
 #ifndef QT_NO_SESSIONMANAGER
@@ -55,7 +53,8 @@ void commitData(QSessionManager &);
 private:
 void createActions();
 void createStatusBar();
-void createTabs();
+void createWelcomeWidget();
+void createTrackWidget();
 void readSettings();
 void writeSettings();
 bool maybeSave();
@@ -66,11 +65,8 @@ QString strippedName(const QString &fullFileName);
 
 QPushButton *createButton(const QAction *action, const QString &text = QString());
 
-QTabWidget *tabWidget;
-QWidget *welcomeTab();
-ConfigTab *configTab;
-TrackTab *trackTab;
-TrackTab0 *trackTab0;
+QWidget *welcomeWidget();
+TrackWidget *trackWidget;
 
 QAction *newAct;
 QAction *openAct;
@@ -83,12 +79,12 @@ QAction *clearRecentFilesAct;
 QAction *exitAct;
 QAction *editCarsAct;
 QAction *editTrackAct;
+QAction *viewConfigAct;
 QAction *aboutAct;
 QAction *aboutQtAct;
-QAction *openTrackAct;
 
 NewWizard *newWizard;
-TrackDialog *trackDialog;
+ConfigDialog *configDialog;
 };
 
 #endif // YASD_MAIN_WINDOW_H

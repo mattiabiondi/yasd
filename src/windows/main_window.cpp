@@ -1,13 +1,10 @@
 #include "src/windows/main_window.h"
 
 MainWindow::MainWindow()
-	: tabWidget(new QTabWidget)
 {
-	setCentralWidget(tabWidget);
-
 	createActions();
 	createStatusBar();
-	createTabs();
+	createWelcomeWidget();
 
 	readSettings();
 
@@ -21,7 +18,7 @@ MainWindow::MainWindow()
 
 	setUnifiedTitleAndToolBarOnMac(true);
 
-	configTab = NULL;
+	trackWidget = NULL;
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -191,8 +188,12 @@ void MainWindow::editCars()
 {
 	CarsDialog dialog(Appl()->getConfig(), this);
 
-	if (dialog.exec() == QDialog::Accepted)
-		configTab->update();
+	if (dialog.exec() == QDialog::Accepted) {
+		configDialog->update();
+		// TODO: restart better trackWidget
+		delete trackWidget;
+		createTrackWidget();
+	}
 }
 
 void MainWindow::editTrack()
@@ -200,11 +201,17 @@ void MainWindow::editTrack()
 	TrackDialog dialog(Appl()->getConfig(), this);
 
 	if (dialog.exec() == QDialog::Accepted) {
-		configTab->update();
-		trackTab->update();
-		//trackTab0->update();
+		// TODO: restart better trackWidget
+		delete trackWidget;
+		createTrackWidget();
 	}
 }
+
+void MainWindow::viewConfig()
+{
+	configDialog->show();
+}
+
 
 void MainWindow::about()
 {
@@ -235,24 +242,6 @@ void MainWindow::about()
 		       .arg(PROJECT_VERSION);
 
 	QMessageBox::about(this, name, text);
-}
-
-void MainWindow::openTrack()
-{
-	// Set OpenGL Version information
-	// Note: This format must be set before show() is called.
-	QSurfaceFormat format;
-
-	format.setRenderableType(QSurfaceFormat::OpenGL);
-	format.setProfile(QSurfaceFormat::CoreProfile);
-	format.setVersion(4, 6);
-
-	// Set the window up
-	TrackWindow *trackWin = new TrackWindow();
-
-	trackWin->setFormat(format);
-	trackWin->resize(QSize(800, 600));
-	trackWin->show();
 }
 
 void MainWindow::fileWasModified()
@@ -348,14 +337,13 @@ void MainWindow::createActions()
 	menuBar()->addSeparator();
 	toolbar->addSeparator();
 
-	QMenu *windowsMenu = menuBar()->addMenu(tr("&Windows"));
+	QMenu *viewMenu = menuBar()->addMenu(tr("&View"));
 
-	openTrackAct = windowsMenu->addAction(tr("Track"), this, &MainWindow::openTrack);
-	openTrackAct->setStatusTip(tr("Open track windows"));
-	openTrackAct->setEnabled(false);
-	toolbar->addAction(openTrackAct);
+	viewConfigAct = viewMenu->addAction(tr("&Configuration"), this, &MainWindow::viewConfig);
+	viewConfigAct->setStatusTip(tr("View current configuration"));
+	viewConfigAct->setEnabled(false);
 
-	menuBar()->addSeparator();
+	toolbar->addSeparator();
 
 	QMenu *helpMenu = menuBar()->addMenu(tr("&Help"));
 
@@ -371,11 +359,27 @@ void MainWindow::createStatusBar()
 	statusBar()->showMessage(tr("Ready"));
 }
 
-void MainWindow::createTabs()
+void MainWindow::createWelcomeWidget()
 {
 	const QIcon detailsIcon = QIcon::fromTheme("todo");
 
-	tabWidget->addTab(welcomeTab(), detailsIcon, "&Welcome");
+	setCentralWidget(welcomeWidget());
+}
+
+void MainWindow::createTrackWidget()
+{
+	// Set OpenGL Version information
+	// Note: This format must be set before show() is called.
+	QSurfaceFormat format;
+
+	format.setRenderableType(QSurfaceFormat::OpenGL);
+	format.setProfile(QSurfaceFormat::CoreProfile);
+	format.setVersion(4, 6);
+
+	trackWidget = new TrackWidget;
+	trackWidget->setFormat(format);
+
+	setCentralWidget(trackWidget);
 }
 
 QPushButton *MainWindow::createButton(const QAction *action, const QString &text)
@@ -386,18 +390,18 @@ QPushButton *MainWindow::createButton(const QAction *action, const QString &text
 	return button;
 }
 
-QWidget *MainWindow::welcomeTab()
+QWidget *MainWindow::welcomeWidget()
 {
 	QScrollArea *scrollArea = new QScrollArea;
-	QWidget *tab = new QWidget;
+	QWidget *welcomeWidget = new QWidget;
 
-	tab->setObjectName("WelcomeTab");
-	scrollArea->setWidget(tab);
+	welcomeWidget->setObjectName("WelcomeWidget");
+	scrollArea->setWidget(welcomeWidget);
 	scrollArea->setWidgetResizable(true);
 	scrollArea->setFrameShape(QFrame::NoFrame);
-	scrollArea->setStyleSheet("QAbstractScrollArea, #WelcomeTab {background: transparent}");
+	scrollArea->setStyleSheet("QAbstractScrollArea, #WelcomeWidget {background: transparent}");
 
-	QVBoxLayout *layout = new QVBoxLayout(tab);
+	QVBoxLayout *layout = new QVBoxLayout(welcomeWidget);
 
 	layout->setAlignment(Qt::AlignCenter);
 
@@ -454,35 +458,20 @@ bool MainWindow::maybeSave()
 
 void MainWindow::configurationChanged()
 {
-	if (!configTab) {
-		delete tabWidget->widget(0);
-		configTab = new ConfigTab;
-		tabWidget->insertTab(0, configTab, "&Configuration");
+	if (!trackWidget) {
 		saveAct->setEnabled(true);
 		saveAsAct->setEnabled(true);
 		editCarsAct->setEnabled(true);
 		editTrackAct->setEnabled(true);
-		openTrackAct->setEnabled(true);
-		trackTab = new TrackTab;
-		tabWidget->insertTab(1, trackTab, "&Track");
+		viewConfigAct->setEnabled(true);
 
-
-		// Set OpenGL Version information
-		// Note: This format must be set before show() is called.
-		QSurfaceFormat format;
-
-		format.setRenderableType(QSurfaceFormat::OpenGL);
-		format.setProfile(QSurfaceFormat::CoreProfile);
-		format.setVersion(4, 6);
-
-		trackTab0 = new TrackTab0;
-		trackTab0->setFormat(format);
-
-		tabWidget->insertTab(2, trackTab0, "Track0");
+		configDialog = new ConfigDialog(this);
+		createTrackWidget();
 	} else {
-		configTab->update();
-		trackTab->update();
-		//trackTab0->update();
+		configDialog->update();
+		// TODO: restart better trackWidget
+		delete trackWidget;
+		createTrackWidget();
 	}
 
 	// TODO
