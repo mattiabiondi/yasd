@@ -1,4 +1,4 @@
-#include "src/tabs/track_tab0.h"
+#include "src/widgets/track_widget.h"
 #include "src/genetic_algorithm/genetic_algorithm_methods.h"
 
 #include <QDebug>
@@ -11,7 +11,7 @@
 const double Xmin = 0.0, Xmax = 3.0;
 const double Ymin = 0.0, Ymax = 3.0;
 
-TrackTab0::TrackTab0(QWidget *parent)
+TrackWidget::TrackWidget(QWidget *parent)
 {
 	srand((unsigned int)time(NULL));
 	this->startTime = time(0);
@@ -44,30 +44,42 @@ TrackTab0::TrackTab0(QWidget *parent)
 		for (int j = 0; j < 3; j++)
 			tracks[i][j] = new Track(matrix[i][j], 1);
 	}
+
+	// Accepts keyboard focus
+	setFocusPolicy(Qt::StrongFocus);
 }
 
-TrackTab0::~TrackTab0()
+TrackWidget::~TrackWidget()
 {
 	makeCurrent();
 	teardownGL();
-	//delete this;
 }
 
 /*******************************************************************************
  * OpenGL Events
  ******************************************************************************/
-void TrackTab0::initializeGL()
+void TrackWidget::initializeGL()
 {
 	// Initialize OpenGL Backend
 	initializeOpenGLFunctions();
-	connect(this, &QOpenGLWidget::frameSwapped, this, &TrackTab0::update);
+	connect(this, &QOpenGLWidget::frameSwapped, this, &TrackWidget::update);
 	printContextInformation();
 }
 
-void TrackTab0::paintGL()
+void TrackWidget::paintGL()
 {
 	// Clear the rendering window
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	grass = new QColor("#a3be8c");
+	asphalt = new QColor("#4c566a");
+
+	glClearColor(
+		asphalt->redF(),
+		asphalt->greenF(),
+		asphalt->blueF(),
+		asphalt->alphaF()
+	);
 
 	for (int i = 0; i < n_cars; i++)
 		cars[i]->print(this);
@@ -81,7 +93,7 @@ void TrackTab0::paintGL()
 	//glFlush();
 }
 
-void TrackTab0::teardownGL()
+void TrackWidget::teardownGL()
 {
 	// Actually destroy our OpenGL information
 
@@ -92,7 +104,7 @@ void TrackTab0::teardownGL()
 	delete tracks;
 }
 
-void TrackTab0::update()
+void TrackWidget::update()
 {
 	// Update input
 	Input::update();
@@ -187,7 +199,7 @@ void TrackTab0::update()
 	QOpenGLWidget::update();
 }
 
-void TrackTab0::keyPressEvent(QKeyEvent *event)
+void TrackWidget::keyPressEvent(QKeyEvent *event)
 {
 	if (event->isAutoRepeat())
 		event->ignore();
@@ -195,7 +207,7 @@ void TrackTab0::keyPressEvent(QKeyEvent *event)
 		Input::registerKeyPress(event->key());
 }
 
-void TrackTab0::keyReleaseEvent(QKeyEvent *event)
+void TrackWidget::keyReleaseEvent(QKeyEvent *event)
 {
 	if (event->isAutoRepeat())
 		event->ignore();
@@ -206,7 +218,7 @@ void TrackTab0::keyReleaseEvent(QKeyEvent *event)
 /*******************************************************************************
  * Private Helpers
  ******************************************************************************/
-void TrackTab0::printContextInformation()
+void TrackWidget::printContextInformation()
 {
 	QString glType;
 	QString glVersion;

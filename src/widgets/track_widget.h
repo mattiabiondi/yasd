@@ -5,8 +5,8 @@
 #include "src/configuration.h"
 #include "src/const.h"
 #include "src/input.h"
-#include "src/tabs/cars/car.h"
-#include "src/tabs/track/track.h"
+#include "src/widgets/cars/car.h"
+#include "src/widgets/track/track.h"
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
@@ -15,14 +15,14 @@
 #include <QPen>
 #include <QFont>
 
-class TrackTab0 : public QOpenGLWidget,
+class TrackWidget : public QOpenGLWidget,
 	protected QOpenGLFunctions
 {
 Q_OBJECT
 
 public:
-TrackTab0(QWidget *parent = 0);
-~TrackTab0();
+TrackWidget(QWidget *parent = 0);
+~TrackWidget();
 
 // OpenGL Events
 void initializeGL();
@@ -47,6 +47,9 @@ int n_red;
 int n_green;
 int n_blue;
 int n_cars;
+
+QColor *grass;
+QColor *asphalt;
 
 // Private Helpers
 void printContextInformation();

@@ -1,4 +1,4 @@
-#include "src/tabs/track/track.h"
+#include "src/widgets/track/track.h"
 
 #include <QPointF>
 #include <iostream>
