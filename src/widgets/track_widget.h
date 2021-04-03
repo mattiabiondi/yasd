@@ -35,12 +35,19 @@ void update();
 protected:
 void keyPressEvent(QKeyEvent *event);
 void keyReleaseEvent(QKeyEvent *event);
+void initTrack();
+void initCars();
+void printTrack();
+void printCar(Car *car);
+void moveCar(Car *car);
+void checkCollisions(Car *car, QPointF *oldp, QPointF *newp);
+void nextGeneration();
 
 private:
 Car **cars;
 Track ***tracks;
 time_t startTime;
-int num_gen = 0;
+int current_gen;
 
 Configuration *config;
 int n_red;

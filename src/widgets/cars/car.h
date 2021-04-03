@@ -35,7 +35,7 @@ QLineF *getHitbox();
 void setPosition(QPointF position);
 void die();
 bool isAlive();
-
+int getId();
 DNA getDNA();
 double getDistance();
 double getAliveTime();

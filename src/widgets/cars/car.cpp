@@ -189,6 +189,11 @@ bool Car::isAlive()
 	return this->alive;
 }
 
+int Car::getId()
+{
+	return this->id;
+}
+
 DNA Car::getDNA()
 {
 	return this->dna;
