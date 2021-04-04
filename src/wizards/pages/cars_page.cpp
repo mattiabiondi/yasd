@@ -13,23 +13,17 @@ CarsWizardPage::CarsWizardPage(QWidget *parent)
 	blueSpinBox = new QSpinBox;
 	blueSpinBox->setRange(MINCARS, MAXCARS);
 
+	registerField("red", redSpinBox);
+	registerField("green", greenSpinBox);
+	registerField("blue", blueSpinBox);
+
 	QFormLayout *formLayout = new QFormLayout;
 
 	formLayout->addRow(tr("Red - Fast driver:"), redSpinBox);
 	formLayout->addRow(tr("Green - Regular driver:"), greenSpinBox);
 	formLayout->addRow(tr("Blue - Slow driver:"), blueSpinBox);
 
-	carsBox = new QGroupBox(tr("Number of cars:"));
-	carsBox->setLayout(formLayout);
-
-	registerField("red", redSpinBox);
-	registerField("green", greenSpinBox);
-	registerField("blue", blueSpinBox);
-
-	QVBoxLayout *layout = new QVBoxLayout;
-
-	layout->addWidget(carsBox);
-	setLayout(layout);
+	setLayout(formLayout);
 
 	connect(redSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
 		this, &QWizardPage::completeChanged);
