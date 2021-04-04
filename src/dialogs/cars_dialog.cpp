@@ -6,6 +6,8 @@ CarsDialog::CarsDialog(Configuration *config, QWidget *parent)
 {
 	setWindowTitle(tr("Cars preferences"));
 
+	QVBoxLayout *layout = new QVBoxLayout;
+
 	redSpinBox = new QSpinBox;
 	redSpinBox->setRange(MINCARS, MAXCARS);
 	redSpinBox->setValue(config->getRed());
@@ -22,11 +24,7 @@ CarsDialog::CarsDialog(Configuration *config, QWidget *parent)
 	formLayout->addRow(tr("Green - Regular driver:"), greenSpinBox);
 	formLayout->addRow(tr("Blue - Slow driver:"), blueSpinBox);
 
-	QVBoxLayout *layout = new QVBoxLayout;
-
-	carsBox = new QGroupBox(tr("Number of cars:"));
-	carsBox->setLayout(formLayout);
-	layout->addWidget(carsBox);
+	layout->addLayout(formLayout);
 
 	buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
 					 | QDialogButtonBox::Cancel);
