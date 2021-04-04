@@ -47,7 +47,6 @@ private:
 Car **cars;
 Track ***tracks;
 time_t startTime;
-int current_gen;
 
 Configuration *config;
 int n_red;

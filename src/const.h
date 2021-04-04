@@ -8,6 +8,8 @@
 #define MINCARS 0
 #define MAXCARS 10
 
+#define MINGENERATION 0
+
 // cars type
 #define REDTYPE 0
 #define GREENTYPE 1

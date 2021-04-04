@@ -28,6 +28,7 @@ Q_OBJECT
 
 public:
 MainWindow();
+ConfigDialog *configDialog;
 
 protected:
 void closeEvent(QCloseEvent *event) override;
@@ -84,7 +85,6 @@ QAction *aboutAct;
 QAction *aboutQtAct;
 
 NewWizard *newWizard;
-ConfigDialog *configDialog;
 };
 
 #endif // YASD_MAIN_WINDOW_H

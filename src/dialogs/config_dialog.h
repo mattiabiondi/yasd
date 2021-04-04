@@ -31,6 +31,7 @@ QDialogButtonBox *buttonBox;
 QLabel *redLabel;
 QLabel *greenLabel;
 QLabel *blueLabel;
+QLabel *generationLabel;
 QLabel *crossroadsLabel;
 QLabel *limitLabel;
 QLabel *frictionLabel;

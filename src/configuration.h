@@ -38,6 +38,12 @@ int getBlue() const
 	return blue;
 }
 
+void setGeneration(int value);
+int getGeneration() const
+{
+	return generation;
+}
+
 void setCrossroads(int value);
 int getCrossroads() const
 {
@@ -60,6 +66,7 @@ private:
 int red;
 int green;
 int blue;
+int generation;
 int crossroads;
 int limit;
 int friction;

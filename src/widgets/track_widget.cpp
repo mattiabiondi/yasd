@@ -44,18 +44,16 @@ void TrackWidget::initTrack()
 
 void TrackWidget::initCars()
 {
-	current_gen = 0;
-
-	QPointF spawn_point = QPointF(CHUNKSIZE / 3, CHUNKSIZE / 3);
-
 	config = Appl()->getConfig();
 	n_red = config->getRed();
 	n_green = config->getGreen();
 	n_blue = config->getBlue();
 	n_cars = n_red + n_green + n_blue;
+	config->setGeneration(0);
 
 	cars = new Car *[n_cars];
 
+	QPointF spawn_point = QPointF(CHUNKSIZE / 3, CHUNKSIZE / 3);
 	int i;
 
 	for (i = 0; i < n_red; i++) {
@@ -175,8 +173,8 @@ void TrackWidget::nextGeneration()
 	for (int i = n_red + n_green; i < n_cars; i++)
 		cars[i] = new Car(BLUETYPE, i, QPointF(CHUNKSIZE / 3 + (i * 20), CHUNKSIZE / 3 + (i * 20)), 0, 1, newGenerationDNAs[i]);
 
-	current_gen++;
-	cout << "\n\nGeneration: " << current_gen << "\n\n";
+	config->setGeneration(config->getGeneration() + 1);
+	dynamic_cast<MainWindow *>(parent())->configDialog->update();
 }
 
 /*******************************************************************************
@@ -205,10 +203,10 @@ void TrackWidget::paintGL()
 		asphalt->alphaF()
 		);
 
-	printTrack();
-
 	for (int i = 0; i < n_cars; i++)
 		printCar(cars[i]);
+
+	printTrack();
 
 	// Flush the pipeline.  (Not usually necessary.)
 	//glFlush();

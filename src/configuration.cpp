@@ -51,6 +51,11 @@ Configuration *Configuration::loadFromFile(const QString &fileName, QString &err
 		config->setBlue(cars.take("blue").toInt());
 	}
 
+	if (root.contains("dna")) {
+		QJsonObject dna = root.value("dna").toObject();
+		config->setGeneration(dna.take("generation").toInt());
+	}
+
 	if (root.contains("track")) {
 		QJsonObject track = root.value("track").toObject();
 		config->setCrossroads(track.take("crossroads").toInt());
@@ -76,6 +81,10 @@ bool Configuration::save(const QString &fileName)
 	cars.insert("green", getGreen());
 	cars.insert("blue", getBlue());
 
+	QJsonObject dna;
+
+	dna.insert("generation", getGeneration());
+
 	QJsonObject track;
 
 	track.insert("crossroads", getCrossroads());
@@ -83,6 +92,7 @@ bool Configuration::save(const QString &fileName)
 	track.insert("friction", getFriction());
 
 	root.insert("cars", cars);
+	root.insert("dna", dna);
 	root.insert("track", track);
 
 	QJsonDocument document;
@@ -128,6 +138,11 @@ void Configuration::setGreen(int value)
 void Configuration::setBlue(int value)
 {
 	blue = bumpProperty(MINCARS, value, MAXCARS);
+}
+
+void Configuration::setGeneration(int value)
+{
+	generation = bumpProperty(MINGENERATION, value, value);
 }
 
 void Configuration::setCrossroads(int value)

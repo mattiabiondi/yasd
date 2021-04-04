@@ -12,9 +12,18 @@ ConfigDialog::ConfigDialog(QWidget *parent)
 	blueLabel = new QLabel;
 	carsFormLayout->addRow(tr("Blue - Slow driver:"), blueLabel);
 
-	QGroupBox *carsGroupBox = new QGroupBox(tr("Number of cars:"));
+	QGroupBox *carsGroupBox = new QGroupBox(tr("Cars"));
 
 	carsGroupBox->setLayout(carsFormLayout);
+
+	QFormLayout *dnaFormLayout = new QFormLayout;
+
+	generationLabel = new QLabel;
+	dnaFormLayout->addRow(tr("Generation:"), generationLabel);
+
+	QGroupBox *dnaGroupBox = new QGroupBox(tr("DNA"));
+
+	dnaGroupBox->setLayout(dnaFormLayout);
 
 	QFormLayout *trackFormLayout = new QFormLayout;
 
@@ -25,7 +34,7 @@ ConfigDialog::ConfigDialog(QWidget *parent)
 	frictionLabel = new QLabel;
 	trackFormLayout->addRow(tr("Coefficient of friction:"), frictionLabel);
 
-	QGroupBox *trackGroupBox = new QGroupBox(tr("Track:"));
+	QGroupBox *trackGroupBox = new QGroupBox(tr("Track"));
 
 	trackGroupBox->setLayout(trackFormLayout);
 
@@ -34,6 +43,7 @@ ConfigDialog::ConfigDialog(QWidget *parent)
 	vBoxLayout->setAlignment(Qt::AlignCenter);
 	vBoxLayout->addStretch();
 	vBoxLayout->addWidget(carsGroupBox);
+	vBoxLayout->addWidget(dnaGroupBox);
 	vBoxLayout->addWidget(trackGroupBox);
 	vBoxLayout->addStretch();
 
@@ -69,6 +79,7 @@ void ConfigDialog::update()
 	redLabel->setText(QString::number(config->getRed()));
 	greenLabel->setText(QString::number(config->getGreen()));
 	blueLabel->setText(QString::number(config->getBlue()));
+	generationLabel->setText(QString::number(config->getGeneration()));
 	crossroadsLabel->setText(QString::number(config->getCrossroads()));
 	limitLabel->setText(QString("%1 km/h").arg(config->getLimit()));
 	if (config->getFriction() == FRICTIONASPHALTINDEX)
