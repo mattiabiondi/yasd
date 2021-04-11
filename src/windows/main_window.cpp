@@ -1,6 +1,7 @@
 #include "src/windows/main_window.h"
 
 MainWindow::MainWindow()
+	: session(Appl()->getSession())
 {
 	createActions();
 	createStatusBar();
@@ -252,8 +253,9 @@ void MainWindow::fileWasModified()
 
 void MainWindow::createActions()
 {
-	QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
 	QToolBar *toolbar = addToolBar(tr("Toolbar"));
+
+	QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
 
 	// TODO
 	const QIcon newIcon = QIcon::fromTheme("document-new");
@@ -322,8 +324,6 @@ void MainWindow::createActions()
 	exitAct->setShortcuts(QKeySequence::Quit);
 	exitAct->setStatusTip(tr("Exit yasd"));
 
-	menuBar()->addSeparator();
-
 	QMenu *editMenu = menuBar()->addMenu(tr("&Edit"));
 
 	editCarsAct = editMenu->addAction(tr("Cars..."), this, &MainWindow::editCars);
@@ -334,9 +334,6 @@ void MainWindow::createActions()
 	editTrackAct->setStatusTip(tr("Edit track preferences"));
 	editTrackAct->setEnabled(false);
 
-	menuBar()->addSeparator();
-	toolbar->addSeparator();
-
 	QMenu *viewMenu = menuBar()->addMenu(tr("&View"));
 
 	viewConfigAct = viewMenu->addAction(tr("&Configuration"), this, &MainWindow::viewConfig);
@@ -344,6 +341,13 @@ void MainWindow::createActions()
 	viewConfigAct->setEnabled(false);
 
 	toolbar->addSeparator();
+
+	QMenu *sessionMenu = menuBar()->addMenu(tr("&Session"));
+
+	sessionMenu->addAction(session->startAct);
+	sessionMenu->addAction(session->stopAct);
+	sessionMenu->addAction(session->resetAct);
+	toolbar->addAction(session->toggleAct);
 
 	QMenu *helpMenu = menuBar()->addMenu(tr("&Help"));
 

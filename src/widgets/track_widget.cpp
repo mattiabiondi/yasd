@@ -12,6 +12,7 @@ const double Xmin = 0.0, Xmax = 3.0;
 const double Ymin = 0.0, Ymax = 3.0;
 
 TrackWidget::TrackWidget(QWidget *parent)
+	: session(Appl()->getSession())
 {
 	srand((unsigned int)time(NULL));
 	this->startTime = time(0);
@@ -231,8 +232,9 @@ void TrackWidget::update()
 	if (Input::keyPressed(Qt::Key_Up))
 		nextGeneration();
 
-	for (int i = 0; i < n_cars; i++)
-		moveCar(cars[i]);
+	if(session->isRunning())
+		for (int i = 0; i < n_cars; i++)
+			moveCar(cars[i]);
 
 	// Schedule a redraw
 	QOpenGLWidget::update();

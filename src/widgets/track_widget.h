@@ -15,6 +15,10 @@
 #include <QPen>
 #include <QFont>
 
+QT_BEGIN_NAMESPACE
+class Session;
+QT_END_NAMESPACE
+
 class TrackWidget : public QOpenGLWidget,
 	protected QOpenGLFunctions
 {
@@ -49,6 +53,8 @@ Track ***tracks;
 time_t startTime;
 
 Configuration *config;
+const Session *session;
+
 int n_red;
 int n_green;
 int n_blue;

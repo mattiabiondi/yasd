@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include "src/configuration.h"
+#include "src/session.h"
 #include "src/application.h"
 #include "src/widgets/track_widget.h"
 #include "src/wizards/new_wizard.h"
@@ -12,6 +13,7 @@
 #include "src/dialogs/config_dialog.h"
 
 QT_BEGIN_NAMESPACE
+class Session;
 class QAction;
 class QMenu;
 class QPushButton;
@@ -63,6 +65,8 @@ static bool hasRecentFiles();
 void prependToRecentFiles(const QString &fileName);
 void setRecentFilesVisible(bool visible);
 QString strippedName(const QString &fullFileName);
+
+const Session *session;
 
 QPushButton *createButton(const QAction *action, const QString &text = QString());
 
