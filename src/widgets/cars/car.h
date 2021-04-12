@@ -26,7 +26,7 @@ using namespace std::chrono;
 class Car
 {
 public:
-Car(int type, int id, QPointF position, double angle, int firstTime = 0, DNA dna = 0);
+Car(int type, int id, QPointF position, double angle, int firstTime = 0, DNA* dna = 0);
 void move();
 void print(QPaintDevice *device);
 QPointF getPosition();
@@ -36,7 +36,7 @@ void setPosition(QPointF position);
 void die();
 bool isAlive();
 int getId();
-DNA getDNA();
+DNA *getDNA();
 double getDistance();
 double getAliveTime();
 
@@ -59,7 +59,7 @@ bool *chunkTraveled;
 high_resolution_clock::time_point t_current, t_start;
 duration<double, std::milli> aliveTime;
 
-DNA dna;
+DNA *dna;
 NeuralNetwork nn;
 };
 

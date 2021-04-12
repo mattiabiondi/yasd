@@ -10,6 +10,7 @@
 #include "src/dialogs/cars_dialog.h"
 #include "src/dialogs/track_dialog.h"
 #include "src/dialogs/config_dialog.h"
+#include "src/dialogs/charts_dialog.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -20,6 +21,7 @@ class ConfigWidget;
 class TrackTab;
 class TrackWidget;
 class ConfigDialog;
+class ChartsDialog;
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -29,6 +31,7 @@ Q_OBJECT
 public:
 MainWindow();
 ConfigDialog *configDialog;
+ChartsDialog *chartsDialog = NULL;
 
 protected:
 void closeEvent(QCloseEvent *event) override;
@@ -44,6 +47,7 @@ void clearRecentFiles();
 void editCars();
 void editTrack();
 void viewConfig();
+void viewCharts();
 void about();
 void fileWasModified();
 void configurationChanged();
@@ -83,6 +87,7 @@ QAction *editTrackAct;
 QAction *viewConfigAct;
 QAction *aboutAct;
 QAction *aboutQtAct;
+QAction *chartsAct;
 
 NewWizard *newWizard;
 };

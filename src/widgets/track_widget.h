@@ -15,6 +15,9 @@
 #include <QPen>
 #include <QFont>
 
+#include <QtCharts/QLineSeries>
+using namespace QtCharts;
+
 class TrackWidget : public QOpenGLWidget,
 	protected QOpenGLFunctions
 {
@@ -56,6 +59,11 @@ int n_cars;
 
 QColor *grass;
 QColor *asphalt;
+
+int currentGeneration = 0;
+
+QLineSeries *series;
+
 
 // Private Helpers
 void printContextInformation();

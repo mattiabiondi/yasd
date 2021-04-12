@@ -1,6 +1,6 @@
 #include "src/widgets/cars/car.h"
 
-Car::Car(int type, int id, QPointF position, double angle, int firstTime, DNA dna)
+Car::Car(int type, int id, QPointF position, double angle, int firstTime, DNA *dna)
 {
 	this->alive = true;
 	this->t_start = this->t_current = high_resolution_clock::now();
@@ -21,7 +21,7 @@ Car::Car(int type, int id, QPointF position, double angle, int firstTime, DNA dn
 	this->id = id;
 
 	if (firstTime == 0)
-		this->dna = DNA(id);
+		this->dna = new DNA(id);
 	else
 		this->dna = dna;
 
@@ -71,6 +71,7 @@ void Car::die()
 {
 	this->alive = false;
 	this->aliveTime = this->t_current - this->t_start;
+	cout << this->id;
 	cout << "La macchina è rimasta in vita per " << this->aliveTime.count() << " milli e ha percorso " << this->distance << " metri \n";
 }
 
@@ -194,7 +195,7 @@ int Car::getId()
 	return this->id;
 }
 
-DNA Car::getDNA()
+DNA *Car::getDNA()
 {
 	return this->dna;
 }
@@ -213,10 +214,10 @@ NeuralNetwork Car::initNeuralNetwork()
 {
 	NeuralNetwork nn = NeuralNetwork(5, 7, 2);
 
-	double **inputs_to_hidden_weights = nn.getMatrixWithWeights(7, 5, getArrayPortion(this->dna.genes, 0, 35));
-	double **hidden_to_output_weights = nn.getMatrixWithWeights(2, 7, getArrayPortion(this->dna.genes, 35, 49));
-	double *inputs_to_hidden_bias = getArrayPortion(this->dna.genes, 49, 56);
-	double *hidden_to_output_bias = getArrayPortion(this->dna.genes, 56, 58);
+	double **inputs_to_hidden_weights = nn.getMatrixWithWeights(7, 5, getArrayPortion(this->dna->genes, 0, 35));
+	double **hidden_to_output_weights = nn.getMatrixWithWeights(2, 7, getArrayPortion(this->dna->genes, 35, 49));
+	double *inputs_to_hidden_bias = getArrayPortion(this->dna->genes, 49, 56);
+	double *hidden_to_output_bias = getArrayPortion(this->dna->genes, 56, 58);
 
 	nn.initNNParams(inputs_to_hidden_weights, hidden_to_output_weights, inputs_to_hidden_bias, hidden_to_output_bias);
 

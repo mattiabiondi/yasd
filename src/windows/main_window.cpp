@@ -212,6 +212,12 @@ void MainWindow::viewConfig()
 	configDialog->show();
 }
 
+void MainWindow::viewCharts()
+{
+	chartsDialog = new ChartsDialog(this);
+	chartsDialog->show();
+}
+
 
 void MainWindow::about()
 {
@@ -343,6 +349,9 @@ void MainWindow::createActions()
 	viewConfigAct->setStatusTip(tr("View current configuration"));
 	viewConfigAct->setEnabled(false);
 
+	chartsAct = viewMenu->addAction(tr("Charts"), this, &MainWindow::viewCharts);
+	chartsAct->setStatusTip(tr("View charts"));
+
 	toolbar->addSeparator();
 
 	QMenu *helpMenu = menuBar()->addMenu(tr("&Help"));
@@ -352,6 +361,11 @@ void MainWindow::createActions()
 
 	aboutQtAct = helpMenu->addAction(tr("About &Qt"), qApp, &QApplication::aboutQt);
 	aboutQtAct->setStatusTip(tr("About the Qt library"));
+	
+	
+	
+	
+	
 }
 
 void MainWindow::createStatusBar()
@@ -466,6 +480,7 @@ void MainWindow::configurationChanged()
 		viewConfigAct->setEnabled(true);
 
 		configDialog = new ConfigDialog(this);
+		// chartsDialog = new ChartsDialog(this);
 		createTrackWidget();
 	} else {
 		configDialog->update();

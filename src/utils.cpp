@@ -31,3 +31,4 @@ double *getArrayPortion(double *array, int start, int end)
 		portion[i - start] = array[i];
 	return portion;
 }
+
