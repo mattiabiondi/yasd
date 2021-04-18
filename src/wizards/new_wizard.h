@@ -14,6 +14,7 @@
 #include "pages/cars_page.h"
 #include "pages/track_page.h"
 #include "src/configuration.h"
+#include "src/const.h"
 
 QT_BEGIN_NAMESPACE
 class QCheckBox;
