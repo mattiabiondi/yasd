@@ -1,16 +1,5 @@
 #include "src/configuration.h"
 
-template<typename T>
-static T bumpProperty(T minValue, T value, T maxValue)
-{
-	if (value < minValue)
-		return minValue;
-	else if (value > maxValue)
-		return maxValue;
-	else
-		return value;
-}
-
 Configuration *Configuration::loadFromFile(const QString &fileName, QString &error)
 {
 	QFile file(fileName);
@@ -56,6 +45,11 @@ Configuration *Configuration::loadFromFile(const QString &fileName, QString &err
 		config->setGeneration(dna.take("generation").toInt());
 	}
 
+	if (root.contains("session")) {
+		QJsonObject session = root.value("session").toObject();
+		config->setSpeed(session.take("speed").toInt());
+	}
+
 	if (root.contains("track")) {
 		QJsonObject track = root.value("track").toObject();
 		config->setCrossroads(track.take("crossroads").toInt());
@@ -85,6 +79,10 @@ bool Configuration::save(const QString &fileName)
 
 	dna.insert("generation", getGeneration());
 
+	QJsonObject session;
+
+	session.insert("speed", getSpeed());
+
 	QJsonObject track;
 
 	track.insert("crossroads", getCrossroads());
@@ -93,6 +91,7 @@ bool Configuration::save(const QString &fileName)
 
 	root.insert("cars", cars);
 	root.insert("dna", dna);
+	root.insert("session", session);
 	root.insert("track", track);
 
 	QJsonDocument document;
@@ -127,35 +126,40 @@ bool Configuration::save(const QString &fileName)
 
 void Configuration::setRed(int value)
 {
-	red = bumpProperty(MINCARS, value, MAXCARS);
+	red = qBound(MINCARS, value, MAXCARS);
 }
 
 void Configuration::setGreen(int value)
 {
-	green = bumpProperty(MINCARS, value, MAXCARS);
+	green = qBound(MINCARS, value, MAXCARS);
 }
 
 void Configuration::setBlue(int value)
 {
-	blue = bumpProperty(MINCARS, value, MAXCARS);
+	blue = qBound(MINCARS, value, MAXCARS);
 }
 
 void Configuration::setGeneration(int value)
 {
-	generation = bumpProperty(MINGENERATION, value, value);
+	generation = qBound(MINGENERATION, value, value);
+}
+
+void Configuration::setSpeed(int value)
+{
+	speed = qBound(MINSPEED, value, MAXSPEED);
 }
 
 void Configuration::setCrossroads(int value)
 {
-	crossroads = bumpProperty(MINCROSSROADS, value, MAXCROSSROADS);
+	crossroads = qBound(MINCROSSROADS, value, MAXCROSSROADS);
 }
 
 void Configuration::setLimit(int value)
 {
-	limit = bumpProperty(MINSPEEDLIMIT, value, MAXSPEEDLIMIT);
+	limit = qBound(MINSPEEDLIMIT, value, MAXSPEEDLIMIT);
 }
 
 void Configuration::setFriction(int value)
 {
-	friction = bumpProperty(FRICTIONASPHALTINDEX, value, FRICTIONGRASSINDEX);
+	friction = qBound(FRICTIONASPHALTINDEX, value, FRICTIONGRASSINDEX);
 }

@@ -44,6 +44,12 @@ int getGeneration() const
 	return generation;
 }
 
+void setSpeed(int value);
+int getSpeed() const
+{
+	return speed;
+}
+
 void setCrossroads(int value);
 int getCrossroads() const
 {
@@ -67,6 +73,7 @@ int red;
 int green;
 int blue;
 int generation;
+int speed;
 int crossroads;
 int limit;
 int friction;
