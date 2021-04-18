@@ -49,6 +49,7 @@ void viewConfig();
 void about();
 void fileWasModified();
 void configurationChanged();
+void speedChanged();
 #ifndef QT_NO_SESSIONMANAGER
 void commitData(QSessionManager &);
 #endif

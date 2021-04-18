@@ -16,6 +16,7 @@ MainWindow::MainWindow()
 #endif
 
 	connect(Appl(), &Application::configurationChanged, this, &MainWindow::configurationChanged);
+	connect(Appl()->getSession(), &Session::speedChanged, this, &MainWindow::speedChanged);
 
 	setUnifiedTitleAndToolBarOnMac(true);
 
@@ -347,7 +348,14 @@ void MainWindow::createActions()
 	sessionMenu->addAction(session->startAct);
 	sessionMenu->addAction(session->stopAct);
 	sessionMenu->addAction(session->resetAct);
+	sessionMenu->addSeparator();
+	sessionMenu->addAction(session->incSpeedAct);
+	sessionMenu->addAction(session->decSpeedAct);
+
 	toolbar->addAction(session->toggleAct);
+	toolbar->addSeparator();
+	toolbar->addAction(session->incSpeedAct);
+	toolbar->addAction(session->decSpeedAct);
 
 	QMenu *helpMenu = menuBar()->addMenu(tr("&Help"));
 
@@ -486,6 +494,12 @@ void MainWindow::configurationChanged()
 		MainWindow::prependToRecentFiles(Appl()->curFile);
 
 	setWindowFilePath(Appl()->curFile);
+}
+
+void MainWindow::speedChanged()
+{
+	configDialog->update();
+	statusBar()->showMessage(QString("Speed: %1x").arg(Appl()->getConfig()->getSpeed()));
 }
 
 QString MainWindow::strippedName(const QString &fullFileName)
