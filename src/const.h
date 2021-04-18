@@ -15,6 +15,10 @@
 #define GREENTYPE 1
 #define BLUETYPE 2
 
+// session speed values
+#define MINSPEED 1
+#define MAXSPEED 5
+
 // track min/max values
 #define MINCROSSROADS 0
 #define MAXCROSSROADS 10
