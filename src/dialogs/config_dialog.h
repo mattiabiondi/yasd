@@ -32,6 +32,7 @@ QLabel *redLabel;
 QLabel *greenLabel;
 QLabel *blueLabel;
 QLabel *generationLabel;
+QLabel *speedLabel;
 QLabel *crossroadsLabel;
 QLabel *limitLabel;
 QLabel *frictionLabel;

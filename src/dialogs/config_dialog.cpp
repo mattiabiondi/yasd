@@ -25,6 +25,15 @@ ConfigDialog::ConfigDialog(QWidget *parent)
 
 	dnaGroupBox->setLayout(dnaFormLayout);
 
+	QFormLayout *sessionFormLayout = new QFormLayout;
+
+	speedLabel = new QLabel;
+	sessionFormLayout->addRow(tr("Speed:"), speedLabel);
+
+	QGroupBox *sessionGroupBox = new QGroupBox(tr("Session"));
+
+	sessionGroupBox->setLayout(sessionFormLayout);
+
 	QFormLayout *trackFormLayout = new QFormLayout;
 
 	crossroadsLabel = new QLabel;
@@ -44,6 +53,7 @@ ConfigDialog::ConfigDialog(QWidget *parent)
 	vBoxLayout->addStretch();
 	vBoxLayout->addWidget(carsGroupBox);
 	vBoxLayout->addWidget(dnaGroupBox);
+	vBoxLayout->addWidget(sessionGroupBox);
 	vBoxLayout->addWidget(trackGroupBox);
 	vBoxLayout->addStretch();
 
@@ -80,6 +90,7 @@ void ConfigDialog::update()
 	greenLabel->setText(QString::number(config->getGreen()));
 	blueLabel->setText(QString::number(config->getBlue()));
 	generationLabel->setText(QString::number(config->getGeneration()));
+	speedLabel->setText(QString("%1x").arg(config->getSpeed()));
 	crossroadsLabel->setText(QString::number(config->getCrossroads()));
 	limitLabel->setText(QString("%1 km/h").arg(config->getLimit()));
 	if (config->getFriction() == FRICTIONASPHALTINDEX)
