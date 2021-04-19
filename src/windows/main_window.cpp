@@ -347,7 +347,6 @@ void MainWindow::createActions()
 
 	sessionMenu->addAction(session->startAct);
 	sessionMenu->addAction(session->stopAct);
-	sessionMenu->addAction(session->resetAct);
 	sessionMenu->addSeparator();
 	sessionMenu->addAction(session->incSpeedAct);
 	sessionMenu->addAction(session->decSpeedAct);
