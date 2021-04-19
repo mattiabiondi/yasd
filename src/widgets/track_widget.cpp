@@ -50,7 +50,6 @@ void TrackWidget::initCars()
 	n_green = config->getGreen();
 	n_blue = config->getBlue();
 	n_cars = n_red + n_green + n_blue;
-	config->setGeneration(0);
 
 	cars = new Car *[n_cars];
 
@@ -78,6 +77,13 @@ void TrackWidget::printTrack()
 void TrackWidget::printCar(Car *car)
 {
 	car->print(this);
+}
+
+void TrackWidget::moveCars()
+{
+	if (session->isRunning())
+		for (int i = 0; i < n_cars; i++)
+			moveCar(cars[i]);
 }
 
 void TrackWidget::moveCar(Car *car)
@@ -176,6 +182,8 @@ void TrackWidget::nextGeneration()
 
 	config->setGeneration(config->getGeneration() + 1);
 	dynamic_cast<MainWindow *>(parent())->configDialog->update();
+
+	cout << "Generation: " << config->getGeneration() << endl;
 }
 
 /*******************************************************************************
@@ -186,6 +194,7 @@ void TrackWidget::initializeGL()
 	// Initialize OpenGL Backend
 	initializeOpenGLFunctions();
 	connect(this, &QOpenGLWidget::frameSwapped, this, &TrackWidget::update);
+	connect(session, &Session::iterationDone, this, &TrackWidget::moveCars);
 	printContextInformation();
 }
 
@@ -229,12 +238,8 @@ void TrackWidget::update()
 	// Update input
 	Input::update();
 
-	if (Input::keyPressed(Qt::Key_Up))
+	if (Input::keyTriggered(Qt::Key_Up))
 		nextGeneration();
-
-	if(session->isRunning())
-		for (int i = 0; i < n_cars; i++)
-			moveCar(cars[i]);
 
 	// Schedule a redraw
 	QOpenGLWidget::update();
