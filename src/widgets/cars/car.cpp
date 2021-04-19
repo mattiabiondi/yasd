@@ -3,7 +3,7 @@
 Car::Car(int type, int id, QPointF position, double angle, int firstTime, DNA dna)
 {
 	this->alive = true;
-	this->t_start = this->t_current = high_resolution_clock::now();
+	aliveTime = 0;
 	this->distance = 0;
 
 	this->type = type;
@@ -52,13 +52,12 @@ void Car::move()
 	// lower bound
 	if (this->speed < 0.0) this->speed = abs(this->speed);
 
-	high_resolution_clock::time_point prev = this->t_current;
+	// 1000ms/60 (= 60fps) --> default time span between frames
+	// we take 60fps as "standard"
+	double time_span = 1.0 / 60;
+	QPointF x = QPointF(this->speed * time_span * cos(-this->angle * M_PI / 180), this->speed * time_span * sin(-this->angle * M_PI / 180));
 
-	this->t_current = high_resolution_clock::now();
-	duration<double, std::milli> time_span = this->t_current - prev;
-
-	double t = time_span.count() / 1000;
-	QPointF x = QPointF(this->speed * t * cos(-this->angle * M_PI / 180), this->speed * t * sin(-this->angle * M_PI / 180));
+	aliveTime += time_span;
 
 	this->position += x;
 	this->distance += QLineF(QPointF(0, 0), x).length();
@@ -70,8 +69,7 @@ void Car::move()
 void Car::die()
 {
 	this->alive = false;
-	this->aliveTime = this->t_current - this->t_start;
-	cout << "La macchina è rimasta in vita per " << this->aliveTime.count() << " milli e ha percorso " << this->distance << " metri \n";
+	cout << "Car " << id << " lasted " << this->aliveTime << "s and traveled " << this->distance << "m" << endl;
 }
 
 void Car::print(QPaintDevice *device)
@@ -206,7 +204,7 @@ double Car::getDistance()
 
 double Car::getAliveTime()
 {
-	return (double)this->aliveTime.count();
+	return this->aliveTime / 1000;
 }
 
 NeuralNetwork Car::initNeuralNetwork()
