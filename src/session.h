@@ -21,6 +21,7 @@ Q_OBJECT
 
 public:
 Session();
+~Session();
 
 Status getStatus() const
 {
@@ -44,6 +45,7 @@ QAction *incSpeedAct;
 QAction *decSpeedAct;
 
 public slots:
+void setSpeed(int speed);
 void stop();
 
 signals:
@@ -56,8 +58,8 @@ void iterationDone();
 private:
 void createActions();
 void setStatus(Status status);
-void setSpeed(int speed);
 Status status;
+QThread *thread;
 QTimer *timer;
 
 private slots:

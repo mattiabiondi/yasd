@@ -9,8 +9,22 @@ Session::Session()
 	connect(this, &Session::speedChanged, this, &Session::updateActions);
 	connect(Appl(), &Application::configurationChanged, this, &Session::configurationChanged);
 
-	timer = new QTimer(this);
+	thread = new QThread(this);
+	timer = new QTimer(0);
+	timer->setTimerType(Qt::PreciseTimer);
+	timer->moveToThread(thread);
+	thread->start();
+
+	connect(this, &Session::sessionStarted, timer, static_cast<void (QTimer::*)()> (&QTimer::start));
+	connect(this, &Session::sessionStopped, timer, static_cast<void (QTimer::*)()> (&QTimer::stop));
 	connect(timer, &QTimer::timeout, this, &Session::timeout);
+}
+
+Session::~Session()
+{
+	thread->quit();
+	while(!thread->isFinished());
+	delete thread;
 }
 
 void Session::createActions()
@@ -76,8 +90,21 @@ void Session::setSpeed(int speed)
 	if (Appl()->getConfig() != NULL) {
 		Appl()->getConfig()->setSpeed(speed);
 
+		// The setInterval function will stop and restart the timer,
+		// but we cannot stop / start the timer from a different thread.
+		// Given this, if the session is running we manually stop the
+		// timer, wait for it to be inactive, set the new interval and
+		// manually restart it.
+		if (isRunning()){
+			emit sessionStopped();
+			while(timer->isActive())
+				QThread::currentThread()->msleep(1);
+		}
+
 		// Set timeout interval to: 1000ms/60 (= 60fps) / speed
 		timer->setInterval((1000 / 60) / speed);
+
+		if (isRunning()) emit sessionStarted();
 
 		emit speedChanged();
 	}
@@ -108,14 +135,11 @@ void Session::start()
 	emit sessionStarted();
 
 	setStatus(RUNNING);
-
-	timer->start();
 }
 
 void Session::stop()
 {
 	if (isRunning()) {
-		timer->stop();
 		setStatus(STOPPED);
 		emit sessionStopped();
 	}

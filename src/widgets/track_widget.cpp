@@ -20,6 +20,8 @@ TrackWidget::TrackWidget(QWidget *parent)
 	initTrack();
 	initCars();
 
+	session->setSpeed(Appl()->getConfig()->getSpeed());
+
 	// Accepts keyboard focus
 	setFocusPolicy(Qt::StrongFocus);
 }

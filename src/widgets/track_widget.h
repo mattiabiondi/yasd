@@ -54,7 +54,7 @@ Track ***tracks;
 time_t startTime;
 
 Configuration *config;
-const Session *session;
+Session *session;
 
 int n_red;
 int n_green;
