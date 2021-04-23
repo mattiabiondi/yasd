@@ -23,7 +23,7 @@ Session::Session()
 Session::~Session()
 {
 	thread->quit();
-	while(!thread->isFinished());
+	while (!thread->isFinished());
 	delete thread;
 }
 
@@ -90,21 +90,20 @@ void Session::setSpeed(int speed)
 	if (Appl()->getConfig() != NULL) {
 		Appl()->getConfig()->setSpeed(speed);
 
-		// The setInterval function will stop and restart the timer,
+		// The setInterval() function will stop and restart the timer,
 		// but we cannot stop / start the timer from a different thread.
 		// Given this, if the session is running we manually stop the
 		// timer, wait for it to be inactive, set the new interval and
 		// manually restart it.
-		if (isRunning()){
-			emit sessionStopped();
-			while(timer->isActive())
-				QThread::currentThread()->msleep(1);
-		}
+		bool wasRunning = isRunning();
+		stop();
+		while (timer->isActive())
+			QThread::currentThread()->msleep(1);
 
 		// Set timeout interval to: 1000ms/60 (= 60fps) / speed
 		timer->setInterval((1000 / 60) / speed);
 
-		if (isRunning()) emit sessionStarted();
+		if (wasRunning) start();
 
 		emit speedChanged();
 	}
