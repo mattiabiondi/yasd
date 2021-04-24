@@ -135,18 +135,16 @@ void TrackWidget::checkCollisions(Car *car, QPointF *oldp, QPointF *newp)
 	}
 
 	// Check collision with other cars
-	for (int l = 0; l < 5; l++) {
-		for (int i = 0; i < n_cars; i++) {
+	for (int l = 0; l < NUMSENSORS && car->isAlive(); l++) {
+		for (int i = 0; i < n_cars && car->isAlive(); i++) {
 			if (cars[i]->getId() != car->getId()) {
-				for (int h = 0; h < 4; h++) {
+				for (int h = 0; h < 4 && car->isAlive(); h++) {
 					QPointF *intersection = new QPointF();
 					if (sensors[l]->intersects(cars[i]->getHitbox()[h], intersection) == QLineF::BoundedIntersection) {
 						sensors[l]->setP2(*intersection);
-						for (int j = 0; j < 4; j++)
-							if (car->getHitbox()[j].intersects(cars[i]->getHitbox()[h], intersection) == QLineF::BoundedIntersection) {
+						for (int j = 0; j < 4 && car->isAlive(); j++)
+							if (car->getHitbox()[j].intersects(cars[i]->getHitbox()[h], intersection) == QLineF::BoundedIntersection)
 								car->die();
-								cars[i]->die();
-							}
 					}
 					delete intersection;
 				}
