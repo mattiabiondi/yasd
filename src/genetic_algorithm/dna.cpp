@@ -42,6 +42,10 @@ void DNA::setFitnessScore(double fitnessScore)
 	this->fitnessScore = fitnessScore;
 }
 
+double DNA::getFitnessScore()
+{
+	return this->fitnessScore;
+}
 
 // double fitnessFunction(double timeBeforeCrash, double distanceTraveledBeforeCrash){
 //     return timeBeforeCrash * 2 + distanceTraveledBeforeCrash; //da decidere insieme... al momento il tempo influisce per 2/3 e la distanza per 1/3

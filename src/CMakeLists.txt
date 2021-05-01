@@ -16,6 +16,7 @@ add_executable(${PROJECT_NAME}
 	dialogs/cars_dialog.cpp
 	dialogs/track_dialog.cpp
 	dialogs/config_dialog.cpp
+	dialogs/charts_dialog.cpp
 	genetic_algorithm/dna.cpp
 	genetic_algorithm/genetic_algorithm_methods.cpp
 	neural_network/neural_network.cpp
@@ -30,6 +31,7 @@ target_include_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
 	Qt5::Widgets
 	Qt5::Gui
+	Qt5::Charts
 )
 
 set_target_properties(${PROJECT_NAME}

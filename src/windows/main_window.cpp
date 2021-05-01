@@ -214,6 +214,11 @@ void MainWindow::viewConfig()
 	configDialog->show();
 }
 
+void MainWindow::viewCharts()
+{
+	chartsDialog = new ChartsDialog(this);
+	chartsDialog->show();
+}
 
 void MainWindow::about()
 {
@@ -340,6 +345,10 @@ void MainWindow::createActions()
 	viewConfigAct = viewMenu->addAction(tr("&Configuration"), this, &MainWindow::viewConfig);
 	viewConfigAct->setStatusTip(tr("View current configuration"));
 	viewConfigAct->setEnabled(false);
+
+	viewChartsAct = viewMenu->addAction(tr("Charts"), this, &MainWindow::viewCharts);
+	viewChartsAct->setStatusTip(tr("View charts"));
+	viewChartsAct->setEnabled(false);
 
 	toolbar->addSeparator();
 
@@ -475,6 +484,7 @@ void MainWindow::configurationChanged()
 		editCarsAct->setEnabled(true);
 		editTrackAct->setEnabled(true);
 		viewConfigAct->setEnabled(true);
+		viewChartsAct->setEnabled(true);
 
 		configDialog = new ConfigDialog(this);
 		createTrackWidget();

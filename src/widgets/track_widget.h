@@ -10,10 +10,12 @@
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
-
+#include <QtCharts/QLineSeries>
 #include <QPainter>
 #include <QPen>
 #include <QFont>
+
+using namespace QtCharts;
 
 QT_BEGIN_NAMESPACE
 class Session;
@@ -63,6 +65,8 @@ int n_cars;
 
 QColor *grass;
 QColor *asphalt;
+
+QLineSeries *series;
 
 // Private Helpers
 void printContextInformation();

@@ -18,5 +18,6 @@ find_package(Qt5 COMPONENTS Widgets Gui REQUIRED)
 set(QT_MINIMUM_VERSION "5.14.0")
 
 find_package(Qt5Widgets ${QT_MINIMUM_VERSION} REQUIRED)
+find_package(Qt5Charts REQUIRED)
 
 add_subdirectory(src)

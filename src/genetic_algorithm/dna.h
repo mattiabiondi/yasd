@@ -15,6 +15,7 @@ DNA();
 DNA(int id);            //first time (initializing DNA with random genes
 DNA(double *genes);     // get from parameters dna after crossover and here we have to call mutation
 void setFitnessScore(double fitnessScore);
+double getFitnessScore();
 // double fitnessFunction(double timeBeforeCrash, double distanceTraveledBeforeCrash);
 // vector<DNA> pickBestDNAs(vector<DNA> DNAs);
 // DNA crossover(vector<DNA> bestDNAs);

@@ -7,6 +7,8 @@
 #include <ctime>
 #include <vector>
 
+using namespace std;
+
 // These variables set the dimensions of the rectanglar region we wish to view.
 const double Xmin = 0.0, Xmax = 3.0;
 const double Ymin = 0.0, Ymax = 3.0;
@@ -43,6 +45,8 @@ void TrackWidget::initTrack()
 		for (int j = 0; j < 3; j++)
 			tracks[i][j] = new Track(matrix[i][j], 1);
 	}
+
+	series = new QLineSeries();
 }
 
 void TrackWidget::initCars()
@@ -155,18 +159,18 @@ void TrackWidget::checkCollisions(Car *car, QPointF *oldp, QPointF *newp)
 
 void TrackWidget::nextGeneration()
 {
-	vector<DNA> DNAs;
+	vector<DNA *> DNAs;
 
 	for (int i = 0; i < n_cars; i++) {
 		if (cars[i]->isAlive())
 			cars[i]->die();
-		cars[i]->getDNA().setFitnessScore(fitnessFunction(cars[i]->getAliveTime(), cars[i]->getDistance()));
+		cars[i]->getDNA()->setFitnessScore(fitnessFunction(cars[i]->getAliveTime(), cars[i]->getDistance()));
 		DNAs.push_back(cars[i]->getDNA());
 	}
 
-	vector<DNA> bestOfThisGen = pickBestDNAs(DNAs);
-	DNA newGenBaseDNA = crossover(bestOfThisGen);
-	vector<DNA> newGenerationDNAs = mutation(newGenBaseDNA, n_cars);
+	vector<DNA *> bestOfThisGen = pickBestDNAs(DNAs);
+	DNA *newGenBaseDNA = crossover(bestOfThisGen);
+	vector<DNA *> newGenerationDNAs = mutation(newGenBaseDNA, n_cars);
 
 	for (int i = 0; i < n_cars; i++)
 		delete cars[i];
@@ -184,6 +188,12 @@ void TrackWidget::nextGeneration()
 	dynamic_cast<MainWindow *>(parent())->configDialog->update();
 
 	cout << "Generation: " << config->getGeneration() << endl;
+
+	bool isDialogVisible = (dynamic_cast<MainWindow *>(parent())->chartsDialog == NULL) ? false : true;
+	double score = bestOfThisGen[0]->getFitnessScore() + bestOfThisGen[1]->getFitnessScore();
+
+	series->append(config->getGeneration(), score);
+	dynamic_cast<MainWindow *>(parent())->chartsDialog->update(series, isDialogVisible);
 }
 
 /*******************************************************************************

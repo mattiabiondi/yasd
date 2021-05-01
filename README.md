@@ -24,6 +24,7 @@ A compiler with C++11 support ([clang-3.3+](https://llvm.org/releases/download.h
 - `git`
 - `cmake 3.5+`
 - `Qt 5.14+`
+- `Qt Charts`
 
 #### Get the source code
 
