@@ -1,6 +1,7 @@
 #include "src/windows/main_window.h"
 
 MainWindow::MainWindow()
+	: session(Appl()->getSession())
 {
 	createActions();
 	createStatusBar();
@@ -15,6 +16,7 @@ MainWindow::MainWindow()
 #endif
 
 	connect(Appl(), &Application::configurationChanged, this, &MainWindow::configurationChanged);
+	connect(Appl()->getSession(), &Session::speedChanged, this, &MainWindow::speedChanged);
 
 	setUnifiedTitleAndToolBarOnMac(true);
 
@@ -218,7 +220,6 @@ void MainWindow::viewCharts()
 	chartsDialog->show();
 }
 
-
 void MainWindow::about()
 {
 	QString name = QString("About yasd");
@@ -258,8 +259,9 @@ void MainWindow::fileWasModified()
 
 void MainWindow::createActions()
 {
-	QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
 	QToolBar *toolbar = addToolBar(tr("Toolbar"));
+
+	QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
 
 	// TODO
 	const QIcon newIcon = QIcon::fromTheme("document-new");
@@ -328,8 +330,6 @@ void MainWindow::createActions()
 	exitAct->setShortcuts(QKeySequence::Quit);
 	exitAct->setStatusTip(tr("Exit yasd"));
 
-	menuBar()->addSeparator();
-
 	QMenu *editMenu = menuBar()->addMenu(tr("&Edit"));
 
 	editCarsAct = editMenu->addAction(tr("Cars..."), this, &MainWindow::editCars);
@@ -340,19 +340,30 @@ void MainWindow::createActions()
 	editTrackAct->setStatusTip(tr("Edit track preferences"));
 	editTrackAct->setEnabled(false);
 
-	menuBar()->addSeparator();
-	toolbar->addSeparator();
-
 	QMenu *viewMenu = menuBar()->addMenu(tr("&View"));
 
 	viewConfigAct = viewMenu->addAction(tr("&Configuration"), this, &MainWindow::viewConfig);
 	viewConfigAct->setStatusTip(tr("View current configuration"));
 	viewConfigAct->setEnabled(false);
 
-	chartsAct = viewMenu->addAction(tr("Charts"), this, &MainWindow::viewCharts);
-	chartsAct->setStatusTip(tr("View charts"));
+	viewChartsAct = viewMenu->addAction(tr("Charts"), this, &MainWindow::viewCharts);
+	viewChartsAct->setStatusTip(tr("View charts"));
+	viewChartsAct->setEnabled(false);
 
 	toolbar->addSeparator();
+
+	QMenu *sessionMenu = menuBar()->addMenu(tr("&Session"));
+
+	sessionMenu->addAction(session->startAct);
+	sessionMenu->addAction(session->stopAct);
+	sessionMenu->addSeparator();
+	sessionMenu->addAction(session->incSpeedAct);
+	sessionMenu->addAction(session->decSpeedAct);
+
+	toolbar->addAction(session->toggleAct);
+	toolbar->addSeparator();
+	toolbar->addAction(session->incSpeedAct);
+	toolbar->addAction(session->decSpeedAct);
 
 	QMenu *helpMenu = menuBar()->addMenu(tr("&Help"));
 
@@ -361,11 +372,6 @@ void MainWindow::createActions()
 
 	aboutQtAct = helpMenu->addAction(tr("About &Qt"), qApp, &QApplication::aboutQt);
 	aboutQtAct->setStatusTip(tr("About the Qt library"));
-	
-	
-	
-	
-	
 }
 
 void MainWindow::createStatusBar()
@@ -478,9 +484,9 @@ void MainWindow::configurationChanged()
 		editCarsAct->setEnabled(true);
 		editTrackAct->setEnabled(true);
 		viewConfigAct->setEnabled(true);
+		viewChartsAct->setEnabled(true);
 
 		configDialog = new ConfigDialog(this);
-		// chartsDialog = new ChartsDialog(this);
 		createTrackWidget();
 	} else {
 		configDialog->update();
@@ -497,6 +503,12 @@ void MainWindow::configurationChanged()
 		MainWindow::prependToRecentFiles(Appl()->curFile);
 
 	setWindowFilePath(Appl()->curFile);
+}
+
+void MainWindow::speedChanged()
+{
+	configDialog->update();
+	statusBar()->showMessage(QString("Speed: %1x").arg(Appl()->getConfig()->getSpeed()));
 }
 
 QString MainWindow::strippedName(const QString &fullFileName)

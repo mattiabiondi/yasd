@@ -6,6 +6,8 @@ Application::Application(int& argc, char **argv)
 {
 	QCoreApplication::setOrganizationName("yasd");
 
+	session.reset(new Session);
+
 	mainWin.reset(new MainWindow);
 
 	mainWin->show();
@@ -14,6 +16,11 @@ Application::Application(int& argc, char **argv)
 Configuration *Application::getConfig()
 {
 	return config.get();
+}
+
+Session *Application::getSession()
+{
+	return session.get();
 }
 
 void Application::createConfig(Configuration *newConfig)
@@ -36,6 +43,8 @@ void Application::loadConfig(const QString &fileName)
 
 void Application::setCurrentConfig(const QString &fileName, Configuration *newConfig)
 {
+	session->stop();
+
 	config.reset(newConfig);
 
 	static int sequenceNumber = 1;

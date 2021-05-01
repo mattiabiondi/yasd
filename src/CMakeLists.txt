@@ -1,8 +1,7 @@
-find_package(Qt5Charts)
-
 add_executable(${PROJECT_NAME}
 	main.cpp
 	configuration.cpp
+	session.cpp
 	application.cpp
 	input.cpp
 	utils.cpp

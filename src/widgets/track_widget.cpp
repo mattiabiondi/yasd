@@ -7,7 +7,6 @@
 #include <ctime>
 #include <vector>
 
-
 using namespace std;
 
 // These variables set the dimensions of the rectanglar region we wish to view.
@@ -15,12 +14,15 @@ const double Xmin = 0.0, Xmax = 3.0;
 const double Ymin = 0.0, Ymax = 3.0;
 
 TrackWidget::TrackWidget(QWidget *parent)
+	: session(Appl()->getSession())
 {
 	srand((unsigned int)time(NULL));
 	this->startTime = time(0);
 
 	initTrack();
 	initCars();
+
+	session->setSpeed(Appl()->getConfig()->getSpeed());
 
 	// Accepts keyboard focus
 	setFocusPolicy(Qt::StrongFocus);
@@ -45,7 +47,6 @@ void TrackWidget::initTrack()
 	}
 
 	series = new QLineSeries();
-
 }
 
 void TrackWidget::initCars()
@@ -55,7 +56,6 @@ void TrackWidget::initCars()
 	n_green = config->getGreen();
 	n_blue = config->getBlue();
 	n_cars = n_red + n_green + n_blue;
-	config->setGeneration(0);
 
 	cars = new Car *[n_cars];
 
@@ -83,6 +83,13 @@ void TrackWidget::printTrack()
 void TrackWidget::printCar(Car *car)
 {
 	car->print(this);
+}
+
+void TrackWidget::moveCars()
+{
+	if (session->isRunning())
+		for (int i = 0; i < n_cars; i++)
+			moveCar(cars[i]);
 }
 
 void TrackWidget::moveCar(Car *car)
@@ -132,18 +139,16 @@ void TrackWidget::checkCollisions(Car *car, QPointF *oldp, QPointF *newp)
 	}
 
 	// Check collision with other cars
-	for (int l = 0; l < 5; l++) {
-		for (int i = 0; i < n_cars; i++) {
+	for (int l = 0; l < NUMSENSORS && car->isAlive(); l++) {
+		for (int i = 0; i < n_cars && car->isAlive(); i++) {
 			if (cars[i]->getId() != car->getId()) {
-				for (int h = 0; h < 4; h++) {
+				for (int h = 0; h < 4 && car->isAlive(); h++) {
 					QPointF *intersection = new QPointF();
 					if (sensors[l]->intersects(cars[i]->getHitbox()[h], intersection) == QLineF::BoundedIntersection) {
 						sensors[l]->setP2(*intersection);
-						for (int j = 0; j < 4; j++)
-							if (car->getHitbox()[j].intersects(cars[i]->getHitbox()[h], intersection) == QLineF::BoundedIntersection) {
+						for (int j = 0; j < 4 && car->isAlive(); j++)
+							if (car->getHitbox()[j].intersects(cars[i]->getHitbox()[h], intersection) == QLineF::BoundedIntersection)
 								car->die();
-								cars[i]->die();
-							}
 					}
 					delete intersection;
 				}
@@ -154,8 +159,7 @@ void TrackWidget::checkCollisions(Car *car, QPointF *oldp, QPointF *newp)
 
 void TrackWidget::nextGeneration()
 {
-	vector<DNA*> DNAs;
-	cout<< "\n next generation \n";
+	vector<DNA *> DNAs;
 
 	for (int i = 0; i < n_cars; i++) {
 		if (cars[i]->isAlive())
@@ -164,9 +168,9 @@ void TrackWidget::nextGeneration()
 		DNAs.push_back(cars[i]->getDNA());
 	}
 
-	vector<DNA*> bestOfThisGen = pickBestDNAs(DNAs);
+	vector<DNA *> bestOfThisGen = pickBestDNAs(DNAs);
 	DNA *newGenBaseDNA = crossover(bestOfThisGen);
-	vector<DNA*> newGenerationDNAs = mutation(newGenBaseDNA, n_cars);
+	vector<DNA *> newGenerationDNAs = mutation(newGenBaseDNA, n_cars);
 
 	for (int i = 0; i < n_cars; i++)
 		delete cars[i];
@@ -182,10 +186,13 @@ void TrackWidget::nextGeneration()
 
 	config->setGeneration(config->getGeneration() + 1);
 	dynamic_cast<MainWindow *>(parent())->configDialog->update();
-	
-	bool isDialogVisible = (dynamic_cast<MainWindow *>(parent())->chartsDialog == NULL) ? false : true; 
+
+	cout << "Generation: " << config->getGeneration() << endl;
+
+	bool isDialogVisible = (dynamic_cast<MainWindow *>(parent())->chartsDialog == NULL) ? false : true;
 	double score = bestOfThisGen[0]->getFitnessScore() + bestOfThisGen[1]->getFitnessScore();
-	series->append(++this->currentGeneration,score);
+
+	series->append(config->getGeneration(), score);
 	dynamic_cast<MainWindow *>(parent())->chartsDialog->update(series, isDialogVisible);
 }
 
@@ -197,6 +204,7 @@ void TrackWidget::initializeGL()
 	// Initialize OpenGL Backend
 	initializeOpenGLFunctions();
 	connect(this, &QOpenGLWidget::frameSwapped, this, &TrackWidget::update);
+	connect(session, &Session::iterationDone, this, &TrackWidget::moveCars);
 	printContextInformation();
 }
 
@@ -240,11 +248,8 @@ void TrackWidget::update()
 	// Update input
 	Input::update();
 
-	if (Input::keyPressed(Qt::Key_Up))
+	if (Input::keyTriggered(Qt::Key_Up))
 		nextGeneration();
-
-	for (int i = 0; i < n_cars; i++)
-		moveCar(cars[i]);
 
 	// Schedule a redraw
 	QOpenGLWidget::update();

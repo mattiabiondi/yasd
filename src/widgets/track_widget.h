@@ -10,13 +10,16 @@
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
-
+#include <QtCharts/QLineSeries>
 #include <QPainter>
 #include <QPen>
 #include <QFont>
 
-#include <QtCharts/QLineSeries>
 using namespace QtCharts;
+
+QT_BEGIN_NAMESPACE
+class Session;
+QT_END_NAMESPACE
 
 class TrackWidget : public QOpenGLWidget,
 	protected QOpenGLFunctions
@@ -42,6 +45,7 @@ void initTrack();
 void initCars();
 void printTrack();
 void printCar(Car *car);
+void moveCars();
 void moveCar(Car *car);
 void checkCollisions(Car *car, QPointF *oldp, QPointF *newp);
 void nextGeneration();
@@ -52,6 +56,8 @@ Track ***tracks;
 time_t startTime;
 
 Configuration *config;
+Session *session;
+
 int n_red;
 int n_green;
 int n_blue;
@@ -60,10 +66,7 @@ int n_cars;
 QColor *grass;
 QColor *asphalt;
 
-int currentGeneration = 0;
-
 QLineSeries *series;
-
 
 // Private Helpers
 void printContextInformation();

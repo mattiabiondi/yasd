@@ -7,8 +7,6 @@
 #include <QPainter>
 #include <QPainterPath>
 
-#include <chrono>
-#include <ctime>
 #include <iostream>
 #include <ratio>
 #include <stdio.h>
@@ -26,7 +24,7 @@ using namespace std::chrono;
 class Car
 {
 public:
-Car(int type, int id, QPointF position, double angle, int firstTime = 0, DNA* dna = 0);
+Car(int type, int id, QPointF position, double angle, int firstTime = 0, DNA *dna = 0);
 void move();
 void print(QPaintDevice *device);
 QPointF getPosition();
@@ -56,8 +54,7 @@ int id;
 bool alive;
 double distance;
 bool *chunkTraveled;
-high_resolution_clock::time_point t_current, t_start;
-duration<double, std::milli> aliveTime;
+double aliveTime;
 
 DNA *dna;
 NeuralNetwork nn;

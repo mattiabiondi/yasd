@@ -1,5 +1,7 @@
 #include "new_wizard.h"
 
+#include <iostream>
+
 NewWizard::NewWizard(QWidget *parent)
 	: QWizard(parent)
 {
@@ -18,6 +20,8 @@ Configuration *NewWizard::getConfig()
 	config->setRed(field("red").toInt());
 	config->setGreen(field("green").toInt());
 	config->setBlue(field("blue").toInt());
+	config->setGeneration(MINGENERATION);
+	config->setSpeed(MINSPEED);
 	config->setCrossroads(field("crossroads").toInt());
 	config->setLimit(field("limit").toInt());
 	config->setFriction(field("friction").toInt());

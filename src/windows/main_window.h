@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include "src/configuration.h"
+#include "src/session.h"
 #include "src/application.h"
 #include "src/widgets/track_widget.h"
 #include "src/wizards/new_wizard.h"
@@ -13,6 +14,7 @@
 #include "src/dialogs/charts_dialog.h"
 
 QT_BEGIN_NAMESPACE
+class Session;
 class QAction;
 class QMenu;
 class QPushButton;
@@ -51,6 +53,7 @@ void viewCharts();
 void about();
 void fileWasModified();
 void configurationChanged();
+void speedChanged();
 #ifndef QT_NO_SESSIONMANAGER
 void commitData(QSessionManager &);
 #endif
@@ -67,6 +70,8 @@ static bool hasRecentFiles();
 void prependToRecentFiles(const QString &fileName);
 void setRecentFilesVisible(bool visible);
 QString strippedName(const QString &fullFileName);
+
+const Session *session;
 
 QPushButton *createButton(const QAction *action, const QString &text = QString());
 
@@ -87,7 +92,7 @@ QAction *editTrackAct;
 QAction *viewConfigAct;
 QAction *aboutAct;
 QAction *aboutQtAct;
-QAction *chartsAct;
+QAction *viewChartsAct;
 
 NewWizard *newWizard;
 };
