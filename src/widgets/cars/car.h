@@ -24,7 +24,7 @@ using namespace std::chrono;
 class Car
 {
 public:
-Car(int type, int id, QPointF position, double angle, int firstTime = 0, DNA *dna = 0);
+Car(int type, int id, QPointF position, double angle, DNA *dna);
 void move();
 void print(QPaintDevice *device);
 QPointF getPosition();

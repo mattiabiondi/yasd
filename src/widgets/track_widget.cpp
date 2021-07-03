@@ -49,6 +49,31 @@ void TrackWidget::initTrack()
 	series = new QLineSeries();
 }
 
+void TrackWidget::spawnCars(vector<DNA *> DNAs)
+{
+	int i;
+
+	if (DNAs.empty()) {
+		for (i = 0; i < n_cars; i++)
+			DNAs.push_back(new DNA(i));
+	}
+
+	for (i = 0; i < n_red; i++) {
+		QPointF spawn_point = QPointF(CHUNKSIZE * (i / 3) + CHUNKSIZE / 2, CHUNKSIZE * (i % 3) + CHUNKSIZE / 2);
+		cars[i] = new Car(REDTYPE, i, spawn_point, 0, DNAs[i]);
+	}
+
+	for (; i < n_red + n_green; i++) {
+		QPointF spawn_point = QPointF(CHUNKSIZE * (i / 3) + CHUNKSIZE / 2, CHUNKSIZE * (i % 3) + CHUNKSIZE / 2);
+		cars[i] = new Car(GREENTYPE, i, spawn_point, 0, DNAs[i]);
+	}
+
+	for (; i < n_cars; i++) {
+		QPointF spawn_point = QPointF(CHUNKSIZE * (i / 3) + CHUNKSIZE / 2, CHUNKSIZE * (i % 3) + CHUNKSIZE / 2);
+		cars[i] = new Car(BLUETYPE, i, spawn_point, 0, DNAs[i]);
+	}
+}
+
 void TrackWidget::initCars()
 {
 	config = Appl()->getConfig();
@@ -58,22 +83,9 @@ void TrackWidget::initCars()
 	n_cars = n_red + n_green + n_blue;
 
 	cars = new Car *[n_cars];
+	vector<DNA *> vect;
 
-	QPointF spawn_point;
-	int i;
-
-	for (i = 0; i < n_red; i++) {
-		QPointF spawn_point = QPointF(CHUNKSIZE * (i / 3) + CHUNKSIZE / 2, CHUNKSIZE * (i % 3) + CHUNKSIZE / 2);
-		cars[i] = new Car(REDTYPE, i, spawn_point, 0);
-	}
-	for (; i < n_red + n_green; i++)
-		QPointF spawn_point = QPointF(CHUNKSIZE * (i / 3) + CHUNKSIZE / 2, CHUNKSIZE * (i % 3) + CHUNKSIZE / 2);
-
-		cars[i] = new Car(GREENTYPE, i, spawn_point, 0);
-
-	for (; i < n_cars; i++)
-		QPointF spawn_point = QPointF(CHUNKSIZE * (i / 3) + CHUNKSIZE / 2, CHUNKSIZE * (i % 3) + CHUNKSIZE / 2);
-		cars[i] = new Car(BLUETYPE, i, spawn_point, 0);
+	this->spawnCars(vect);
 }
 
 void TrackWidget::printTrack()
@@ -178,14 +190,7 @@ void TrackWidget::nextGeneration()
 	for (int i = 0; i < n_cars; i++)
 		delete cars[i];
 
-	for (int i = 0; i < n_red; i++)
-		cars[i] = new Car(REDTYPE, i, QPointF(CHUNKSIZE / 3 + (i * 20), CHUNKSIZE / 3 + (i * 20)), 0, 1, newGenerationDNAs[i]);
-
-	for (int i = n_red; i < n_red + n_green; i++)
-		cars[i] = new Car(GREENTYPE, i, QPointF(CHUNKSIZE / 3 + (i * 20), CHUNKSIZE / 3 + (i * 20)), 0, 1, newGenerationDNAs[i]);
-
-	for (int i = n_red + n_green; i < n_cars; i++)
-		cars[i] = new Car(BLUETYPE, i, QPointF(CHUNKSIZE / 3 + (i * 20), CHUNKSIZE / 3 + (i * 20)), 0, 1, newGenerationDNAs[i]);
+	spawnCars(newGenerationDNAs);
 
 	config->setGeneration(config->getGeneration() + 1);
 	dynamic_cast<MainWindow *>(parent())->configDialog->update();

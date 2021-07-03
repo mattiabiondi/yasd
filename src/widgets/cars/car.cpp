@@ -1,6 +1,6 @@
 #include "src/widgets/cars/car.h"
 
-Car::Car(int type, int id, QPointF position, double angle, int firstTime, DNA *dna)
+Car::Car(int type, int id, QPointF position, double angle, DNA *dna)
 {
 	this->alive = true;
 	aliveTime = 0;
@@ -19,11 +19,7 @@ Car::Car(int type, int id, QPointF position, double angle, int firstTime, DNA *d
 	this->setHitbox();
 
 	this->id = id;
-
-	if (firstTime == 0)
-		this->dna = new DNA(id);
-	else
-		this->dna = dna;
+	this->dna = dna;
 
 	this->nn = initNeuralNetwork();
 }

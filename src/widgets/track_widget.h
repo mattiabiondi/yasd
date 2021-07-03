@@ -49,6 +49,7 @@ void moveCars();
 void moveCar(Car *car);
 void checkCollisions(Car *car, QPointF *oldp, QPointF *newp);
 void nextGeneration();
+void spawnCars(vector<DNA *> DNAs);
 
 private:
 Car **cars;
