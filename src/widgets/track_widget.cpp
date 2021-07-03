@@ -59,17 +59,20 @@ void TrackWidget::initCars()
 
 	cars = new Car *[n_cars];
 
-	QPointF spawn_point = QPointF(CHUNKSIZE / 3, CHUNKSIZE / 3);
+	QPointF spawn_point;
 	int i;
 
 	for (i = 0; i < n_red; i++) {
 		QPointF spawn_point = QPointF(CHUNKSIZE * (i / 3) + CHUNKSIZE / 2, CHUNKSIZE * (i % 3) + CHUNKSIZE / 2);
 		cars[i] = new Car(REDTYPE, i, spawn_point, 0);
 	}
-	for (i = n_red; i < n_red + n_green; i++)
+	for (; i < n_red + n_green; i++)
+		QPointF spawn_point = QPointF(CHUNKSIZE * (i / 3) + CHUNKSIZE / 2, CHUNKSIZE * (i % 3) + CHUNKSIZE / 2);
+
 		cars[i] = new Car(GREENTYPE, i, spawn_point, 0);
 
-	for (i = n_red + n_green; i < n_cars; i++)
+	for (; i < n_cars; i++)
+		QPointF spawn_point = QPointF(CHUNKSIZE * (i / 3) + CHUNKSIZE / 2, CHUNKSIZE * (i % 3) + CHUNKSIZE / 2);
 		cars[i] = new Car(BLUETYPE, i, spawn_point, 0);
 }
 
