@@ -80,6 +80,38 @@ void Car::print(QPaintDevice *device)
 	for (int i = 0; i < NUMSENSORS; i++)
 		painter.drawLine(*this->sensors[i]);
 
+		// painter.drawImage(QRect(CHUNKSIZE*j , CHUNKSIZE*i , CHUNKSIZE, CHUNKSIZE), QImage(QString ("/home/vincenzo/Documents/yasd/assets/%1.png").arg(matrix[i][j])));
+	// QString img;
+
+
+	// switch (this->type) {
+	// case REDTYPE:
+	// 	img = "/home/vincenzo/Documents/yasd/assets/rossa.png";
+	// 	break;
+	// case GREENTYPE:
+	// 	img = "/home/vincenzo/Documents/yasd/assets/verde.png";
+	// 	break;
+	// case BLUETYPE:
+	// default:
+	// 	img = "/home/vincenzo/Documents/yasd/assets/blu.png";
+	// 	break;
+	// }
+
+	// QPointF *startPoint = new QPointF(this->hitbox[3].p1());
+	// QPointF *endPoint = new QPointF(this->hitbox[1].p1());
+	
+	// // std::cout<<this->hitbox[3].p1()),x();
+	// // std::cout<<"\n";
+	// // std::cout<<this->hitbox[3].p1()),y();
+	// // std::cout<<"\n";
+	// // std::cout<<"\n";
+	// // std::cout<<this->hitbox[1].p1()),x();
+	// // std::cout<<"\n";
+	// // std::cout<<this->hitbox[1].p1()),y();
+
+	// painter.drawImage(QRectF(*startPoint,*endPoint), QImage(img));
+
+
 	QColor outline_color;
 	QColor infill_color;
 
@@ -123,10 +155,22 @@ void Car::print(QPaintDevice *device)
 
 void Car::setSensors()
 {
+		double mult;
+	switch(this->type){
+		case 0:
+			mult = 0.8;
+			break;
+		case 1:
+			mult = 1;
+			break;
+		case 2:
+			mult = 1.2;
+			break;
+	}
 	for (int i = 0; i < NUMSENSORS; i++) {
 		this->sensors[i]->setP1(this->position);
 		this->sensors[i]->setAngle(this->angle - 90 + i * 45);
-		this->sensors[i]->setLength(MINSENSORS + (SENSORSOFFSET * this->type));
+		this->sensors[i]->setLength(MINSENSORS *mult );//+ (SENSORSOFFSET * this->type));
 	}
 }
 

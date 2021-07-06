@@ -37,10 +37,10 @@
 // cars sensors proximity
 #define NUMSENSORS 5
 #define SENSORSOFFSET 50
-#define MINSENSORS CHUNKSIZE / 5
+#define MINSENSORS CHUNKSIZE / 2
 
-#define CAR_LENGTH 10
-#define CAR_WIDTH 5
+#define CAR_LENGTH 50
+#define CAR_WIDTH 25
 
 #define SPEEDOFFSET 100
 #define ANGLEOFFSET 10

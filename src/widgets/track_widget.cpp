@@ -13,6 +13,17 @@ using namespace std;
 const double Xmin = 0.0, Xmax = 3.0;
 const double Ymin = 0.0, Ymax = 3.0;
 
+//int matrix[3][3] = { { 12, 14, 6 }, { 13, 15, 7 }, { 9, 11, 3 } };
+//4
+//int matrix[4][4] = { { 12, 6, 12, 6 }, { 9, 15, 15, 3}, { 12, 15, 15, 6 }, {9, 3, 9, 3}};
+//1
+//int matrix[3][3] = { { 12, 6, 0 }, { 9, 15, 6}, { 0, 9, 3 }};
+//8
+int matrix[4][4] = { { 12, 14, 10, 6 }, { 5, 13, 14, 7}, { 13, 11, 7, 5 }, {9, 10, 11, 3}};
+int rows = sizeof(matrix) / sizeof(matrix[0]);
+int columns = sizeof(matrix[0]) / sizeof(int); 
+
+
 TrackWidget::TrackWidget(QWidget *parent)
 	: session(Appl()->getSession())
 {
@@ -36,13 +47,19 @@ TrackWidget::~TrackWidget()
 
 void TrackWidget::initTrack()
 {
-	int matrix[3][3] = { { 12, 14, 6 }, { 13, 15, 7 }, { 9, 11, 3 } };
+	//int matrix[3][3] = { { 12, 14, 6 }, { 13, 15, 7 }, { 9, 11, 3 } };
+	//4
+	//int matrix[4][4] = { { 12, 6, 12, 6 }, { 9, 15, 15, 3}, { 12, 15, 15, 6 }, {9, 3, 9, 3}};
+	//1
+	//int matrix[3][3] = { { 12, 6, 0 }, { 9, 15, 6}, { 0, 9, 3 }};
+	//8
+	//int matrix[4][4] = { { 12, 14, 10, 6 }, { 5, 13, 14, 7}, { 13, 11, 7, 5 }, {9, 10, 11, 3}};
+	
+	tracks = new Track * *[rows];
 
-	tracks = new Track * *[3];
-
-	for (int i = 0; i < 3; i++) {
-		tracks[i] = new Track *[3];
-		for (int j = 0; j < 3; j++)
+	for (int i = 0; i < rows; i++) {
+		tracks[i] = new Track *[columns];
+		for (int j = 0; j < columns; j++)
 			tracks[i][j] = new Track(matrix[i][j], 1);
 	}
 
@@ -51,25 +68,33 @@ void TrackWidget::initTrack()
 
 void TrackWidget::spawnCars(vector<DNA *> DNAs)
 {
-	int i;
-
+	int i, empty;
+	
 	if (DNAs.empty()) {
 		for (i = 0; i < n_cars; i++)
 			DNAs.push_back(new DNA(i));
 	}
 
-	for (i = 0; i < n_red; i++) {
-		QPointF spawn_point = QPointF(CHUNKSIZE * (i / 3) + CHUNKSIZE / 2, CHUNKSIZE * (i % 3) + CHUNKSIZE / 2);
+	for (i = 0, empty = 0; i < n_red; i++) {
+		if(matrix[(i + empty)/ rows][(i + empty) % rows] == 0)
+			empty++;
+		QPointF spawn_point = QPointF(CHUNKSIZE * ((i + empty) / rows) + CHUNKSIZE / 2, CHUNKSIZE * ((i + empty) % rows) + CHUNKSIZE / 2);
 		cars[i] = new Car(REDTYPE, i, spawn_point, 0, DNAs[i]);
 	}
 
 	for (; i < n_red + n_green; i++) {
-		QPointF spawn_point = QPointF(CHUNKSIZE * (i / 3) + CHUNKSIZE / 2, CHUNKSIZE * (i % 3) + CHUNKSIZE / 2);
+		if(matrix[(i + empty) / rows][(i + empty) % rows] == 0)
+			empty++;
+
+		QPointF spawn_point = QPointF(CHUNKSIZE * ((i + empty) / rows) + CHUNKSIZE / 2, CHUNKSIZE * ((i + empty) % rows) + CHUNKSIZE / 2);
 		cars[i] = new Car(GREENTYPE, i, spawn_point, 0, DNAs[i]);
 	}
 
 	for (; i < n_cars; i++) {
-		QPointF spawn_point = QPointF(CHUNKSIZE * (i / 3) + CHUNKSIZE / 2, CHUNKSIZE * (i % 3) + CHUNKSIZE / 2);
+		if(matrix[(i + empty) / rows][(i + empty) % rows] == 0)
+			empty++;
+
+		QPointF spawn_point = QPointF(CHUNKSIZE * ((i + empty) / rows) + CHUNKSIZE / 2, CHUNKSIZE * ((i + empty) % rows) + CHUNKSIZE / 2);
 		cars[i] = new Car(BLUETYPE, i, spawn_point, 0, DNAs[i]);
 	}
 }
@@ -90,9 +115,17 @@ void TrackWidget::initCars()
 
 void TrackWidget::printTrack()
 {
-	for (int i = 0; i < 3; i++)
-		for (int j = 0; j < 3; j++)
+	for (int i = 0; i < rows; i++)
+		for (int j = 0; j < columns; j++){
 			tracks[i][j]->print(this, i, j);
+			QPainter painter;
+			painter.begin(this);
+			// string filename = "/home/vincenzo/Documents/yasd/assets/";
+			// strcat(filename,std::toString(matrix[i]));
+			// strcat(filename,".png");
+			painter.drawImage(QRect(CHUNKSIZE*i , CHUNKSIZE*j , CHUNKSIZE, CHUNKSIZE), QImage(QString ("/home/vincenzo/Documents/yasd/assets/%1.png").arg(matrix[i][j])));
+			// std::i << ": "<<QString ("/home/vincenzo/Documents/yasd/assets/%1.png").arg(matrix[i][j])<<"\n";
+		}
 }
 
 void TrackWidget::printCar(Car *car)
@@ -128,9 +161,9 @@ void TrackWidget::checkCollisions(Car *car, QPointF *oldp, QPointF *newp)
 
 	// Check if collision with track borders
 	for (int i = x - 1; i <= x + 1; i++) {
-		if (i >= 0 && i < 3) {
+		if (i >= 0 && i < rows) {
 			for (int j = y - 1; j <= y + 1; j++) {
-				if (j >= 0 && j < 3) {
+				if (j >= 0 && j < columns) {
 					for (int k = 0; k < tracks[i][j]->numLines; k++) {
 						// Die if collision with track borders
 						QPointF *intersection = new QPointF();
@@ -231,10 +264,11 @@ void TrackWidget::paintGL()
 		asphalt->alphaF()
 		);
 
+	printTrack();
+
 	for (int i = 0; i < n_cars; i++)
 		printCar(cars[i]);
 
-	printTrack();
 
 	// Flush the pipeline.  (Not usually necessary.)
 	//glFlush();
