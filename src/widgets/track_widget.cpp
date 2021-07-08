@@ -13,13 +13,44 @@ using namespace std;
 const double Xmin = 0.0, Xmax = 3.0;
 const double Ymin = 0.0, Ymax = 3.0;
 
+
+//base
 //int matrix[3][3] = { { 12, 14, 6 }, { 13, 15, 7 }, { 9, 11, 3 } };
 //4
 //int matrix[4][4] = { { 12, 6, 12, 6 }, { 9, 15, 15, 3}, { 12, 15, 15, 6 }, {9, 3, 9, 3}};
 //1
 //int matrix[3][3] = { { 12, 6, 0 }, { 9, 15, 6}, { 0, 9, 3 }};
 //8
-int matrix[4][4] = { { 12, 14, 10, 6 }, { 5, 13, 14, 7}, { 13, 11, 7, 5 }, {9, 10, 11, 3}};
+// int matrix[4][4] = { { 12, 14, 10, 6 }, { 5, 13, 14, 7}, { 13, 11, 7, 5 }, {9, 10, 11, 3}};
+
+
+/*
+3 -> 3
+5 -> 10
+6 -> 9
+7 -> 11
+9 -> 6
+10 -> 5
+11 -> 7
+12 -> 12
+13 -> 14 
+14 -> 13
+15 -> 15
+
+*/
+
+
+//base
+//int matrix[3][3] = { { 12, 13, 9 }, { 14, 15, 11 }, { 6, 7, 3 } };
+//4
+//int matrix[4][4] = { { 12, 9, 12, 9 }, { 6, 15, 15, 3}, { 12, 15, 15, 9 }, {6, 3, 6, 3}};
+//1
+//int matrix[3][3] = { { 12, 9, 0 }, { 6, 15, 9}, { 0, 6, 3 }};
+//8
+int matrix[4][4] = { { 12, 13, 5, 9 }, { 10, 14, 13, 11}, { 14, 7, 11, 10 }, {6, 5, 7, 3}};
+
+
+
 int rows = sizeof(matrix) / sizeof(matrix[0]);
 int columns = sizeof(matrix[0]) / sizeof(int); 
 
@@ -115,17 +146,28 @@ void TrackWidget::initCars()
 
 void TrackWidget::printTrack()
 {
-	for (int i = 0; i < rows; i++)
+	
+	for (int i = 0; i < rows; i++){
 		for (int j = 0; j < columns; j++){
-			tracks[i][j]->print(this, i, j);
+			// tracks[i][j]->print(this, i, j);
 			QPainter painter;
 			painter.begin(this);
 			// string filename = "/home/vincenzo/Documents/yasd/assets/";
 			// strcat(filename,std::toString(matrix[i]));
 			// strcat(filename,".png");
-			painter.drawImage(QRect(CHUNKSIZE*i , CHUNKSIZE*j , CHUNKSIZE, CHUNKSIZE), QImage(QString ("/home/vincenzo/Documents/yasd/assets/%1.png").arg(matrix[i][j])));
+			painter.drawImage(QRect(CHUNKSIZE*j , CHUNKSIZE*i , CHUNKSIZE, CHUNKSIZE), QImage(QString ("../assets/%1.png").arg(matrix[i][j])));
+			tracks[i][j]->print(this, i, j);
 			// std::i << ": "<<QString ("/home/vincenzo/Documents/yasd/assets/%1.png").arg(matrix[i][j])<<"\n";
 		}
+	}
+
+		// for (int i = 0; i < rows; i++){
+		// 	for (int j = 0; j < columns; j++){
+		// 		tracks[i][j]->print(this, i, j);
+		// 	}
+		// }
+			
+	
 }
 
 void TrackWidget::printCar(Car *car)
@@ -167,7 +209,7 @@ void TrackWidget::checkCollisions(Car *car, QPointF *oldp, QPointF *newp)
 					for (int k = 0; k < tracks[i][j]->numLines; k++) {
 						// Die if collision with track borders
 						QPointF *intersection = new QPointF();
-						if (distance.intersects(tracks[i][j]->lines[k]->translated(QPointF(i * CHUNKSIZE, j * CHUNKSIZE)), intersection) == QLineF::BoundedIntersection) {
+						if (distance.intersects(tracks[i][j]->lines[k]->translated(QPointF(j * CHUNKSIZE, i * CHUNKSIZE)), intersection) == QLineF::BoundedIntersection) {
 							car->die();
 							car->setPosition(*intersection);
 						}
@@ -176,7 +218,7 @@ void TrackWidget::checkCollisions(Car *car, QPointF *oldp, QPointF *newp)
 						// Update sensors lenght (do not cross track borders)
 						for (int l = 0; l < 5; l++) {
 							QPointF *intersection = new QPointF();
-							if (sensors[l]->intersects(tracks[i][j]->lines[k]->translated(QPointF(i * CHUNKSIZE, j * CHUNKSIZE)), intersection) == QLineF::BoundedIntersection)
+							if (sensors[l]->intersects(tracks[i][j]->lines[k]->translated(QPointF(j * CHUNKSIZE, i * CHUNKSIZE)), intersection) == QLineF::BoundedIntersection)
 								sensors[l]->setP2(*intersection);
 							delete intersection;
 						}

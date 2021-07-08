@@ -15,7 +15,7 @@ Track();
 Track(int type, double friction);
 QLineF **lines;
 int numLines;
-void print(QPaintDevice *device, int x, int y);
+void print(QPaintDevice *device, int i, int j);
 
 protected:
 double friction;
