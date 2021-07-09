@@ -60,7 +60,7 @@ void Track::print(QPaintDevice *device, int i, int j)
 	painter.begin(device);
 	painter.setRenderHint(QPainter::Antialiasing);
 
-	painter.setPen(QPen(Qt::yellow, 2, Qt::SolidLine, Qt::RoundCap));
+	//painter.setPen(QPen(Qt::yellow, 2, Qt::SolidLine, Qt::RoundCap));
 
 	for (int k = 0; k < this->numLines; k++)
 		painter.drawLine(this->lines[k]->translated(QPointF(j * CHUNKSIZE, i * CHUNKSIZE)));

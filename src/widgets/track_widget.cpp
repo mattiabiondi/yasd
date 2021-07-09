@@ -25,34 +25,34 @@ const double Ymin = 0.0, Ymax = 3.0;
 
 
 /*
-3 -> 3
-5 -> 10
-6 -> 9
-7 -> 11
-9 -> 6
-10 -> 5
-11 -> 7
-12 -> 12
-13 -> 14 
-14 -> 13
-15 -> 15
-
-*/
+ * 3 -> 3
+ * 5 -> 10
+ * 6 -> 9
+ * 7 -> 11
+ * 9 -> 6
+ * 10 -> 5
+ * 11 -> 7
+ * 12 -> 12
+ * 13 -> 14
+ * 14 -> 13
+ * 15 -> 15
+ *
+ */
 
 
 //base
 //int matrix[3][3] = { { 12, 13, 9 }, { 14, 15, 11 }, { 6, 7, 3 } };
 //4
-//int matrix[4][4] = { { 12, 9, 12, 9 }, { 6, 15, 15, 3}, { 12, 15, 15, 9 }, {6, 3, 6, 3}};
+int matrix[4][4] = { { 12, 9, 12, 9 }, { 6, 15, 15, 3 }, { 12, 15, 15, 9 }, { 6, 3, 6, 3 } };
 //1
 //int matrix[3][3] = { { 12, 9, 0 }, { 6, 15, 9}, { 0, 6, 3 }};
 //8
-int matrix[4][4] = { { 12, 13, 5, 9 }, { 10, 14, 13, 11}, { 14, 7, 11, 10 }, {6, 5, 7, 3}};
+//int matrix[4][4] = { { 12, 13, 5, 9 }, { 10, 14, 13, 11}, { 14, 7, 11, 10 }, {6, 5, 7, 3}};
 
 
 
 int rows = sizeof(matrix) / sizeof(matrix[0]);
-int columns = sizeof(matrix[0]) / sizeof(int); 
+int columns = sizeof(matrix[0]) / sizeof(int);
 
 
 TrackWidget::TrackWidget(QWidget *parent)
@@ -85,7 +85,7 @@ void TrackWidget::initTrack()
 	//int matrix[3][3] = { { 12, 6, 0 }, { 9, 15, 6}, { 0, 9, 3 }};
 	//8
 	//int matrix[4][4] = { { 12, 14, 10, 6 }, { 5, 13, 14, 7}, { 13, 11, 7, 5 }, {9, 10, 11, 3}};
-	
+
 	tracks = new Track * *[rows];
 
 	for (int i = 0; i < rows; i++) {
@@ -100,21 +100,20 @@ void TrackWidget::initTrack()
 void TrackWidget::spawnCars(vector<DNA *> DNAs)
 {
 	int i, empty;
-	
-	if (DNAs.empty()) {
+
+	if (DNAs.empty())
 		for (i = 0; i < n_cars; i++)
 			DNAs.push_back(new DNA(i));
-	}
 
 	for (i = 0, empty = 0; i < n_red; i++) {
-		if(matrix[(i + empty)/ rows][(i + empty) % rows] == 0)
+		if (matrix[(i + empty) / rows][(i + empty) % rows] == 0)
 			empty++;
 		QPointF spawn_point = QPointF(CHUNKSIZE * ((i + empty) / rows) + CHUNKSIZE / 2, CHUNKSIZE * ((i + empty) % rows) + CHUNKSIZE / 2);
 		cars[i] = new Car(REDTYPE, i, spawn_point, 0, DNAs[i]);
 	}
 
 	for (; i < n_red + n_green; i++) {
-		if(matrix[(i + empty) / rows][(i + empty) % rows] == 0)
+		if (matrix[(i + empty) / rows][(i + empty) % rows] == 0)
 			empty++;
 
 		QPointF spawn_point = QPointF(CHUNKSIZE * ((i + empty) / rows) + CHUNKSIZE / 2, CHUNKSIZE * ((i + empty) % rows) + CHUNKSIZE / 2);
@@ -122,7 +121,7 @@ void TrackWidget::spawnCars(vector<DNA *> DNAs)
 	}
 
 	for (; i < n_cars; i++) {
-		if(matrix[(i + empty) / rows][(i + empty) % rows] == 0)
+		if (matrix[(i + empty) / rows][(i + empty) % rows] == 0)
 			empty++;
 
 		QPointF spawn_point = QPointF(CHUNKSIZE * ((i + empty) / rows) + CHUNKSIZE / 2, CHUNKSIZE * ((i + empty) % rows) + CHUNKSIZE / 2);
@@ -146,28 +145,25 @@ void TrackWidget::initCars()
 
 void TrackWidget::printTrack()
 {
-	
-	for (int i = 0; i < rows; i++){
-		for (int j = 0; j < columns; j++){
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < columns; j++) {
 			// tracks[i][j]->print(this, i, j);
 			QPainter painter;
 			painter.begin(this);
 			// string filename = "/home/vincenzo/Documents/yasd/assets/";
 			// strcat(filename,std::toString(matrix[i]));
 			// strcat(filename,".png");
-			painter.drawImage(QRect(CHUNKSIZE*j , CHUNKSIZE*i , CHUNKSIZE, CHUNKSIZE), QImage(QString ("../assets/%1.png").arg(matrix[i][j])));
+			painter.drawImage(QRect(CHUNKSIZE * j, CHUNKSIZE * i, CHUNKSIZE, CHUNKSIZE), QImage(QString("../assets/%1.png").arg(matrix[i][j])));
 			tracks[i][j]->print(this, i, j);
 			// std::i << ": "<<QString ("/home/vincenzo/Documents/yasd/assets/%1.png").arg(matrix[i][j])<<"\n";
 		}
 	}
 
-		// for (int i = 0; i < rows; i++){
-		// 	for (int j = 0; j < columns; j++){
-		// 		tracks[i][j]->print(this, i, j);
-		// 	}
-		// }
-			
-	
+	// for (int i = 0; i < rows; i++){
+	// 	for (int j = 0; j < columns; j++){
+	// 		tracks[i][j]->print(this, i, j);
+	// 	}
+	// }
 }
 
 void TrackWidget::printCar(Car *car)
@@ -202,9 +198,9 @@ void TrackWidget::checkCollisions(Car *car, QPointF *oldp, QPointF *newp)
 	QLineF **sensors = car->getSensors();
 
 	// Check if collision with track borders
-	for (int i = x - 1; i <= x + 1; i++) {
+	for (int i = y - 1; i <= y + 1; i++) {
 		if (i >= 0 && i < rows) {
-			for (int j = y - 1; j <= y + 1; j++) {
+			for (int j = x - 1; j <= x + 1; j++) {
 				if (j >= 0 && j < columns) {
 					for (int k = 0; k < tracks[i][j]->numLines; k++) {
 						// Die if collision with track borders
