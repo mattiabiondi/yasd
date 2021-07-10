@@ -111,6 +111,10 @@ void TrackWidget::initCars()
 	vector<DNA *> vect;
 
 	this->spawnCars(vect);
+
+	cout << "------------------------------------------------------" << endl;
+	cout << "Generation: " << config->getGeneration() << endl;
+	cout << "| Car | Time alive | Distance | Chunk score | Fitness score |" << endl;
 }
 
 void TrackWidget::printTrack()
@@ -234,7 +238,9 @@ void TrackWidget::nextGeneration()
 	config->setGeneration(config->getGeneration() + 1);
 	dynamic_cast<MainWindow *>(parent())->configDialog->update();
 
+	cout << "------------------------------------------------------" << endl;
 	cout << "Generation: " << config->getGeneration() << endl;
+	cout << "| Car | Time alive | Distance | Chunk score | Fitness score |" << endl;
 
 	bool isDialogVisible = (dynamic_cast<MainWindow *>(parent())->chartsDialog == NULL) ? false : true;
 	double score = bestOfThisGen[0]->getFitnessScore() + bestOfThisGen[1]->getFitnessScore();
