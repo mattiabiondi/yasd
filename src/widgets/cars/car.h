@@ -24,7 +24,7 @@ using namespace std::chrono;
 class Car
 {
 public:
-Car(int type, int id, QPointF position, double angle, DNA *dna);
+Car(int type, int id, QPointF position, double angle, DNA *dna, int sizeX, int sizeY);
 void move();
 void print(QPaintDevice *device);
 QPointF getPosition();
@@ -37,6 +37,7 @@ int getId();
 DNA *getDNA();
 double getDistance();
 double getAliveTime();
+int getChunkScore();
 
 private:
 void setSensors();
@@ -53,7 +54,9 @@ int type;
 int id;
 bool alive;
 double distance;
-bool *chunkTraveled;
+int **chunkTraveled;
+int mapSizeX;
+int mapSizeY;
 double aliveTime;
 
 DNA *dna;

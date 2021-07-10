@@ -13,33 +13,6 @@ using namespace std;
 const double Xmin = 0.0, Xmax = 3.0;
 const double Ymin = 0.0, Ymax = 3.0;
 
-
-//base
-//int matrix[3][3] = { { 12, 14, 6 }, { 13, 15, 7 }, { 9, 11, 3 } };
-//4
-//int matrix[4][4] = { { 12, 6, 12, 6 }, { 9, 15, 15, 3}, { 12, 15, 15, 6 }, {9, 3, 9, 3}};
-//1
-//int matrix[3][3] = { { 12, 6, 0 }, { 9, 15, 6}, { 0, 9, 3 }};
-//8
-// int matrix[4][4] = { { 12, 14, 10, 6 }, { 5, 13, 14, 7}, { 13, 11, 7, 5 }, {9, 10, 11, 3}};
-
-
-/*
- * 3 -> 3
- * 5 -> 10
- * 6 -> 9
- * 7 -> 11
- * 9 -> 6
- * 10 -> 5
- * 11 -> 7
- * 12 -> 12
- * 13 -> 14
- * 14 -> 13
- * 15 -> 15
- *
- */
-
-
 //base
 //int matrix[3][3] = { { 12, 13, 9 }, { 14, 15, 11 }, { 6, 7, 3 } };
 //4
@@ -49,11 +22,11 @@ int matrix[4][4] = { { 12, 9, 12, 9 }, { 6, 15, 15, 3 }, { 12, 15, 15, 9 }, { 6,
 //8
 //int matrix[4][4] = { { 12, 13, 5, 9 }, { 10, 14, 13, 11}, { 14, 7, 11, 10 }, {6, 5, 7, 3}};
 
-
+vector<DNA *> prevGenDNAs;
+vector<float> prevGenScores;
 
 int rows = sizeof(matrix) / sizeof(matrix[0]);
 int columns = sizeof(matrix[0]) / sizeof(int);
-
 
 TrackWidget::TrackWidget(QWidget *parent)
 	: session(Appl()->getSession())
@@ -78,13 +51,10 @@ TrackWidget::~TrackWidget()
 
 void TrackWidget::initTrack()
 {
-	//int matrix[3][3] = { { 12, 14, 6 }, { 13, 15, 7 }, { 9, 11, 3 } };
-	//4
-	//int matrix[4][4] = { { 12, 6, 12, 6 }, { 9, 15, 15, 3}, { 12, 15, 15, 6 }, {9, 3, 9, 3}};
-	//1
-	//int matrix[3][3] = { { 12, 6, 0 }, { 9, 15, 6}, { 0, 9, 3 }};
-	//8
-	//int matrix[4][4] = { { 12, 14, 10, 6 }, { 5, 13, 14, 7}, { 13, 11, 7, 5 }, {9, 10, 11, 3}};
+	for (int i = 0; i < 2; i++) {
+		prevGenDNAs.push_back(new DNA(0));
+		prevGenScores.push_back(0.0);
+	}
 
 	tracks = new Track * *[rows];
 
@@ -109,7 +79,7 @@ void TrackWidget::spawnCars(vector<DNA *> DNAs)
 		if (matrix[(i + empty) / rows][(i + empty) % rows] == 0)
 			empty++;
 		QPointF spawn_point = QPointF(CHUNKSIZE * ((i + empty) / rows) + CHUNKSIZE / 2, CHUNKSIZE * ((i + empty) % rows) + CHUNKSIZE / 2);
-		cars[i] = new Car(REDTYPE, i, spawn_point, 0, DNAs[i]);
+		cars[i] = new Car(REDTYPE, i, spawn_point, 0, DNAs[i], rows, columns);
 	}
 
 	for (; i < n_red + n_green; i++) {
@@ -117,7 +87,7 @@ void TrackWidget::spawnCars(vector<DNA *> DNAs)
 			empty++;
 
 		QPointF spawn_point = QPointF(CHUNKSIZE * ((i + empty) / rows) + CHUNKSIZE / 2, CHUNKSIZE * ((i + empty) % rows) + CHUNKSIZE / 2);
-		cars[i] = new Car(GREENTYPE, i, spawn_point, 0, DNAs[i]);
+		cars[i] = new Car(GREENTYPE, i, spawn_point, 0, DNAs[i], rows, columns);
 	}
 
 	for (; i < n_cars; i++) {
@@ -125,7 +95,7 @@ void TrackWidget::spawnCars(vector<DNA *> DNAs)
 			empty++;
 
 		QPointF spawn_point = QPointF(CHUNKSIZE * ((i + empty) / rows) + CHUNKSIZE / 2, CHUNKSIZE * ((i + empty) % rows) + CHUNKSIZE / 2);
-		cars[i] = new Car(BLUETYPE, i, spawn_point, 0, DNAs[i]);
+		cars[i] = new Car(BLUETYPE, i, spawn_point, 0, DNAs[i], rows, columns);
 	}
 }
 
@@ -147,23 +117,12 @@ void TrackWidget::printTrack()
 {
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < columns; j++) {
-			// tracks[i][j]->print(this, i, j);
 			QPainter painter;
 			painter.begin(this);
-			// string filename = "/home/vincenzo/Documents/yasd/assets/";
-			// strcat(filename,std::toString(matrix[i]));
-			// strcat(filename,".png");
 			painter.drawImage(QRect(CHUNKSIZE * j, CHUNKSIZE * i, CHUNKSIZE, CHUNKSIZE), QImage(QString("../assets/%1.png").arg(matrix[i][j])));
-			tracks[i][j]->print(this, i, j);
-			// std::i << ": "<<QString ("/home/vincenzo/Documents/yasd/assets/%1.png").arg(matrix[i][j])<<"\n";
+			//tracks[i][j]->print(this, i, j);
 		}
 	}
-
-	// for (int i = 0; i < rows; i++){
-	// 	for (int j = 0; j < columns; j++){
-	// 		tracks[i][j]->print(this, i, j);
-	// 	}
-	// }
 }
 
 void TrackWidget::printCar(Car *car)
@@ -250,16 +209,25 @@ void TrackWidget::nextGeneration()
 	for (int i = 0; i < n_cars; i++) {
 		if (cars[i]->isAlive())
 			cars[i]->die();
-		cars[i]->getDNA()->setFitnessScore(fitnessFunction(cars[i]->getAliveTime(), cars[i]->getDistance()));
+		cars[i]->getDNA()->setFitnessScore((fitnessFunction(cars[i]->getAliveTime(), cars[i]->getDistance())) * cars[i]->getChunkScore());
 		DNAs.push_back(cars[i]->getDNA());
 	}
 
 	vector<DNA *> bestOfThisGen = pickBestDNAs(DNAs);
+
+	for (int i = 0; i < 2; i++)
+		if (bestOfThisGen[i]->fitnessScore < prevGenScores[i])
+			bestOfThisGen[i] = prevGenDNAs[i];
+
 	DNA *newGenBaseDNA = crossover(bestOfThisGen);
 	vector<DNA *> newGenerationDNAs = mutation(newGenBaseDNA, n_cars);
 
 	for (int i = 0; i < n_cars; i++)
 		delete cars[i];
+
+	prevGenDNAs = newGenerationDNAs;
+	prevGenScores[0] = bestOfThisGen[0]->fitnessScore;
+	prevGenScores[1] = bestOfThisGen[1]->fitnessScore;
 
 	spawnCars(newGenerationDNAs);
 
@@ -284,7 +252,7 @@ void TrackWidget::initializeGL()
 	initializeOpenGLFunctions();
 	connect(this, &QOpenGLWidget::frameSwapped, this, &TrackWidget::update);
 	connect(session, &Session::iterationDone, this, &TrackWidget::moveCars);
-	printContextInformation();
+	//printContextInformation();
 }
 
 void TrackWidget::paintGL()

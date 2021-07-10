@@ -1,6 +1,6 @@
 #include "src/widgets/cars/car.h"
 
-Car::Car(int type, int id, QPointF position, double angle, DNA *dna)
+Car::Car(int type, int id, QPointF position, double angle, DNA *dna, int sizeX, int sizeY)
 {
 	this->alive = true;
 	aliveTime = 0;
@@ -22,6 +22,15 @@ Car::Car(int type, int id, QPointF position, double angle, DNA *dna)
 	this->dna = dna;
 
 	this->nn = initNeuralNetwork();
+
+	this->chunkTraveled = new int *[sizeX];
+	this->mapSizeX = sizeX;
+	this->mapSizeY = sizeY;
+	for (int i = 0; i < sizeX; i++) {
+		this->chunkTraveled[i] = new int[sizeY];
+		for (int j = 0; j < sizeY; j++)
+			this->chunkTraveled[i][j] = 0;
+	}
 }
 
 void Car::move()
@@ -58,6 +67,11 @@ void Car::move()
 	this->position += x;
 	this->distance += QLineF(QPointF(0, 0), x).length();
 
+	int j = this->position.x() / CHUNKSIZE;
+	int i = this->position.y() / CHUNKSIZE;
+
+	this->chunkTraveled[i][j] = 1;
+
 	this->setSensors();
 	this->setHitbox();
 }
@@ -65,7 +79,8 @@ void Car::move()
 void Car::die()
 {
 	this->alive = false;
-	cout << "Car " << id << " lasted " << this->aliveTime << "s and traveled " << this->distance << "m" << endl;
+
+	cout << "|  " << id << "  |  " << this->aliveTime << "s  |  " << this->distance << "m  |  " << this->getChunkScore() << "  |  " << (this->aliveTime * 2 + this->distance) * this->getChunkScore() << "  |" << endl;
 }
 
 void Car::print(QPaintDevice *device)
@@ -79,38 +94,6 @@ void Car::print(QPaintDevice *device)
 	painter.setPen(QPen(Qt::magenta, 5, Qt::DashDotLine, Qt::RoundCap));
 	for (int i = 0; i < NUMSENSORS; i++)
 		painter.drawLine(*this->sensors[i]);
-
-	// painter.drawImage(QRect(CHUNKSIZE*j , CHUNKSIZE*i , CHUNKSIZE, CHUNKSIZE), QImage(QString ("/home/vincenzo/Documents/yasd/assets/%1.png").arg(matrix[i][j])));
-	// QString img;
-
-
-	// switch (this->type) {
-	// case REDTYPE:
-	// 	img = "/home/vincenzo/Documents/yasd/assets/rossa.png";
-	// 	break;
-	// case GREENTYPE:
-	// 	img = "/home/vincenzo/Documents/yasd/assets/verde.png";
-	// 	break;
-	// case BLUETYPE:
-	// default:
-	// 	img = "/home/vincenzo/Documents/yasd/assets/blu.png";
-	// 	break;
-	// }
-
-	// QPointF *startPoint = new QPointF(this->hitbox[3].p1());
-	// QPointF *endPoint = new QPointF(this->hitbox[1].p1());
-
-	// // std::cout<<this->hitbox[3].p1()),x();
-	// // std::cout<<"\n";
-	// // std::cout<<this->hitbox[3].p1()),y();
-	// // std::cout<<"\n";
-	// // std::cout<<"\n";
-	// // std::cout<<this->hitbox[1].p1()),x();
-	// // std::cout<<"\n";
-	// // std::cout<<this->hitbox[1].p1()),y();
-
-	// painter.drawImage(QRectF(*startPoint,*endPoint), QImage(img));
-
 
 	QColor outline_color;
 	QColor infill_color;
@@ -161,17 +144,19 @@ void Car::setSensors()
 	case 0:
 		mult = 0.8;
 		break;
-	case 1:
-		mult = 1;
-		break;
 	case 2:
 		mult = 1.2;
 		break;
+	case 1:
+	default:
+		mult = 1;
+		break;
 	}
+
 	for (int i = 0; i < NUMSENSORS; i++) {
 		this->sensors[i]->setP1(this->position);
 		this->sensors[i]->setAngle(this->angle - 90 + i * 45);
-		this->sensors[i]->setLength(MINSENSORS * mult);//+ (SENSORSOFFSET * this->type));
+		this->sensors[i]->setLength(MINSENSORS * mult);
 	}
 }
 
@@ -246,6 +231,18 @@ double Car::getDistance()
 double Car::getAliveTime()
 {
 	return this->aliveTime / 1000;
+}
+
+int Car::getChunkScore()
+{
+	int score = 0;
+
+	for (int i = 0; i < this->mapSizeY; i++)
+		for (int j = 0; j < this->mapSizeX; j++)
+			score += this->chunkTraveled[i][j];
+
+
+	return score;
 }
 
 NeuralNetwork Car::initNeuralNetwork()

@@ -17,7 +17,7 @@
 
 // session speed values
 #define MINSPEED 1
-#define MAXSPEED 5
+#define MAXSPEED 10
 
 // track min/max values
 #define MINCROSSROADS 0
@@ -43,6 +43,6 @@
 #define CAR_WIDTH 25
 
 #define SPEEDOFFSET 100
-#define ANGLEOFFSET 10
+#define ANGLEOFFSET 5
 
 #define N_GENES 58

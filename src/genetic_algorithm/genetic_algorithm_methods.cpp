@@ -55,7 +55,7 @@ vector<DNA *> mutation(DNA *dna, int N_CARS)
 		int maxProb = 100;
 		int minProb = 30;
 		int probability = rand() % maxProb;
-		DNA *nthDNA = dna;
+		DNA *nthDNA = new DNA(dna->genes);
 		for (int j = 0; j < N_GENES; j++) {
 			if (probability > minProb) {
 				double newGene = getNumberWithOneDecimalDigit(getRandomDouble(1.0f, 0.1f));
