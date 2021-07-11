@@ -136,12 +136,16 @@ void TrackWidget::printCar(Car *car)
 
 void TrackWidget::moveCars()
 {
-	if (session->isRunning())
+	int aliveCounter = 0;
+
+	if (session->isRunning()) {
 		for (int i = 0; i < n_cars; i++)
-			moveCar(cars[i]);
+			aliveCounter += moveCar(cars[i]);
+		if (!aliveCounter) nextGeneration();
+	}
 }
 
-void TrackWidget::moveCar(Car *car)
+int TrackWidget::moveCar(Car *car)
 {
 	if (car->isAlive()) {
 		QPointF oldp = QPointF(car->getPosition());
@@ -149,6 +153,9 @@ void TrackWidget::moveCar(Car *car)
 		QPointF newp = QPointF(car->getPosition());
 
 		checkCollisions(car, &oldp, &newp);
+		return 1;
+	} else {
+		return 0;
 	}
 }
 
