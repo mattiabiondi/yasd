@@ -49,13 +49,19 @@ void Car::move()
 	// TODO se una macchina rimane ferma per un tempo preso in input(per i test 1 min) distruggerla e darle una penalità
 
 	this->speed += outputs[0] * SPEEDOFFSET;
-	this->angle -= outputs[1] * ANGLEOFFSET;
+	this->angle += outputs[1] * ANGLEOFFSET;
 
-	// upper bound
+	// speed upper bound
 	if (this->speed > 100.0) this->speed = 100.0;
 
-	// lower bound
-	if (this->speed < 0.0) this->speed = abs(this->speed);
+	// speed lower bound
+	if (this->speed < 1) this->speed = getRandomDouble(100.0, 1.0); // abs(this->speed);
+
+	// angle upper bound
+	if (this->angle > 360.0) this->angle = getRandomDouble(360.0, 0.0);
+
+	// angle lower bound
+	if (this->angle < -360.0) this->angle = getRandomDouble(0.0, -360.0);
 
 	// 1000ms/60 (= 60fps) --> default time span between frames
 	// we take 60fps as "standard"
